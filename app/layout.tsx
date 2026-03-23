@@ -1,6 +1,7 @@
 // app/layout.tsx
 import type { Metadata } from 'next'
 import './globals.css'
+import AuthProvider from '@/components/AuthProvider'
 
 export const metadata: Metadata = {
   title: 'Peptidrop — AI Peptide Intelligence Platform',
@@ -36,7 +37,9 @@ export default function RootLayout({
         />
       </head>
       <body className="min-h-screen bg-surface text-text-primary font-body antialiased">
-        {children}
+        <AuthProvider>
+          {children}
+        </AuthProvider>
       </body>
     </html>
   )
