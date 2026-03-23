@@ -1,4 +1,14 @@
 /** @type {import('tailwindcss').Config} */
+
+function withOpacity(variableName) {
+  return ({ opacityValue }) => {
+    if (opacityValue !== undefined) {
+      return `rgba(var(${variableName}), ${opacityValue})`
+    }
+    return `rgb(var(${variableName}))`
+  }
+}
+
 module.exports = {
   content: [
     './app/**/*.{js,ts,jsx,tsx,mdx}',
@@ -9,10 +19,15 @@ module.exports = {
     extend: {
       colors: {
         surface: {
-          DEFAULT: '#0A0A0F',
-          secondary: '#12121A',
-          tertiary: '#1A1A28',
-          border: '#2A2A3A',
+          DEFAULT: withOpacity('--c-surface'),
+          secondary: withOpacity('--c-surface-sec'),
+          tertiary: withOpacity('--c-surface-ter'),
+          border: withOpacity('--c-border'),
+        },
+        text: {
+          primary: withOpacity('--c-text'),
+          secondary: withOpacity('--c-text-sec'),
+          muted: withOpacity('--c-text-mut'),
         },
         accent: {
           cyan: '#00E5FF',
@@ -21,20 +36,13 @@ module.exports = {
           amber: '#FFB800',
           rose: '#FF4D6A',
         },
-        text: {
-          primary: '#FFFFFF',
-          secondary: '#9CA3AF',
-          muted: '#6B7280',
-        }
       },
       fontFamily: {
         display: ['Outfit', 'sans-serif'],
         body: ['DM Sans', 'sans-serif'],
         mono: ['JetBrains Mono', 'monospace'],
       },
-      borderRadius: {
-        card: '16px',
-      },
+      borderRadius: { card: '16px' },
       boxShadow: {
         glow: '0 0 40px -10px rgba(0, 229, 255, 0.3)',
         'glow-violet': '0 0 40px -10px rgba(122, 92, 255, 0.3)',
@@ -43,8 +51,8 @@ module.exports = {
       },
       animation: {
         'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
-        'float': 'float 6s ease-in-out infinite',
-        'shimmer': 'shimmer 2s linear infinite',
+        float: 'float 6s ease-in-out infinite',
+        shimmer: 'shimmer 2s linear infinite',
         'glow-pulse': 'glow-pulse 3s ease-in-out infinite',
       },
       keyframes: {
@@ -53,7 +61,7 @@ module.exports = {
         'glow-pulse': {
           '0%, 100%': { boxShadow: '0 0 20px -5px rgba(0, 229, 255, 0.2)' },
           '50%': { boxShadow: '0 0 40px -5px rgba(0, 229, 255, 0.4)' },
-        }
+        },
       },
     },
   },

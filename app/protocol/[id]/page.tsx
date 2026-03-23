@@ -57,8 +57,8 @@ export default function ProtocolDetailPage() {
         <Navigation />
         <div className="pt-28 pb-20 max-w-5xl mx-auto px-4 sm:px-6 text-center">
           <div className="animate-pulse">
-            <div className="h-8 rounded-lg max-w-xs mx-auto mb-4" style={{ backgroundColor: 'var(--color-surface-tertiary)' }} />
-            <div className="h-4 rounded max-w-sm mx-auto" style={{ backgroundColor: 'var(--color-surface-tertiary)' }} />
+            <div className="h-8 rounded-lg max-w-xs mx-auto mb-4 bg-surface-tertiary" />
+            <div className="h-4 rounded max-w-sm mx-auto bg-surface-tertiary" />
           </div>
         </div>
       </main>
@@ -179,7 +179,7 @@ export default function ProtocolDetailPage() {
                         <div><span className="text-text-muted">Mechanism:</span><p className="text-text-secondary">{pep.mechanism}</p></div>
                         <div><span className="text-text-muted">Why Selected:</span><p className="text-text-secondary">{pep.whySelected}</p></div>
                         <div><span className="text-text-muted">Synergy:</span><p className="text-text-secondary">{pep.synergyRole}</p></div>
-                        <div className="pt-2" style={{ borderTop: '1px solid var(--color-surface-border)' }}>
+                        <div className="pt-2 border-t border-surface-border">
                           <span className="text-text-muted text-xs">Dosing (Educational): </span>
                           <span className="text-accent-cyan font-mono text-xs">{pep.educationalDosing}</span>
                           <span className="text-text-muted text-xs ml-3">Frequency: </span>

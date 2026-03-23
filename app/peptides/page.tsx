@@ -92,10 +92,8 @@ function PeptideModal({ peptide, onClose }: { peptide: Peptide; onClose: () => v
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4" onClick={onClose}>
       <div className="absolute inset-0 bg-black/70 backdrop-blur-sm" />
-      <div className="relative border border-surface-border rounded-2xl max-w-3xl w-full max-h-[85vh] overflow-y-auto"
-        style={{ backgroundColor: 'var(--color-surface-secondary)' }} onClick={(e) => e.stopPropagation()}>
-        <div className="sticky top-0 backdrop-blur-xl border-b border-surface-border/50 p-5 sm:p-6 flex justify-between items-start"
-          style={{ backgroundColor: 'color-mix(in srgb, var(--color-surface-secondary) 95%, transparent)' }}>
+      <div className="relative border border-surface-border rounded-2xl max-w-3xl w-full max-h-[85vh] overflow-y-auto bg-surface-secondary" onClick={(e) => e.stopPropagation()}>
+        <div className="sticky top-0 backdrop-blur-xl border-b border-surface-border/50 p-5 sm:p-6 flex justify-between items-start bg-surface-secondary/95">
           <div>
             <div className="flex items-center gap-2 mb-2">
               <span className="text-xl">{catInfo.icon}</span>

@@ -3,10 +3,11 @@ import { NextRequest, NextResponse } from 'next/server'
 import { createServerClient } from '@supabase/ssr'
 import { buildProtocolPrompt, type ProtocolInput } from '@/lib/ai-engine'
 
-function createSupabaseFromRequest(req: NextRequest) {
-  const response = NextResponse.next()
+// Increase timeout for Vercel Pro plan (default 10s on Hobby)
+export const maxDuration = 60
 
-  const supabase = createServerClient(
+function createSupabaseFromRequest(req: NextRequest) {
+  return createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
     {
@@ -15,15 +16,11 @@ function createSupabaseFromRequest(req: NextRequest) {
           return req.cookies.getAll()
         },
         setAll(cookiesToSet: { name: string; value: string; options?: any }[]) {
-          cookiesToSet.forEach(({ name, value, options }) => {
-            response.cookies.set(name, value, options)
-          })
+          // Can't set cookies in POST response easily, but auth works from getAll
         },
       },
     }
   )
-
-  return { supabase, response }
 }
 
 export async function POST(req: NextRequest) {
@@ -34,37 +31,48 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Missing required fields' }, { status: 400 })
     }
 
-    // Get authenticated user
-    const { supabase } = createSupabaseFromRequest(req)
+    // Auth
+    const supabase = createSupabaseFromRequest(req)
     const { data: { user }, error: authError } = await supabase.auth.getUser()
 
     if (authError || !user) {
-      return NextResponse.json({ error: 'Not authenticated. Please sign in.' }, { status: 401 })
+      console.error('[Generate] Auth error:', authError?.message)
+      return NextResponse.json({ error: 'Not authenticated. Please sign in again.' }, { status: 401 })
     }
 
-    // Check credits
-    const { data: profile } = await supabase
+    // Credits check
+    const { data: profile, error: profileError } = await supabase
       .from('profiles')
       .select('credits, plan')
       .eq('id', user.id)
       .single()
 
-    if (!profile) {
-      return NextResponse.json({ error: 'Profile not found' }, { status: 404 })
+    if (profileError || !profile) {
+      console.error('[Generate] Profile error:', profileError?.message)
+      return NextResponse.json({ error: 'Profile not found. Please sign in again.' }, { status: 404 })
     }
 
     if (profile.plan !== 'pro' && profile.credits < 1) {
-      return NextResponse.json({ error: 'Insufficient credits. Upgrade to Pro or purchase credits.' }, { status: 402 })
+      return NextResponse.json({ error: 'Insufficient credits. Upgrade to Pro.' }, { status: 402 })
     }
 
-    // Build prompt and call Claude
+    // Build prompt
     const prompt = buildProtocolPrompt(body)
 
-    const response = await fetch('https://api.anthropic.com/v1/messages', {
+    // Call Claude API
+    const apiKey = process.env.ANTHROPIC_API_KEY
+    if (!apiKey) {
+      console.error('[Generate] ANTHROPIC_API_KEY not set')
+      return NextResponse.json({ error: 'AI service not configured. Contact support.' }, { status: 500 })
+    }
+
+    console.log('[Generate] Calling Claude API for user:', user.email, 'goal:', body.goal)
+
+    const claudeRes = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'x-api-key': process.env.ANTHROPIC_API_KEY!,
+        'x-api-key': apiKey,
         'anthropic-version': '2023-06-01',
       },
       body: JSON.stringify({
@@ -74,17 +82,29 @@ export async function POST(req: NextRequest) {
       }),
     })
 
-    if (!response.ok) {
-      const err = await response.text()
-      console.error('Claude API error:', err)
+    if (!claudeRes.ok) {
+      const errText = await claudeRes.text()
+      console.error('[Generate] Claude API error:', claudeRes.status, errText)
+
+      if (claudeRes.status === 401) {
+        return NextResponse.json({ error: 'AI API key is invalid. Contact support.' }, { status: 500 })
+      }
+      if (claudeRes.status === 429) {
+        return NextResponse.json({ error: 'AI service is busy. Please try again in a minute.' }, { status: 429 })
+      }
+      if (claudeRes.status === 400) {
+        return NextResponse.json({ error: 'AI request error. Please try different parameters.' }, { status: 500 })
+      }
+
       return NextResponse.json({ error: 'AI generation failed. Please try again.' }, { status: 500 })
     }
 
-    const data = await response.json()
-    const textContent = data.content.find((c: any) => c.type === 'text')?.text
+    const claudeData = await claudeRes.json()
+    const textContent = claudeData.content?.find((c: any) => c.type === 'text')?.text
 
     if (!textContent) {
-      return NextResponse.json({ error: 'No response from AI' }, { status: 500 })
+      console.error('[Generate] No text in Claude response:', JSON.stringify(claudeData).substring(0, 200))
+      return NextResponse.json({ error: 'No response from AI. Please try again.' }, { status: 500 })
     }
 
     // Parse JSON
@@ -93,9 +113,11 @@ export async function POST(req: NextRequest) {
       const cleaned = textContent.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim()
       protocol = JSON.parse(cleaned)
     } catch (parseErr) {
-      console.error('JSON parse error:', parseErr)
-      return NextResponse.json({ error: 'Failed to parse AI response. Please try again.' }, { status: 500 })
+      console.error('[Generate] JSON parse error. Raw (first 500 chars):', textContent.substring(0, 500))
+      return NextResponse.json({ error: 'AI returned invalid format. Please try again.' }, { status: 500 })
     }
+
+    console.log('[Generate] Protocol parsed successfully. Saving...')
 
     // Deduct credit
     await supabase
@@ -120,9 +142,12 @@ export async function POST(req: NextRequest) {
       .single()
 
     if (saveError) {
-      console.error('Save protocol error:', saveError)
+      console.error('[Generate] Save error:', saveError.message)
+      // Return protocol even if save fails
       return NextResponse.json({ protocol, creditsUsed: 1, saved: false })
     }
+
+    console.log('[Generate] Saved protocol:', savedProtocol.id)
 
     return NextResponse.json({
       protocol,
@@ -132,7 +157,7 @@ export async function POST(req: NextRequest) {
       creditsRemaining: Math.max(0, profile.credits - 1),
     })
   } catch (error: any) {
-    console.error('Generate error:', error)
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
+    console.error('[Generate] Unexpected error:', error.message || error)
+    return NextResponse.json({ error: 'Internal server error. Please try again.' }, { status: 500 })
   }
 }

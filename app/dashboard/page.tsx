@@ -23,8 +23,7 @@ function PaywallSection({ children, title, description, requiresPro = true }: {
   return (
     <div className="relative">
       <div className="blur-md pointer-events-none select-none opacity-40">{children}</div>
-      <div className="absolute inset-0 z-10 flex flex-col items-center justify-center rounded-2xl"
-        style={{ backgroundColor: 'rgba(10,10,15,0.5)' }}>
+      <div className="absolute inset-0 z-10 flex flex-col items-center justify-center rounded-2xl bg-surface/60 backdrop-blur-sm">
         <div className="text-center px-6 max-w-md">
           <span className="text-3xl sm:text-4xl block mb-3">🔒</span>
           <h3 className="font-display font-bold text-lg sm:text-xl mb-2">{title}</h3>
@@ -81,7 +80,7 @@ function QuickActions() {
       <h3 className="font-display font-semibold text-base sm:text-lg mb-4">Quick Actions</h3>
       <div className="space-y-2 sm:space-y-3">
         <Link href="/generator" className="flex items-center gap-3 sm:gap-4 p-3 sm:p-4 rounded-xl border border-surface-border transition-all group"
-          style={{ backgroundColor: 'var(--color-surface-tertiary)' }}>
+          className="bg-surface-tertiary">
           <span className="text-xl sm:text-2xl">⚡</span>
           <div>
             <p className="font-display font-semibold text-sm group-hover:text-accent-cyan transition-colors">Generate Protocol</p>
@@ -89,7 +88,7 @@ function QuickActions() {
           </div>
         </Link>
         <Link href="/peptides" className="flex items-center gap-3 sm:gap-4 p-3 sm:p-4 rounded-xl border border-surface-border transition-all group"
-          style={{ backgroundColor: 'var(--color-surface-tertiary)' }}>
+          className="bg-surface-tertiary">
           <span className="text-xl sm:text-2xl">🔍</span>
           <div>
             <p className="font-display font-semibold text-sm group-hover:text-accent-violet transition-colors">Explore Peptides</p>
@@ -142,7 +141,7 @@ function ProtocolTimeline() {
                 'absolute left-2.5 sm:left-3.5 top-4 w-3 h-3 rounded-full',
                 p.status === 'active' ? 'bg-accent-emerald' :
                 p.status === 'completed' ? 'bg-accent-cyan' : 'bg-accent-amber'
-              )} style={{ border: '2px solid var(--color-surface)' }} />
+              )} className="border-2 border-surface" />
 
               <Link href={`/protocol/${p.id}`} className="glass-panel-light p-4 sm:p-5 card-hover block">
                 <div className="flex items-start justify-between gap-2 mb-3 flex-wrap">
@@ -171,7 +170,7 @@ function ProtocolTimeline() {
                   <div className="flex flex-wrap gap-1.5">
                     {p.protocol.coreStack.slice(0, 5).map((s: any, j: number) => (
                       <span key={j} className="px-2 py-0.5 rounded text-xs text-text-secondary font-mono"
-                        style={{ backgroundColor: 'var(--color-surface-tertiary)' }}>
+                        className="bg-surface-tertiary">
                         {s.name}
                       </span>
                     ))}
@@ -325,7 +324,7 @@ function StackBuilderPro() {
 
         {/* Save Form */}
         {showSaveForm && selectedPeptides.length > 0 && (
-          <div className="mb-4 p-3 rounded-xl flex gap-2" style={{ backgroundColor: 'var(--color-surface-tertiary)' }}>
+          <div className="mb-4 p-3 rounded-xl flex gap-2 bg-surface-tertiary">
             <input type="text" value={stackName} onChange={(e) => setStackName(e.target.value)}
               placeholder="Stack name..." className="input-field !min-h-[36px] !py-1.5 !text-sm flex-1" />
             <button onClick={handleSaveStack} disabled={saving || !stackName.trim()}
@@ -347,7 +346,7 @@ function StackBuilderPro() {
                 return (
                   <button key={id} onClick={() => addToStack(id)}
                     className="px-3 py-2 rounded-lg text-xs text-text-secondary hover:text-accent-cyan transition-all min-h-[36px]"
-                    style={{ backgroundColor: 'var(--color-surface-tertiary)' }}>
+                    className="bg-surface-tertiary">
                     + {p.abbreviation}
                   </button>
                 )
@@ -357,7 +356,7 @@ function StackBuilderPro() {
         ) : (
           <>
             {/* SVG Node Graph */}
-            <div className="rounded-xl border mb-4 overflow-hidden" style={{ backgroundColor: 'var(--color-surface)', borderColor: 'var(--color-surface-border)' }}>
+            <div className="rounded-xl border mb-4 overflow-hidden bg-surface border-surface-border">
               <svg ref={svgRef} viewBox="0 0 500 400" className="w-full h-[250px] sm:h-[320px] touch-none select-none">
                 {connections.map((conn, i) => {
                   const fromNode = getNode(conn.from)
@@ -405,7 +404,7 @@ function StackBuilderPro() {
                   { label: 'Peptides', value: stackPeptides.length, color: 'text-accent-cyan' },
                   { label: 'Conflicts', value: compatibility.conflicts.length, color: compatibility.conflicts.length > 0 ? 'text-accent-rose' : 'text-accent-emerald' },
                 ].map((s, i) => (
-                  <div key={i} className="rounded-xl p-3 text-center" style={{ backgroundColor: 'var(--color-surface-tertiary)' }}>
+                  <div key={i} className="rounded-xl p-3 text-center bg-surface-tertiary">
                     <div className="text-xs text-text-muted mb-1">{s.label}</div>
                     <div className={cn('text-lg font-display font-bold', s.color)}>{s.value}</div>
                   </div>
@@ -420,7 +419,7 @@ function StackBuilderPro() {
                 return (
                   <button key={id} onClick={() => addToStack(id)}
                     className="px-2.5 py-1.5 rounded-lg text-xs text-text-muted hover:text-accent-cyan transition-all min-h-[32px]"
-                    style={{ backgroundColor: 'var(--color-surface-tertiary)' }}>
+                    className="bg-surface-tertiary">
                     + {p.abbreviation}
                   </button>
                 )
@@ -440,7 +439,7 @@ function StackBuilderPro() {
           <div className="space-y-3">
             {savedStacks.map(stack => (
               <div key={stack.id} className="p-3 sm:p-4 rounded-xl flex items-center justify-between gap-3"
-                style={{ backgroundColor: 'var(--color-surface-tertiary)' }}>
+                className="bg-surface-tertiary">
                 <div className="min-w-0 flex-1">
                   <h4 className="font-display font-semibold text-sm">{stack.name}</h4>
                   <div className="flex flex-wrap gap-1 mt-1">
@@ -531,7 +530,7 @@ function CoachingPanel() {
       </h3>
       <div className="space-y-3">
         {suggestions.map((s, i) => (
-          <div key={i} className="flex items-start gap-3 p-3 sm:p-4 rounded-xl" style={{ backgroundColor: 'var(--color-surface-tertiary)' }}>
+          <div key={i} className="flex items-start gap-3 p-3 sm:p-4 rounded-xl bg-surface-tertiary">
             <span className="text-xl flex-shrink-0">{s.icon}</span>
             <div className="min-w-0 flex-1">
               <p className={cn('font-display font-semibold text-sm', s.accent)}>{s.title}</p>
@@ -574,8 +573,7 @@ function ProgressTracker() {
       </h3>
       <div className="grid grid-cols-6 sm:grid-cols-12 gap-1.5 sm:gap-2">
         {weeks.map(w => (
-          <div key={w.week} className="aspect-square rounded-lg flex flex-col items-center justify-center text-center border transition-all"
-            style={{ backgroundColor: 'var(--color-surface-tertiary)', borderColor: 'var(--color-surface-border)' }}>
+          <div key={w.week} className="aspect-square rounded-lg flex flex-col items-center justify-center text-center border border-surface-border bg-surface-tertiary transition-all">
             <span className="text-[9px] sm:text-[10px] text-text-muted">W{w.week}</span>
           </div>
         ))}
