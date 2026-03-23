@@ -56,7 +56,7 @@ export const PRICING_PLANS = [
       'Advanced synergy analysis',
     ],
     limitations: [],
-    cta: 'Start Pro — 7 Day Trial',
+    cta: 'Get Pro Access',
     popular: true,
   },
   {

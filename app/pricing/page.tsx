@@ -5,10 +5,48 @@ import { useState } from 'react'
 import Navigation from '@/components/layout/Navigation'
 import Footer from '@/components/layout/Footer'
 import { PRICING_PLANS, REPORT_TYPES, cn } from '@/lib/utils'
+import { useAppStore } from '@/lib/store'
 import Link from 'next/link'
+
+async function handlePurchase(
+  type: 'subscription' | 'report',
+  itemId: string,
+  userId: string,
+  setLoading: (v: boolean) => void,
+  setError: (v: string) => void,
+) {
+  setLoading(true)
+  setError('')
+  try {
+    const res = await fetch('/api/credits', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        type,
+        planId: type === 'subscription' ? itemId : undefined,
+        reportType: type === 'report' ? itemId : undefined,
+        userId,
+      }),
+    })
+    if (!res.ok) {
+      const err = await res.json()
+      throw new Error(err.error || 'Payment failed')
+    }
+    const data = await res.json()
+    // Redirect to NOWPayments hosted invoice page
+    window.location.href = data.invoiceUrl
+  } catch (err: any) {
+    setError(err.message || 'Something went wrong')
+  } finally {
+    setLoading(false)
+  }
+}
 
 export default function PricingPage() {
   const [billingPeriod, setBillingPeriod] = useState<'monthly' | 'yearly'>('monthly')
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState('')
+  const { user } = useAppStore()
 
   return (
     <main className="min-h-screen">
@@ -73,18 +111,41 @@ export default function PricingPage() {
               </div>
 
               {/* CTA */}
-              <Link
-                href={plan.id === 'free' ? '/signup' : plan.id === 'premium' ? '/generator' : '/signup'}
-                className={cn(
-                  'w-full text-center py-3.5 rounded-xl font-display font-semibold text-sm transition-all min-h-[44px] flex items-center justify-center',
-                  plan.popular ? 'btn-primary' : 'btn-secondary'
-                )}
-              >
-                {plan.cta}
-              </Link>
+              {plan.id === 'free' ? (
+                <Link href="/signup"
+                  className="w-full text-center py-3.5 rounded-xl font-display font-semibold text-sm transition-all min-h-[44px] flex items-center justify-center btn-secondary">
+                  {plan.cta}
+                </Link>
+              ) : (
+                <button
+                  onClick={() => {
+                    if (!user) { window.location.href = '/signup'; return }
+                    handlePurchase(
+                      plan.id === 'pro' ? 'subscription' : 'report',
+                      plan.id,
+                      user.id,
+                      setLoading,
+                      setError,
+                    )
+                  }}
+                  disabled={loading}
+                  className={cn(
+                    'w-full text-center py-3.5 rounded-xl font-display font-semibold text-sm transition-all min-h-[44px] flex items-center justify-center disabled:opacity-50',
+                    plan.popular ? 'btn-primary' : 'btn-secondary'
+                  )}
+                >
+                  {loading ? 'Processing...' : plan.cta}
+                </button>
+              )}
             </div>
           ))}
         </div>
+
+        {error && (
+          <div className="glass-panel p-4 border-accent-rose/30 text-center mb-8">
+            <p className="text-accent-rose text-sm">{error}</p>
+          </div>
+        )}
 
         {/* Clinical Reports Section */}
         <div className="mb-16 sm:mb-20">
@@ -99,7 +160,15 @@ export default function PricingPage() {
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {REPORT_TYPES.map((report) => (
-              <div key={report.id} className="glass-panel p-5 sm:p-6 card-hover flex items-center justify-between gap-3">
+              <button
+                key={report.id}
+                onClick={() => {
+                  if (!user) { window.location.href = '/signup'; return }
+                  handlePurchase('report', report.id, user.id, setLoading, setError)
+                }}
+                disabled={loading}
+                className="glass-panel p-5 sm:p-6 card-hover flex items-center justify-between gap-3 text-left disabled:opacity-50 w-full"
+              >
                 <div className="min-w-0">
                   <h4 className="font-display font-semibold text-sm">{report.label}</h4>
                   <p className="text-xs text-text-muted mt-0.5">Comprehensive clinical format</p>
@@ -107,7 +176,7 @@ export default function PricingPage() {
                 <div className="flex-shrink-0 text-right">
                   <span className="font-display font-bold text-accent-cyan">${report.price}</span>
                 </div>
-              </div>
+              </button>
             ))}
           </div>
 

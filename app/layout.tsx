@@ -6,6 +6,11 @@ export const metadata: Metadata = {
   title: 'Peptidrop — AI Peptide Intelligence Platform',
   description: 'Clinical-grade AI peptide protocol generation. Research 345+ peptides, analyze synergies, and generate personalized stacks.',
   keywords: ['peptides', 'peptide protocols', 'AI', 'biohacking', 'research'],
+  icons: {
+    icon: '/favicon.svg',
+    shortcut: '/favicon.svg',
+    apple: '/favicon.svg',
+  },
   openGraph: {
     title: 'Peptidrop — AI Peptide Intelligence Platform',
     description: 'Clinical-grade AI peptide protocol generation.',

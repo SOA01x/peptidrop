@@ -6,6 +6,7 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { cn } from '@/lib/utils'
 import { useAppStore } from '@/lib/store'
+import { DropletLogo } from '@/components/ui/Logo'
 
 const navLinks = [
   { href: '/', label: 'Home' },
@@ -49,12 +50,8 @@ export default function Navigation() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3 sm:py-4 flex items-center justify-between">
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2 sm:gap-3 group flex-shrink-0">
-          <div className="relative w-8 h-8 sm:w-10 sm:h-10">
-            <div className="absolute inset-0 bg-gradient-to-br from-accent-cyan to-accent-violet rounded-lg sm:rounded-xl opacity-80 group-hover:opacity-100 transition-opacity" />
-            <div className="absolute inset-[2px] bg-surface rounded-[6px] sm:rounded-[10px] flex items-center justify-center">
-              <span className="text-accent-cyan font-display font-bold text-sm sm:text-lg">P</span>
-            </div>
-          </div>
+          <DropletLogo size="sm" className="sm:hidden" />
+          <DropletLogo size="md" className="hidden sm:block" />
           <span className="font-display font-bold text-lg sm:text-xl tracking-tight">
             Pepti<span className="text-gradient">drop</span>
           </span>

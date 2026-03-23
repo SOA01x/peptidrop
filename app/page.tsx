@@ -138,7 +138,7 @@ function PricingPreview() {
               <span className="text-text-muted text-sm">/mo</span>
             </div>
             <p className="text-sm text-text-muted mb-6">AI protocols, tracking, optimization</p>
-            <Link href="/signup" className="btn-primary text-sm w-full">Start 7-Day Trial</Link>
+            <Link href="/signup" className="btn-primary text-sm w-full">Get Pro Access</Link>
           </div>
 
           {/* Clinical Reports */}

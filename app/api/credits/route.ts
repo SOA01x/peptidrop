@@ -1,54 +1,81 @@
 // app/api/credits/route.ts
+// NOWPayments Invoice Creation
 import { NextRequest, NextResponse } from 'next/server'
-import { CREDIT_PACKAGES } from '@/lib/utils'
+import { PRICING_PLANS, REPORT_TYPES } from '@/lib/utils'
+
+const NOWPAYMENTS_API = 'https://api.nowpayments.io/v1'
 
 export async function POST(req: NextRequest) {
   try {
-    const { packageId, userId } = await req.json()
+    const { type, planId, reportType, userId } = await req.json()
 
-    const pkg = CREDIT_PACKAGES.find(p => p.id === packageId)
-    if (!pkg) {
-      return NextResponse.json({ error: 'Invalid package' }, { status: 400 })
+    // Determine amount based on purchase type
+    let priceAmount: number
+    let description: string
+    let orderId: string
+
+    if (type === 'subscription') {
+      const plan = PRICING_PLANS.find(p => p.id === planId)
+      if (!plan || plan.price === 0) {
+        return NextResponse.json({ error: 'Invalid plan' }, { status: 400 })
+      }
+      priceAmount = plan.price
+      description = `Peptidrop ${plan.label} Plan - Monthly Subscription`
+      orderId = `sub_${userId}_${planId}_${Date.now()}`
+
+    } else if (type === 'report') {
+      const report = REPORT_TYPES.find(r => r.id === reportType)
+      if (!report) {
+        return NextResponse.json({ error: 'Invalid report type' }, { status: 400 })
+      }
+      priceAmount = report.price
+      description = `Peptidrop Clinical Report: ${report.label}`
+      orderId = `rpt_${userId}_${reportType}_${Date.now()}`
+
+    } else {
+      return NextResponse.json({ error: 'Invalid purchase type' }, { status: 400 })
     }
 
-    // Create Coinbase Commerce charge
-    const response = await fetch('https://api.commerce.coinbase.com/charges', {
+    // Create NOWPayments invoice
+    // Invoice method = user gets redirected to NOWPayments hosted page
+    // where they pick their crypto and pay. Simplest integration.
+    const response = await fetch(`${NOWPAYMENTS_API}/invoice`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'X-CC-Api-Key': process.env.COINBASE_COMMERCE_API_KEY!,
-        'X-CC-Version': '2018-03-22',
+        'x-api-key': process.env.NOWPAYMENTS_API_KEY!,
       },
       body: JSON.stringify({
-        name: `Peptidrop ${pkg.label} Credits`,
-        description: `${pkg.credits} protocol generation credits`,
-        pricing_type: 'fixed_price',
-        local_price: {
-          amount: pkg.priceUSDC.toString(),
-          currency: 'USD',
-        },
-        metadata: {
-          user_id: userId,
-          package_id: packageId,
-          credits: pkg.credits,
-        },
-        redirect_url: `${process.env.NEXT_PUBLIC_APP_URL}/dashboard?payment=success`,
+        price_amount: priceAmount,
+        price_currency: 'usd',
+        order_id: orderId,
+        order_description: description,
+        ipn_callback_url: `${process.env.NEXT_PUBLIC_APP_URL}/api/webhook`,
+        success_url: `${process.env.NEXT_PUBLIC_APP_URL}/dashboard?payment=success`,
         cancel_url: `${process.env.NEXT_PUBLIC_APP_URL}/dashboard?payment=cancelled`,
+        // If you want to restrict to specific cryptos:
+        // pay_currency: 'usdttrc20',
       }),
     })
 
     if (!response.ok) {
       const err = await response.text()
-      console.error('Coinbase Commerce error:', err)
-      return NextResponse.json({ error: 'Payment creation failed' }, { status: 500 })
+      console.error('NOWPayments error:', err)
+      return NextResponse.json(
+        { error: 'Payment creation failed' },
+        { status: 500 }
+      )
     }
 
-    const charge = await response.json()
+    const invoice = await response.json()
+
+    // invoice.invoice_url = hosted payment page user visits
+    // invoice.id = invoice ID for tracking
 
     return NextResponse.json({
-      chargeId: charge.data.id,
-      hostedUrl: charge.data.hosted_url,
-      expiresAt: charge.data.expires_at,
+      invoiceId: invoice.id,
+      invoiceUrl: invoice.invoice_url,
+      orderId,
     })
   } catch (error) {
     console.error('Credits API error:', error)
