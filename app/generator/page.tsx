@@ -5,7 +5,8 @@ import { useState } from 'react'
 import Navigation from '@/components/layout/Navigation'
 import Footer from '@/components/layout/Footer'
 import { useAppStore } from '@/lib/store'
-import { GOALS, GENDERS, cn } from '@/lib/utils'
+import { GOALS, GENDERS, cn, PDF_REPORT_PRICE } from '@/lib/utils'
+import { createClient } from '@/lib/supabase'
 import type { GeneratedProtocol } from '@/lib/ai-engine'
 import Link from 'next/link'
 
@@ -23,23 +24,17 @@ function GoalSelector({ selected, onSelect }: { selected: string; onSelect: (g: 
   return (
     <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-3">
       {GOALS.map((goal) => (
-        <button
-          key={goal.id}
-          onClick={() => onSelect(goal.id)}
+        <button key={goal.id} onClick={() => onSelect(goal.id)}
           className={cn(
             'p-3 sm:p-4 rounded-xl border transition-all duration-300 text-left group min-h-[44px]',
             selected === goal.id
               ? 'border-accent-cyan/50 bg-accent-cyan/10 shadow-glow'
               : 'border-surface-border bg-surface-secondary active:bg-surface-tertiary'
-          )}
-        >
-          <span className="text-xl sm:text-2xl block mb-1 sm:mb-2">{goal.icon}</span>
-          <span className={cn(
-            'font-display font-semibold text-xs sm:text-sm',
-            selected === goal.id ? 'text-accent-cyan' : 'text-text-primary'
           )}>
-            {goal.label}
-          </span>
+          <span className="text-xl sm:text-2xl block mb-1 sm:mb-2">{goal.icon}</span>
+          <span className={cn('font-display font-semibold text-xs sm:text-sm',
+            selected === goal.id ? 'text-accent-cyan' : 'text-text-primary'
+          )}>{goal.label}</span>
         </button>
       ))}
     </div>
@@ -50,16 +45,13 @@ function GenderSelector({ selected, onSelect }: { selected: string; onSelect: (g
   return (
     <div className="grid grid-cols-3 gap-2 sm:gap-3">
       {GENDERS.map((g) => (
-        <button
-          key={g.id}
-          onClick={() => onSelect(g.id)}
+        <button key={g.id} onClick={() => onSelect(g.id)}
           className={cn(
             'py-3 sm:py-4 px-3 rounded-xl border text-center transition-all duration-300 min-h-[44px]',
             selected === g.id
               ? 'border-accent-cyan/50 bg-accent-cyan/10 text-accent-cyan'
               : 'border-surface-border bg-surface-secondary text-text-muted active:bg-surface-tertiary'
-          )}
-        >
+          )}>
           <span className="text-xl block mb-1">{g.icon}</span>
           <span className="font-display font-medium text-xs sm:text-sm">{g.label}</span>
         </button>
@@ -78,14 +70,12 @@ function SliderInput({ label, value, onChange, min, max, step = 1, labels }: {
         <label className="text-sm font-display font-medium text-text-secondary">{label}</label>
         <span className="text-sm font-mono text-accent-cyan">{value}</span>
       </div>
-      <input
-        type="range" min={min} max={max} step={step} value={value}
+      <input type="range" min={min} max={max} step={step} value={value}
         onChange={(e) => onChange(Number(e.target.value))}
         className="w-full h-2 bg-surface-tertiary rounded-full appearance-none cursor-pointer
                    [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-5 [&::-webkit-slider-thumb]:h-5
                    [&::-webkit-slider-thumb]:bg-accent-cyan [&::-webkit-slider-thumb]:rounded-full
-                   [&::-webkit-slider-thumb]:shadow-glow [&::-webkit-slider-thumb]:cursor-pointer"
-      />
+                   [&::-webkit-slider-thumb]:shadow-glow [&::-webkit-slider-thumb]:cursor-pointer" />
       {labels && (
         <div className="flex justify-between mt-1">
           {labels.map((l, i) => <span key={i} className="text-xs text-text-muted">{l}</span>)}
@@ -119,173 +109,109 @@ function GeneratingOverlay({ step }: { step: string }) {
 function ProtocolReport({ protocol }: { protocol: GeneratedProtocol }) {
   return (
     <div className="space-y-6 sm:space-y-8">
-      {/* Protocol Summary */}
-      <div className="glass-panel glow-border p-5 sm:p-8">
-        <div className="flex items-center gap-3 mb-4">
-          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-accent-cyan to-accent-violet flex items-center justify-center flex-shrink-0">
-            <span className="text-lg">📋</span>
+      {protocol.protocolSummary && (
+        <div className="glass-panel glow-border p-5 sm:p-8">
+          <div className="flex items-center gap-3 mb-4">
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-accent-cyan to-accent-violet flex items-center justify-center flex-shrink-0">
+              <span className="text-lg">📋</span>
+            </div>
+            <h2 className="font-display font-bold text-lg sm:text-xl">Protocol Summary</h2>
           </div>
-          <h2 className="font-display font-bold text-lg sm:text-xl">Protocol Summary</h2>
+          <div className="space-y-4">
+            <div>
+              <h4 className="text-sm font-display font-semibold text-accent-cyan mb-1">Objective</h4>
+              <p className="text-sm sm:text-base text-text-secondary">{protocol.protocolSummary.objective}</p>
+            </div>
+            <div>
+              <h4 className="text-sm font-display font-semibold text-accent-violet mb-1">Strategic Reasoning</h4>
+              <p className="text-sm sm:text-base text-text-secondary">{protocol.protocolSummary.strategicReasoning}</p>
+            </div>
+          </div>
         </div>
-        <div className="space-y-4">
-          <div>
-            <h4 className="text-sm font-display font-semibold text-accent-cyan mb-1">Objective</h4>
-            <p className="text-sm sm:text-base text-text-secondary">{protocol.protocolSummary.objective}</p>
-          </div>
-          <div>
-            <h4 className="text-sm font-display font-semibold text-accent-violet mb-1">Strategic Reasoning</h4>
-            <p className="text-sm sm:text-base text-text-secondary">{protocol.protocolSummary.strategicReasoning}</p>
-          </div>
-        </div>
-      </div>
+      )}
 
-      {/* Core Stack */}
-      <div>
-        <h2 className="font-display font-bold text-lg sm:text-xl mb-4 flex items-center gap-2">
-          <span>🧬</span> Core Stack
-        </h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {protocol.coreStack.map((peptide, i) => (
-            <div key={i} className="glass-panel p-5 sm:p-6 card-hover">
-              <div className="flex items-center justify-between mb-3 flex-wrap gap-2">
-                <h3 className="font-display font-semibold text-base sm:text-lg text-accent-cyan">{peptide.name}</h3>
-                <span className={cn(
-                  'px-2 py-0.5 rounded-full text-xs font-mono border flex-shrink-0',
-                  peptide.riskLevel === 'low' ? 'text-accent-emerald border-accent-emerald/20 bg-accent-emerald/10' :
-                  peptide.riskLevel === 'moderate' ? 'text-accent-amber border-accent-amber/20 bg-accent-amber/10' :
-                  'text-accent-rose border-accent-rose/20 bg-accent-rose/10'
-                )}>{peptide.riskLevel}</span>
-              </div>
-              <div className="space-y-3 text-sm">
-                <div><span className="text-text-muted">Mechanism:</span><p className="text-text-secondary">{peptide.mechanism}</p></div>
-                <div><span className="text-text-muted">Why Selected:</span><p className="text-text-secondary">{peptide.whySelected}</p></div>
-                <div><span className="text-text-muted">Synergy Role:</span><p className="text-text-secondary">{peptide.synergyRole}</p></div>
-                <div className="flex flex-col sm:flex-row justify-between gap-2 pt-2 border-t border-surface-border/30">
-                  <div>
-                    <span className="text-text-muted text-xs">Dosing (Educational)</span>
-                    <p className="text-accent-cyan font-mono text-xs">{peptide.educationalDosing}</p>
-                  </div>
-                  <div className="sm:text-right">
-                    <span className="text-text-muted text-xs">Expected Results</span>
-                    <p className="text-accent-violet text-xs">{peptide.timelineExpectation}</p>
+      {protocol.coreStack && (
+        <div>
+          <h2 className="font-display font-bold text-lg sm:text-xl mb-4 flex items-center gap-2">
+            <span>🧬</span> Core Stack ({protocol.coreStack.length} peptides)
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {protocol.coreStack.map((pep: any, i: number) => (
+              <div key={i} className="glass-panel p-5 sm:p-6">
+                <div className="flex items-center justify-between mb-3 flex-wrap gap-2">
+                  <h3 className="font-display font-semibold text-base text-accent-cyan">{pep.name}</h3>
+                  <span className={cn('px-2 py-0.5 rounded-full text-xs font-mono',
+                    pep.riskLevel === 'low' ? 'text-accent-emerald bg-accent-emerald/10' :
+                    pep.riskLevel === 'moderate' ? 'text-accent-amber bg-accent-amber/10' :
+                    'text-accent-rose bg-accent-rose/10'
+                  )}>{pep.riskLevel}</span>
+                </div>
+                <div className="space-y-2 text-sm">
+                  <div><span className="text-text-muted">Mechanism:</span><p className="text-text-secondary">{pep.mechanism}</p></div>
+                  <div><span className="text-text-muted">Why Selected:</span><p className="text-text-secondary">{pep.whySelected}</p></div>
+                  <div><span className="text-text-muted">Synergy:</span><p className="text-text-secondary">{pep.synergyRole}</p></div>
+                  <div className="pt-2 border-t border-surface-border">
+                    <span className="text-text-muted text-xs">Dosing (Educational): </span>
+                    <span className="text-accent-cyan font-mono text-xs">{pep.educationalDosing}</span>
                   </div>
                 </div>
               </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {protocol.synergyAnalysis && (
+        <div className="glass-panel p-5 sm:p-8">
+          <h2 className="font-display font-bold text-lg sm:text-xl mb-4">🔗 Synergy Analysis</h2>
+          <p className="text-sm text-text-secondary mb-4">{protocol.synergyAnalysis.overview}</p>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div>
+              <h4 className="text-sm font-display font-semibold text-accent-emerald mb-2">Amplifiers</h4>
+              {protocol.synergyAnalysis.amplifiers?.map((a: string, i: number) => (
+                <p key={i} className="text-xs text-text-secondary mb-1">+ {a}</p>
+              ))}
             </div>
-          ))}
-        </div>
-      </div>
-
-      {/* Synergy Analysis */}
-      <div className="glass-panel p-5 sm:p-8">
-        <h2 className="font-display font-bold text-lg sm:text-xl mb-4 flex items-center gap-2"><span>🔗</span> Synergy Analysis</h2>
-        <p className="text-sm sm:text-base text-text-secondary mb-4">{protocol.synergyAnalysis.overview}</p>
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-          <div>
-            <h4 className="text-sm font-display font-semibold text-accent-emerald mb-2">Amplifiers</h4>
-            <ul className="space-y-1">{protocol.synergyAnalysis.amplifiers.map((a, i) => (
-              <li key={i} className="text-xs sm:text-sm text-text-secondary flex items-start gap-2"><span className="text-accent-emerald mt-0.5 flex-shrink-0">+</span>{a}</li>
-            ))}</ul>
-          </div>
-          <div>
-            <h4 className="text-sm font-display font-semibold text-accent-amber mb-2">Redundancies</h4>
-            <ul className="space-y-1">{protocol.synergyAnalysis.redundancies.map((r, i) => (
-              <li key={i} className="text-xs sm:text-sm text-text-secondary flex items-start gap-2"><span className="text-accent-amber mt-0.5 flex-shrink-0">~</span>{r}</li>
-            ))}</ul>
-          </div>
-          <div>
-            <h4 className="text-sm font-display font-semibold text-accent-rose mb-2">Warnings</h4>
-            <ul className="space-y-1">{protocol.synergyAnalysis.interactionWarnings.map((w, i) => (
-              <li key={i} className="text-xs sm:text-sm text-text-secondary flex items-start gap-2"><span className="text-accent-rose mt-0.5 flex-shrink-0">!</span>{w}</li>
-            ))}</ul>
-          </div>
-        </div>
-      </div>
-
-      {/* Risk */}
-      <div className="glass-panel p-5 sm:p-8 border-accent-rose/10">
-        <h2 className="font-display font-bold text-lg sm:text-xl mb-4 flex items-center gap-2"><span>⚠️</span> Risk & Tradeoffs</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
-          <div>
-            <h4 className="text-sm font-display font-semibold text-accent-rose mb-2">Side Effects</h4>
-            <div className="flex flex-wrap gap-1.5">
-              {protocol.riskAndTradeoffs.sideEffects.map((se, i) => (
-                <span key={i} className="px-2 py-1 bg-accent-rose/10 border border-accent-rose/20 rounded text-xs text-accent-rose">{se}</span>
+            <div>
+              <h4 className="text-sm font-display font-semibold text-accent-amber mb-2">Redundancies</h4>
+              {protocol.synergyAnalysis.redundancies?.map((r: string, i: number) => (
+                <p key={i} className="text-xs text-text-secondary mb-1">~ {r}</p>
+              ))}
+            </div>
+            <div>
+              <h4 className="text-sm font-display font-semibold text-accent-rose mb-2">Warnings</h4>
+              {protocol.synergyAnalysis.interactionWarnings?.map((w: string, i: number) => (
+                <p key={i} className="text-xs text-text-secondary mb-1">! {w}</p>
               ))}
             </div>
           </div>
-          <div>
-            <h4 className="text-sm font-display font-semibold text-accent-amber mb-2">Monitoring</h4>
-            <ul className="space-y-1">{protocol.riskAndTradeoffs.monitoringRecommendations.map((m, i) => (
-              <li key={i} className="text-xs sm:text-sm text-text-secondary">• {m}</li>
-            ))}</ul>
-          </div>
         </div>
-      </div>
+      )}
 
-      {/* Timeline */}
-      <div>
-        <h2 className="font-display font-bold text-lg sm:text-xl mb-4 flex items-center gap-2"><span>📅</span> Weekly Timeline</h2>
-        <div className="space-y-3">
-          {protocol.weeklyTimeline.map((week, i) => (
-            <div key={i} className="glass-panel p-4 sm:p-5 flex gap-3 sm:gap-4 items-start">
-              <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-xl bg-gradient-to-br from-accent-cyan/20 to-accent-violet/20 flex flex-col items-center justify-center flex-shrink-0">
-                <span className="text-[10px] sm:text-xs text-text-muted">Week</span>
-                <span className="font-display font-bold text-sm sm:text-base text-accent-cyan">{week.week}</span>
+      {protocol.weeklyTimeline && (
+        <div>
+          <h2 className="font-display font-bold text-lg sm:text-xl mb-4">📅 Weekly Timeline</h2>
+          <div className="space-y-3">
+            {protocol.weeklyTimeline.map((week: any, i: number) => (
+              <div key={i} className="glass-panel p-4 sm:p-5 flex gap-3 sm:gap-4 items-start">
+                <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-xl bg-accent-cyan/10 flex flex-col items-center justify-center flex-shrink-0">
+                  <span className="text-[10px] text-text-muted">Week</span>
+                  <span className="font-display font-bold text-sm text-accent-cyan">{week.week}</span>
+                </div>
+                <div className="min-w-0">
+                  <h4 className="font-display font-semibold text-sm text-accent-violet">{week.phase}</h4>
+                  <p className="text-xs sm:text-sm text-text-secondary mt-1">{week.actions}</p>
+                  <p className="text-xs text-text-muted mt-1">{week.expectations}</p>
+                </div>
               </div>
-              <div className="min-w-0">
-                <h4 className="font-display font-semibold text-sm text-accent-violet">{week.phase}</h4>
-                <p className="text-xs sm:text-sm text-text-secondary mt-1">{week.actions}</p>
-                <p className="text-xs text-text-muted mt-1">{week.expectations}</p>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* Adaptation */}
-      <div className="glass-panel p-5 sm:p-8">
-        <h2 className="font-display font-bold text-lg sm:text-xl mb-4 flex items-center gap-2"><span>🔄</span> Adaptation Logic</h2>
-        <div className="space-y-4">
-          <div><h4 className="text-sm font-display font-semibold text-accent-cyan mb-1">Plateau Response</h4><p className="text-sm text-text-secondary">{protocol.adaptationLogic.plateauResponse}</p></div>
-          <div><h4 className="text-sm font-display font-semibold text-accent-violet mb-1">Rotation Schedule</h4><p className="text-sm text-text-secondary">{protocol.adaptationLogic.rotationSchedule}</p></div>
-          <div><h4 className="text-sm font-display font-semibold text-accent-amber mb-1">When to Stop</h4><p className="text-sm text-text-secondary">{protocol.adaptationLogic.discontinuationCriteria}</p></div>
-        </div>
-      </div>
-
-      {/* Alternatives */}
-      <div>
-        <h2 className="font-display font-bold text-lg sm:text-xl mb-4 flex items-center gap-2"><span>🔀</span> Alternative Stacks</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div className="glass-panel p-5 sm:p-6 border-accent-emerald/20">
-            <h4 className="font-display font-semibold text-accent-emerald mb-2">Conservative Option</h4>
-            <p className="text-sm text-text-secondary mb-3">{protocol.alternativeStacks.conservative.description}</p>
-            <div className="flex flex-wrap gap-1.5 mb-3">
-              {protocol.alternativeStacks.conservative.peptides.map((p, i) => (
-                <span key={i} className="px-2 py-1 bg-accent-emerald/10 rounded text-xs text-accent-emerald font-mono">{p}</span>
-              ))}
-            </div>
-            <p className="text-xs text-text-muted italic">{protocol.alternativeStacks.conservative.tradeoff}</p>
-          </div>
-          <div className="glass-panel p-5 sm:p-6 border-accent-rose/20">
-            <h4 className="font-display font-semibold text-accent-rose mb-2">Aggressive Option</h4>
-            <p className="text-sm text-text-secondary mb-3">{protocol.alternativeStacks.aggressive.description}</p>
-            <div className="flex flex-wrap gap-1.5 mb-3">
-              {protocol.alternativeStacks.aggressive.peptides.map((p, i) => (
-                <span key={i} className="px-2 py-1 bg-accent-rose/10 rounded text-xs text-accent-rose font-mono">{p}</span>
-              ))}
-            </div>
-            <p className="text-xs text-text-muted italic">{protocol.alternativeStacks.aggressive.tradeoff}</p>
+            ))}
           </div>
         </div>
-      </div>
+      )}
 
-      {/* Disclaimer */}
       <div className="glass-panel p-4 sm:p-6 border-accent-amber/20">
         <p className="text-xs text-text-muted text-center leading-relaxed">
-          ⚠️ <strong>DISCLAIMER:</strong> This protocol is for educational and research purposes only.
-          All dosing is non-prescriptive. This is NOT medical advice.
-          Consult a qualified healthcare professional before making any decisions.
+          ⚠️ <strong>DISCLAIMER:</strong> For educational and research purposes only. Not medical advice. Consult a healthcare professional.
         </p>
       </div>
     </div>
@@ -304,8 +230,10 @@ export default function GeneratorPage() {
   const [isGenerating, setIsGenerating] = useState(false)
   const [genStep, setGenStep] = useState('')
   const [protocol, setProtocol] = useState<GeneratedProtocol | null>(null)
+  const [protocolId, setProtocolId] = useState<string | null>(null)
+  const [saved, setSaved] = useState(false)
   const [error, setError] = useState('')
-  const { plan, addProtocol, setCredits } = useAppStore()
+  const { plan, user, addProtocol } = useAppStore()
 
   const handleGenerate = async () => {
     if (!goal) { setError('Please select a goal'); return }
@@ -313,6 +241,8 @@ export default function GeneratorPage() {
     setError('')
     setIsGenerating(true)
     setProtocol(null)
+    setProtocolId(null)
+    setSaved(false)
 
     for (let i = 0; i < GENERATION_STEPS.length; i++) {
       setGenStep(GENERATION_STEPS[i])
@@ -333,21 +263,14 @@ export default function GeneratorPage() {
       if (!res.ok) { const err = await res.json(); throw new Error(err.error || 'Generation failed') }
       const data = await res.json()
       setProtocol(data.protocol)
+      setProtocolId(data.protocolId || null)
+      setSaved(!!data.saved)
 
-      // Update store with new protocol and credits
       if (data.saved && data.protocolId) {
         addProtocol({
-          id: data.protocolId,
-          goal: goal,
-          created_at: new Date().toISOString(),
-          protocol: data.protocol,
-          credits_used: 1,
-          status: 'active',
-          currentWeek: 1,
+          id: data.protocolId, goal, created_at: new Date().toISOString(),
+          protocol: data.protocol, credits_used: 0, status: 'active', currentWeek: 1,
         })
-      }
-      if (data.creditsRemaining !== undefined) {
-        setCredits(data.creditsRemaining)
       }
     } catch (err: any) {
       setError(err.message || 'Failed to generate protocol.')
@@ -355,6 +278,30 @@ export default function GeneratorPage() {
       setIsGenerating(false)
       setGenStep('')
     }
+  }
+
+  const handleSave = async () => {
+    if (!protocol || !user || saved) return
+    try {
+      const supabase = createClient()
+      const { data, error: saveErr } = await supabase
+        .from('protocols')
+        .insert({
+          user_id: user.id, goal, gender: gender || null,
+          input: { goal, gender, experienceLevel: experience, riskTolerance, age },
+          protocol, status: 'active', current_week: 1, credits_used: 0,
+        })
+        .select().single()
+
+      if (!saveErr && data) {
+        setProtocolId(data.id)
+        setSaved(true)
+        addProtocol({
+          id: data.id, goal, created_at: new Date().toISOString(),
+          protocol, credits_used: 0, status: 'active', currentWeek: 1,
+        })
+      }
+    } catch (e) { console.error('Save error:', e) }
   }
 
   return (
@@ -368,7 +315,7 @@ export default function GeneratorPage() {
             <div className="mb-8 sm:mb-12 text-center">
               <div className="inline-flex items-center gap-2 px-3 sm:px-4 py-2 glass-panel-light mb-4 sm:mb-6">
                 <div className="w-2 h-2 rounded-full bg-accent-cyan animate-pulse" />
-                <span className="text-[10px] sm:text-xs font-mono text-text-secondary uppercase tracking-wider">AI Protocol Engine v2.0</span>
+                <span className="text-[10px] sm:text-xs font-mono text-text-secondary uppercase tracking-wider">AI Protocol Engine</span>
               </div>
               <h1 className="font-display font-bold text-3xl sm:text-4xl md:text-5xl mb-3 sm:mb-4">
                 Protocol <span className="text-gradient">Generator</span>
@@ -385,7 +332,6 @@ export default function GeneratorPage() {
             </div>
 
             <div className="space-y-6 sm:space-y-8">
-              {/* Goal */}
               <div className="glass-panel p-5 sm:p-8">
                 <h3 className="font-display font-semibold text-base sm:text-lg mb-4 flex items-center gap-2">
                   <span className="text-accent-cyan">01</span> Select Your Goal
@@ -393,38 +339,29 @@ export default function GeneratorPage() {
                 <GoalSelector selected={goal} onSelect={setGoal} />
               </div>
 
-              {/* Parameters */}
               <div className="glass-panel p-5 sm:p-8">
                 <h3 className="font-display font-semibold text-base sm:text-lg mb-6 flex items-center gap-2">
                   <span className="text-accent-cyan">02</span> Set Parameters
                 </h3>
                 <div className="space-y-6">
-                  {/* Gender */}
                   <div>
                     <label className="text-sm font-display font-medium text-text-secondary mb-3 block">Gender</label>
                     <GenderSelector selected={gender} onSelect={setGender} />
                   </div>
-
-                  {/* Experience */}
                   <div>
                     <label className="text-sm font-display font-medium text-text-secondary mb-3 block">Experience Level</label>
                     <div className="grid grid-cols-3 gap-2 sm:gap-3">
                       {(['beginner', 'intermediate', 'advanced'] as const).map(lvl => (
                         <button key={lvl} onClick={() => setExperience(lvl)}
-                          className={cn(
-                            'py-3 rounded-xl border text-xs sm:text-sm font-medium transition-all min-h-[44px]',
-                            experience === lvl
-                              ? 'border-accent-cyan/50 bg-accent-cyan/10 text-accent-cyan'
-                              : 'border-surface-border bg-surface-tertiary text-text-muted active:bg-surface-secondary'
-                          )}
-                        >{lvl.charAt(0).toUpperCase() + lvl.slice(1)}</button>
+                          className={cn('py-3 rounded-xl border text-xs sm:text-sm font-medium transition-all min-h-[44px]',
+                            experience === lvl ? 'border-accent-cyan/50 bg-accent-cyan/10 text-accent-cyan'
+                              : 'border-surface-border bg-surface-tertiary text-text-muted'
+                          )}>{lvl.charAt(0).toUpperCase() + lvl.slice(1)}</button>
                       ))}
                     </div>
                   </div>
-
                   <SliderInput label="Risk Tolerance" value={riskTolerance} onChange={setRiskTolerance} min={1} max={5} labels={['Conservative', 'Moderate', 'Aggressive']} />
                   <SliderInput label="Age" value={age} onChange={setAge} min={18} max={80} />
-
                   <div className="grid grid-cols-2 gap-3 sm:gap-4">
                     <div>
                       <label className="text-xs sm:text-sm font-display font-medium text-text-secondary mb-2 block">Weight (lbs)</label>
@@ -435,7 +372,6 @@ export default function GeneratorPage() {
                       <input type="number" value={bodyFat} onChange={(e) => setBodyFat(e.target.value)} placeholder="Optional" className="input-field" />
                     </div>
                   </div>
-
                   <div>
                     <label className="text-xs sm:text-sm font-display font-medium text-text-secondary mb-2 block">Additional Notes</label>
                     <textarea value={notes} onChange={(e) => setNotes(e.target.value)} placeholder="Symptoms, bloodwork, concerns..." rows={3} className="input-field resize-none" />
@@ -451,21 +387,29 @@ export default function GeneratorPage() {
 
               <div className="text-center">
                 <button onClick={handleGenerate} disabled={isGenerating || plan === 'free'}
-                  className="btn-primary text-base sm:text-lg px-10 sm:px-12 py-4 sm:py-5 disabled:opacity-50 disabled:cursor-not-allowed w-full sm:w-auto"
-                >
+                  className="btn-primary text-base sm:text-lg px-10 sm:px-12 py-4 sm:py-5 disabled:opacity-50 disabled:cursor-not-allowed w-full sm:w-auto">
                   {plan === 'free' ? '🔒 Upgrade to Pro' : isGenerating ? 'Generating...' : '⚡ Generate Protocol'}
                 </button>
-                {plan !== 'free' && <p className="text-xs text-text-muted mt-3">Included with your Pro subscription</p>}
+                {plan !== 'free' && <p className="text-xs text-text-muted mt-3">Unlimited with your Pro subscription</p>}
               </div>
             </div>
           </>
         ) : (
           <>
+            {/* Protocol Result Header */}
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 mb-6 sm:mb-8">
-              <button onClick={() => setProtocol(null)} className="btn-secondary text-sm !py-2">← New Protocol</button>
+              <button onClick={() => { setProtocol(null); setProtocolId(null); setSaved(false) }}
+                className="btn-secondary text-sm !py-2">← New Protocol</button>
               <div className="flex gap-3">
-                <button className="btn-secondary text-sm !py-2">💾 Save</button>
-                <button className="btn-primary text-sm !py-2">📄 Export PDF — $19</button>
+                {!saved ? (
+                  <button onClick={handleSave} className="btn-secondary text-sm !py-2">💾 Save Protocol</button>
+                ) : (
+                  <Link href={protocolId ? `/protocol/${protocolId}` : '/dashboard'}
+                    className="btn-secondary text-sm !py-2">✅ Saved — View Details</Link>
+                )}
+                <button className="btn-primary text-sm !py-2" onClick={() => alert('PDF export coming soon! Price: $' + PDF_REPORT_PRICE)}>
+                  📄 Export PDF — ${PDF_REPORT_PRICE}
+                </button>
               </div>
             </div>
             <ProtocolReport protocol={protocol} />

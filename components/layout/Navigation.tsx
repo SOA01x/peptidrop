@@ -43,12 +43,9 @@ function ThemeToggle() {
   }
 
   return (
-    <button
-      onClick={toggle}
+    <button onClick={toggle}
       className="p-2 rounded-lg text-text-muted hover:text-text-primary hover:bg-surface-secondary transition-all min-w-[36px] min-h-[36px] flex items-center justify-center"
-      aria-label="Toggle theme"
-      title={dark ? 'Switch to light mode' : 'Switch to dark mode'}
-    >
+      aria-label="Toggle theme">
       {dark ? (
         <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
           <circle cx="12" cy="12" r="5"/><path d="M12 1v2m0 18v2M4.22 4.22l1.42 1.42m12.73 12.73l1.42 1.42M1 12h2m18 0h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
@@ -66,7 +63,7 @@ export default function Navigation() {
   const pathname = usePathname()
   const [scrolled, setScrolled] = useState(false)
   const [mobileOpen, setMobileOpen] = useState(false)
-  const { credits, user } = useAppStore()
+  const { user, plan } = useAppStore()
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20)
@@ -102,15 +99,22 @@ export default function Navigation() {
           ))}
         </div>
 
+        {/* Desktop Right */}
         <div className="hidden lg:flex items-center gap-3">
           <ThemeToggle />
           {user ? (
             <>
-              <div className="flex items-center gap-2 px-4 py-2 glass-panel-light">
-                <div className="w-2 h-2 rounded-full bg-accent-emerald animate-pulse" />
-                <span className="text-sm font-mono text-accent-cyan">{credits}</span>
-                <span className="text-xs text-text-muted">credits</span>
-              </div>
+              {plan === 'pro' ? (
+                <div className="flex items-center gap-2 px-4 py-2 glass-panel-light">
+                  <div className="w-2 h-2 rounded-full bg-accent-cyan animate-pulse" />
+                  <span className="text-sm font-display font-semibold text-accent-cyan">PRO</span>
+                </div>
+              ) : (
+                <Link href="/pricing" className="flex items-center gap-2 px-4 py-2 glass-panel-light hover:border-accent-cyan/30 transition-colors">
+                  <span className="text-xs text-text-muted">Free</span>
+                  <span className="text-xs text-accent-cyan">Upgrade</span>
+                </Link>
+              )}
               <Link href="/profile" className="btn-secondary text-sm !py-2">Profile</Link>
             </>
           ) : (
@@ -125,10 +129,14 @@ export default function Navigation() {
         <div className="flex lg:hidden items-center gap-1">
           <ThemeToggle />
           {user ? (
-            <Link href="/dashboard" className="flex items-center gap-1.5 px-3 py-1.5 glass-panel-light rounded-lg">
-              <div className="w-1.5 h-1.5 rounded-full bg-accent-emerald animate-pulse" />
-              <span className="text-xs font-mono text-accent-cyan">{credits}</span>
-            </Link>
+            plan === 'pro' ? (
+              <Link href="/dashboard" className="flex items-center gap-1.5 px-3 py-1.5 glass-panel-light rounded-lg">
+                <div className="w-1.5 h-1.5 rounded-full bg-accent-cyan animate-pulse" />
+                <span className="text-xs font-display font-semibold text-accent-cyan">PRO</span>
+              </Link>
+            ) : (
+              <Link href="/pricing" className="text-xs text-accent-cyan px-2 py-1">Upgrade</Link>
+            )
           ) : (
             <Link href="/signup" className="btn-primary text-xs !py-2 !px-4">Sign Up</Link>
           )}
@@ -156,9 +164,8 @@ export default function Navigation() {
               {user ? (
                 <>
                   <div className="flex items-center gap-3 px-4 py-3 glass-panel">
-                    <div className="w-2 h-2 rounded-full bg-accent-emerald animate-pulse" />
-                    <span className="text-sm font-mono text-accent-cyan">{credits}</span>
-                    <span className="text-xs text-text-muted">credits available</span>
+                    <div className="w-2 h-2 rounded-full bg-accent-cyan animate-pulse" />
+                    <span className="text-sm font-display font-semibold text-accent-cyan">{plan === 'pro' ? 'Pro Plan' : 'Free Plan'}</span>
                   </div>
                   <Link href="/profile" onClick={() => setMobileOpen(false)}
                     className="block px-4 py-4 rounded-xl text-base font-medium text-text-secondary active:bg-surface-secondary">Profile</Link>

@@ -5,28 +5,27 @@ import { useState, useRef, useEffect } from 'react'
 import Navigation from '@/components/layout/Navigation'
 import Footer from '@/components/layout/Footer'
 import { useAppStore } from '@/lib/store'
-import { peptides, getPeptideById, getStackCompatibility, peptideCategories, type Peptide } from '@/data/peptides'
+import { getPeptideById, getStackCompatibility, type Peptide } from '@/data/peptides'
 import { cn } from '@/lib/utils'
+import { createClient } from '@/lib/supabase'
 import Link from 'next/link'
 
 // ============================================
-// PAYWALL BLUR WRAPPER
+// PAYWALL
 // ============================================
 function PaywallSection({ children, title, description, requiresPro = true }: {
   children: React.ReactNode; title: string; description: string; requiresPro?: boolean
 }) {
   const { user, plan } = useAppStore()
   const showPaywall = requiresPro ? (!user || plan === 'free') : !user
-
   if (!showPaywall) return <>{children}</>
-
   return (
     <div className="relative">
       <div className="blur-md pointer-events-none select-none opacity-40">{children}</div>
       <div className="absolute inset-0 z-10 flex flex-col items-center justify-center rounded-2xl bg-surface/60 backdrop-blur-sm">
         <div className="text-center px-6 max-w-md">
-          <span className="text-3xl sm:text-4xl block mb-3">🔒</span>
-          <h3 className="font-display font-bold text-lg sm:text-xl mb-2">{title}</h3>
+          <span className="text-3xl block mb-3">🔒</span>
+          <h3 className="font-display font-bold text-lg mb-2">{title}</h3>
           <p className="text-text-muted text-sm mb-5">{description}</p>
           {!user ? (
             <Link href="/signup" className="btn-primary text-sm">Sign Up Free</Link>
@@ -40,30 +39,28 @@ function PaywallSection({ children, title, description, requiresPro = true }: {
 }
 
 // ============================================
-// PLAN CARD
+// PLAN CARD — No credits, just plan status
 // ============================================
 function PlanCard() {
-  const { plan, credits } = useAppStore()
+  const { plan } = useAppStore()
   return (
     <div className="glass-panel glow-border p-5 sm:p-8 relative overflow-hidden">
       <div className="relative">
-        <div className="flex items-center gap-2 mb-2">
+        <div className="flex items-center gap-2 mb-3">
           <div className={cn('w-3 h-3 rounded-full animate-pulse', plan === 'pro' ? 'bg-accent-cyan' : 'bg-accent-emerald')} />
-          <span className="text-sm text-text-secondary font-display">
-            {plan === 'pro' ? 'Pro Plan' : 'Free Plan'}
-          </span>
+          <span className="text-sm text-text-secondary font-display">Current Plan</span>
         </div>
-        {plan === 'free' ? (
+        {plan === 'pro' ? (
           <>
-            <div className="text-3xl sm:text-4xl font-display font-bold text-text-muted mb-3">Explorer</div>
-            <p className="text-sm text-text-muted mb-5">Upgrade to unlock AI protocols and tracking</p>
-            <Link href="/pricing" className="btn-primary text-sm">Upgrade to Pro — $29/mo</Link>
+            <div className="text-4xl sm:text-5xl font-display font-bold text-gradient mb-2">Pro</div>
+            <p className="text-sm text-text-muted mb-5">Unlimited AI protocols, tracking, and analysis</p>
+            <Link href="/generator" className="btn-primary text-sm">Generate Protocol</Link>
           </>
         ) : (
           <>
-            <div className="text-4xl sm:text-5xl font-display font-bold text-gradient mb-1">{credits}</div>
-            <p className="text-sm text-text-muted mb-5">AI analyses remaining</p>
-            <Link href="/generator" className="btn-primary text-sm">Generate Protocol</Link>
+            <div className="text-3xl font-display font-bold text-text-muted mb-2">Free</div>
+            <p className="text-sm text-text-muted mb-5">Upgrade for AI protocols and full access</p>
+            <Link href="/pricing" className="btn-primary text-sm">Upgrade to Pro — $29/mo</Link>
           </>
         )}
       </div>
@@ -79,17 +76,15 @@ function QuickActions() {
     <div className="glass-panel p-5 sm:p-8">
       <h3 className="font-display font-semibold text-base sm:text-lg mb-4">Quick Actions</h3>
       <div className="space-y-2 sm:space-y-3">
-        <Link href="/generator" className="flex items-center gap-3 sm:gap-4 p-3 sm:p-4 rounded-xl border border-surface-border transition-all group"
-          className="bg-surface-tertiary">
-          <span className="text-xl sm:text-2xl">⚡</span>
+        <Link href="/generator" className="flex items-center gap-3 p-3 sm:p-4 bg-surface-tertiary rounded-xl border border-transparent transition-all group">
+          <span className="text-xl">⚡</span>
           <div>
             <p className="font-display font-semibold text-sm group-hover:text-accent-cyan transition-colors">Generate Protocol</p>
             <p className="text-xs text-text-muted">AI-powered stack generation</p>
           </div>
         </Link>
-        <Link href="/peptides" className="flex items-center gap-3 sm:gap-4 p-3 sm:p-4 rounded-xl border border-surface-border transition-all group"
-          className="bg-surface-tertiary">
-          <span className="text-xl sm:text-2xl">🔍</span>
+        <Link href="/peptides" className="flex items-center gap-3 p-3 sm:p-4 bg-surface-tertiary rounded-xl border border-transparent transition-all group">
+          <span className="text-xl">🔍</span>
           <div>
             <p className="font-display font-semibold text-sm group-hover:text-accent-violet transition-colors">Explore Peptides</p>
             <p className="text-xs text-text-muted">Browse 345+ compounds</p>
@@ -101,7 +96,7 @@ function QuickActions() {
 }
 
 // ============================================
-// PROTOCOL HISTORY — REAL DATA ONLY
+// PROTOCOL HISTORY — REAL DATA, CLICKABLE
 // ============================================
 function ProtocolTimeline() {
   const { protocols } = useAppStore()
@@ -112,12 +107,10 @@ function ProtocolTimeline() {
         <h3 className="font-display font-semibold text-base sm:text-lg mb-6 flex items-center gap-2">
           <span>📋</span> Protocol History
         </h3>
-        <div className="text-center py-12 sm:py-16">
+        <div className="text-center py-12">
           <span className="text-4xl block mb-4">📋</span>
           <h4 className="font-display font-semibold text-base mb-2">No protocols yet</h4>
-          <p className="text-text-muted text-sm mb-6 max-w-xs mx-auto">
-            Generate your first AI protocol to see it here with progress tracking.
-          </p>
+          <p className="text-text-muted text-sm mb-6 max-w-xs mx-auto">Generate your first AI protocol to see it here.</p>
           <Link href="/generator" className="btn-primary text-sm">Generate Your First Protocol</Link>
         </div>
       </div>
@@ -128,56 +121,37 @@ function ProtocolTimeline() {
     <div className="glass-panel p-5 sm:p-8">
       <h3 className="font-display font-semibold text-base sm:text-lg mb-6 flex items-center gap-2">
         <span>📋</span> Protocol History
-        <span className="text-xs font-mono text-text-muted ml-auto">{protocols.length} protocol{protocols.length !== 1 ? 's' : ''}</span>
+        <span className="text-xs font-mono text-text-muted ml-auto">{protocols.length} total</span>
       </h3>
-
       <div className="relative">
-        <div className="absolute left-[18px] sm:left-[22px] top-0 bottom-0 w-px" style={{ background: 'linear-gradient(to bottom, #00E5FF33, #7A5CFF22, transparent)' }} />
-
-        <div className="space-y-4 sm:space-y-6">
+        <div className="absolute left-[18px] sm:left-[22px] top-0 bottom-0 w-px bg-gradient-to-b from-accent-cyan/30 to-transparent" />
+        <div className="space-y-4">
           {protocols.map((p: any) => (
-            <div key={p.id} className="relative pl-10 sm:pl-14">
-              <div className={cn(
-                'absolute left-2.5 sm:left-3.5 top-4 w-3 h-3 rounded-full',
-                p.status === 'active' ? 'bg-accent-emerald' :
-                p.status === 'completed' ? 'bg-accent-cyan' : 'bg-accent-amber'
-              )} className="border-2 border-surface" />
-
-              <Link href={`/protocol/${p.id}`} className="glass-panel-light p-4 sm:p-5 card-hover block">
-                <div className="flex items-start justify-between gap-2 mb-3 flex-wrap">
-                  <div className="min-w-0">
-                    <h4 className="font-display font-semibold text-sm sm:text-base">{p.goal}</h4>
-                    <p className="text-xs text-text-muted mt-0.5">
-                      {new Date(p.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
-                    </p>
+            <Link key={p.id} href={`/protocol/${p.id}`} className="relative pl-10 sm:pl-14 block group">
+              <div className={cn('absolute left-2.5 sm:left-3.5 top-4 w-3 h-3 rounded-full border-2 border-surface',
+                p.status === 'active' ? 'bg-accent-emerald' : p.status === 'completed' ? 'bg-accent-cyan' : 'bg-accent-amber'
+              )} />
+              <div className="glass-panel-light p-4 sm:p-5 card-hover">
+                <div className="flex items-start justify-between gap-2 mb-2">
+                  <div>
+                    <h4 className="font-display font-semibold text-sm group-hover:text-accent-cyan transition-colors">{p.goal}</h4>
+                    <p className="text-xs text-text-muted">{new Date(p.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</p>
                   </div>
-                  <span className={cn(
-                    'px-2 py-0.5 rounded-full text-xs font-mono',
-                    p.status === 'active' ? 'text-accent-emerald' :
-                    p.status === 'completed' ? 'text-accent-cyan' : 'text-accent-amber'
-                  )} style={{
-                    backgroundColor: p.status === 'active' ? 'rgba(0,214,143,0.1)' :
-                      p.status === 'completed' ? 'rgba(0,229,255,0.1)' : 'rgba(255,184,0,0.1)',
-                    border: `1px solid ${p.status === 'active' ? 'rgba(0,214,143,0.2)' :
-                      p.status === 'completed' ? 'rgba(0,229,255,0.2)' : 'rgba(255,184,0,0.2)'}`
-                  }}>
-                    {p.status || 'active'}
-                  </span>
+                  <span className={cn('px-2 py-0.5 rounded-full text-xs font-mono',
+                    p.status === 'active' ? 'text-accent-emerald bg-accent-emerald/10' :
+                    p.status === 'completed' ? 'text-accent-cyan bg-accent-cyan/10' : 'text-accent-amber bg-accent-amber/10'
+                  )}>{p.status || 'active'}</span>
                 </div>
-
-                {/* Stack pills from real protocol data */}
                 {p.protocol?.coreStack && (
-                  <div className="flex flex-wrap gap-1.5">
-                    {p.protocol.coreStack.slice(0, 5).map((s: any, j: number) => (
-                      <span key={j} className="px-2 py-0.5 rounded text-xs text-text-secondary font-mono"
-                        className="bg-surface-tertiary">
-                        {s.name}
-                      </span>
+                  <div className="flex flex-wrap gap-1">
+                    {p.protocol.coreStack.slice(0, 4).map((s: any, j: number) => (
+                      <span key={j} className="px-2 py-0.5 rounded text-[10px] text-text-muted font-mono bg-surface-tertiary">{s.name}</span>
                     ))}
                   </div>
                 )}
-              </Link>
-            </div>
+                <p className="text-xs text-accent-cyan mt-2 opacity-0 group-hover:opacity-100 transition-opacity">Click to view full details →</p>
+              </div>
+            </Link>
           ))}
         </div>
       </div>
@@ -186,7 +160,7 @@ function ProtocolTimeline() {
 }
 
 // ============================================
-// STACK BUILDER — WITH SAVE/LOAD
+// STACK BUILDER with save/load
 // ============================================
 function StackBuilderPro() {
   const { selectedPeptides, stackNodes, removeFromStack, clearStack, addToStack, updateNodePosition,
@@ -205,265 +179,150 @@ function StackBuilderPro() {
   for (let i = 0; i < stackPeptides.length; i++) {
     for (let j = i + 1; j < stackPeptides.length; j++) {
       const a = stackPeptides[i], b = stackPeptides[j]
-      if (a.synergisticWith.includes(b.id) || b.synergisticWith.includes(a.id))
-        connections.push({ from: a.id, to: b.id, type: 'synergy' })
-      if (a.conflictsWith.includes(b.id) || b.conflictsWith.includes(a.id))
-        connections.push({ from: a.id, to: b.id, type: 'conflict' })
+      if (a.synergisticWith.includes(b.id) || b.synergisticWith.includes(a.id)) connections.push({ from: a.id, to: b.id, type: 'synergy' })
+      if (a.conflictsWith.includes(b.id) || b.conflictsWith.includes(a.id)) connections.push({ from: a.id, to: b.id, type: 'conflict' })
     }
   }
 
-  const riskColors: Record<string, string> = {
-    low: '#00D68F', moderate: '#FFB800', high: '#FF4D6A', 'very-high': '#FF0040',
-  }
-
+  const riskColors: Record<string, string> = { low: '#00D68F', moderate: '#FFB800', high: '#FF4D6A', 'very-high': '#FF0040' }
   const getNode = (id: string) => stackNodes.find(n => n.peptideId === id)
 
   const handleMouseDown = (peptideId: string, e: React.MouseEvent | React.TouchEvent) => {
     e.preventDefault()
     const node = getNode(peptideId)
     if (!node || !svgRef.current) return
-    const svg = svgRef.current
-    const pt = svg.createSVGPoint()
-    const clientX = 'touches' in e ? e.touches[0].clientX : e.clientX
-    const clientY = 'touches' in e ? e.touches[0].clientY : e.clientY
-    pt.x = clientX; pt.y = clientY
-    const svgP = pt.matrixTransform(svg.getScreenCTM()?.inverse())
-    setDragging(peptideId)
-    setDragOffset({ x: svgP.x - node.x, y: svgP.y - node.y })
+    const svg = svgRef.current; const pt = svg.createSVGPoint()
+    const cx = 'touches' in e ? e.touches[0].clientX : e.clientX
+    const cy = 'touches' in e ? e.touches[0].clientY : e.clientY
+    pt.x = cx; pt.y = cy
+    const sp = pt.matrixTransform(svg.getScreenCTM()?.inverse())
+    setDragging(peptideId); setDragOffset({ x: sp.x - node.x, y: sp.y - node.y })
   }
 
   useEffect(() => {
     if (!dragging) return
-    const handleMove = (e: MouseEvent | TouchEvent) => {
+    const move = (e: MouseEvent | TouchEvent) => {
       if (!svgRef.current) return
-      const svg = svgRef.current
-      const pt = svg.createSVGPoint()
-      const clientX = 'touches' in e ? e.touches[0].clientX : (e as MouseEvent).clientX
-      const clientY = 'touches' in e ? e.touches[0].clientY : (e as MouseEvent).clientY
-      pt.x = clientX; pt.y = clientY
-      const svgP = pt.matrixTransform(svg.getScreenCTM()?.inverse())
-      updateNodePosition(dragging, svgP.x - dragOffset.x, svgP.y - dragOffset.y)
+      const svg = svgRef.current; const pt = svg.createSVGPoint()
+      const cx = 'touches' in e ? e.touches[0].clientX : (e as MouseEvent).clientX
+      const cy = 'touches' in e ? e.touches[0].clientY : (e as MouseEvent).clientY
+      pt.x = cx; pt.y = cy
+      const sp = pt.matrixTransform(svg.getScreenCTM()?.inverse())
+      updateNodePosition(dragging, sp.x - dragOffset.x, sp.y - dragOffset.y)
     }
-    const handleUp = () => setDragging(null)
-    window.addEventListener('mousemove', handleMove)
-    window.addEventListener('mouseup', handleUp)
-    window.addEventListener('touchmove', handleMove, { passive: false })
-    window.addEventListener('touchend', handleUp)
-    return () => {
-      window.removeEventListener('mousemove', handleMove)
-      window.removeEventListener('mouseup', handleUp)
-      window.removeEventListener('touchmove', handleMove)
-      window.removeEventListener('touchend', handleUp)
-    }
+    const up = () => setDragging(null)
+    window.addEventListener('mousemove', move); window.addEventListener('mouseup', up)
+    window.addEventListener('touchmove', move, { passive: false }); window.addEventListener('touchend', up)
+    return () => { window.removeEventListener('mousemove', move); window.removeEventListener('mouseup', up)
+      window.removeEventListener('touchmove', move); window.removeEventListener('touchend', up) }
   }, [dragging, dragOffset, updateNodePosition])
 
-  const handleSaveStack = async () => {
+  const handleSave = async () => {
     if (!user || !stackName.trim() || selectedPeptides.length === 0) return
     setSaving(true)
     try {
-      const supabase = (await import('@/lib/supabase')).createClient()
-      const { data, error } = await supabase
-        .from('saved_stacks')
-        .insert({
-          user_id: user.id,
-          name: stackName.trim(),
-          peptide_ids: selectedPeptides,
-          node_positions: stackNodes,
-          synergy_score: compatibility?.score || null,
-          notes: null,
-        })
-        .select()
-        .single()
-
+      const supabase = createClient()
+      const { data, error } = await supabase.from('saved_stacks')
+        .insert({ user_id: user.id, name: stackName.trim(), peptide_ids: selectedPeptides, node_positions: stackNodes, synergy_score: compatibility?.score || null })
+        .select().single()
       if (!error && data) {
-        addSavedStack({
-          id: data.id, name: data.name,
-          peptide_ids: data.peptide_ids,
-          node_positions: data.node_positions,
-          synergy_score: data.synergy_score,
-          notes: data.notes, created_at: data.created_at,
-        })
-        setStackName('')
-        setShowSaveForm(false)
+        addSavedStack({ id: data.id, name: data.name, peptide_ids: data.peptide_ids, node_positions: data.node_positions, synergy_score: data.synergy_score, notes: null, created_at: data.created_at })
+        setStackName(''); setShowSaveForm(false)
       }
-    } catch (e) { console.error('Save stack error:', e) }
+    } catch (e) { console.error(e) }
     setSaving(false)
   }
 
-  const handleDeleteStack = async (stackId: string) => {
-    try {
-      const supabase = (await import('@/lib/supabase')).createClient()
-      await supabase.from('saved_stacks').delete().eq('id', stackId)
-      removeSavedStack(stackId)
-    } catch (e) { console.error('Delete stack error:', e) }
+  const handleDelete = async (id: string) => {
+    try { const s = createClient(); await s.from('saved_stacks').delete().eq('id', id); removeSavedStack(id) } catch (e) { console.error(e) }
   }
 
-  const popularIds = ['bpc-157', 'ipamorelin', 'cjc-1295-no-dac', 'tb-500', 'semax', 'mk-677']
-  const quickAddOptions = popularIds.filter(id => !selectedPeptides.includes(id)).slice(0, 4)
+  const qIds = ['bpc-157', 'ipamorelin', 'cjc-1295-no-dac', 'tb-500', 'semax', 'mk-677'].filter(id => !selectedPeptides.includes(id)).slice(0, 4)
 
   return (
     <div className="space-y-4">
-      {/* Active Stack Builder */}
       <div className="glass-panel p-5 sm:p-8">
         <div className="flex items-center justify-between mb-4 flex-wrap gap-2">
-          <h3 className="font-display font-semibold text-base sm:text-lg flex items-center gap-2">
-            <span>🧬</span> Stack Builder
-          </h3>
+          <h3 className="font-display font-semibold text-base sm:text-lg flex items-center gap-2"><span>🧬</span> Stack Builder</h3>
           <div className="flex gap-2">
             {selectedPeptides.length > 0 && (
-              <>
-                <button onClick={() => setShowSaveForm(!showSaveForm)}
-                  className="text-xs text-accent-cyan hover:underline px-2 py-1">💾 Save</button>
-                <button onClick={clearStack}
-                  className="text-xs text-text-muted hover:text-accent-rose transition-colors px-2 py-1">Clear</button>
-              </>
+              <><button onClick={() => setShowSaveForm(!showSaveForm)} className="text-xs text-accent-cyan px-2 py-1">💾 Save</button>
+              <button onClick={clearStack} className="text-xs text-text-muted hover:text-accent-rose px-2 py-1">Clear</button></>
             )}
-            <Link href="/peptides" className="text-xs text-accent-cyan hover:underline px-2 py-1">+ Add</Link>
+            <Link href="/peptides" className="text-xs text-accent-cyan px-2 py-1">+ Add</Link>
           </div>
         </div>
 
-        {/* Save Form */}
-        {showSaveForm && selectedPeptides.length > 0 && (
+        {showSaveForm && (
           <div className="mb-4 p-3 rounded-xl flex gap-2 bg-surface-tertiary">
-            <input type="text" value={stackName} onChange={(e) => setStackName(e.target.value)}
-              placeholder="Stack name..." className="input-field !min-h-[36px] !py-1.5 !text-sm flex-1" />
-            <button onClick={handleSaveStack} disabled={saving || !stackName.trim()}
-              className="btn-primary !py-1.5 !px-4 text-xs disabled:opacity-50">
-              {saving ? '...' : 'Save'}
-            </button>
+            <input type="text" value={stackName} onChange={(e) => setStackName(e.target.value)} placeholder="Stack name..." className="input-field !min-h-[36px] !py-1.5 !text-sm flex-1" />
+            <button onClick={handleSave} disabled={saving || !stackName.trim()} className="btn-primary !py-1.5 !px-4 text-xs disabled:opacity-50">{saving ? '...' : 'Save'}</button>
           </div>
         )}
 
         {stackPeptides.length === 0 ? (
-          <div className="text-center py-8 sm:py-12">
-            <span className="text-3xl sm:text-4xl block mb-4">🧬</span>
-            <h4 className="font-display font-semibold text-sm mb-2">Start building your stack</h4>
-            <p className="text-text-muted text-xs mb-4">Add peptides to see synergy scores and interactions</p>
+          <div className="text-center py-10">
+            <span className="text-3xl block mb-3">🧬</span>
+            <p className="text-text-muted text-sm mb-4">Add peptides to build your stack</p>
             <div className="flex flex-wrap justify-center gap-2">
-              {quickAddOptions.map(id => {
-                const p = getPeptideById(id)
-                if (!p) return null
-                return (
-                  <button key={id} onClick={() => addToStack(id)}
-                    className="px-3 py-2 rounded-lg text-xs text-text-secondary hover:text-accent-cyan transition-all min-h-[36px]"
-                    className="bg-surface-tertiary">
-                    + {p.abbreviation}
-                  </button>
-                )
-              })}
+              {qIds.map(id => { const p = getPeptideById(id); return p ? (
+                <button key={id} onClick={() => addToStack(id)} className="px-3 py-2 rounded-lg text-xs text-text-secondary bg-surface-tertiary hover:text-accent-cyan min-h-[36px]">+ {p.abbreviation}</button>
+              ) : null })}
             </div>
           </div>
         ) : (
           <>
-            {/* SVG Node Graph */}
             <div className="rounded-xl border mb-4 overflow-hidden bg-surface border-surface-border">
               <svg ref={svgRef} viewBox="0 0 500 400" className="w-full h-[250px] sm:h-[320px] touch-none select-none">
-                {connections.map((conn, i) => {
-                  const fromNode = getNode(conn.from)
-                  const toNode = getNode(conn.to)
-                  if (!fromNode || !toNode) return null
-                  return (
-                    <line key={i} x1={fromNode.x} y1={fromNode.y} x2={toNode.x} y2={toNode.y}
-                      stroke={conn.type === 'synergy' ? '#00D68F' : '#FF4D6A'}
-                      strokeWidth={conn.type === 'conflict' ? 2 : 1.5}
-                      strokeDasharray={conn.type === 'conflict' ? '6,4' : 'none'} opacity={0.6} />
-                  )
-                })}
-                {stackNodes.map(node => {
-                  const p = getPeptideById(node.peptideId)
-                  if (!p) return null
-                  const color = riskColors[p.riskProfile] || '#00E5FF'
-                  return (
-                    <g key={node.peptideId} onMouseDown={(e) => handleMouseDown(node.peptideId, e)}
-                      onTouchStart={(e) => handleMouseDown(node.peptideId, e)} style={{ cursor: 'grab' }}>
-                      <circle cx={node.x} cy={node.y} r={28} fill={color} opacity={0.1} />
-                      <circle cx={node.x} cy={node.y} r={22} fill="#12121A" stroke={color} strokeWidth={2} />
-                      <text x={node.x} y={node.y - 1} textAnchor="middle" dominantBaseline="middle"
-                        fill="white" fontSize="9" fontFamily="monospace" fontWeight="600">
-                        {p.abbreviation.substring(0, 6)}
-                      </text>
-                      <circle cx={node.x + 16} cy={node.y - 16} r={4} fill={color} />
-                      <g onClick={(e) => { e.stopPropagation(); removeFromStack(node.peptideId) }} style={{ cursor: 'pointer' }}>
-                        <circle cx={node.x + 16} cy={node.y + 16} r={8} fill="#1A1A28" stroke="#2A2A3A" strokeWidth={1} />
-                        <text x={node.x + 16} y={node.y + 17} textAnchor="middle" dominantBaseline="middle" fill="#6B7280" fontSize="10">×</text>
-                      </g>
+                {connections.map((c, i) => { const f = getNode(c.from), t = getNode(c.to); return f && t ? (
+                  <line key={i} x1={f.x} y1={f.y} x2={t.x} y2={t.y} stroke={c.type === 'synergy' ? '#00D68F' : '#FF4D6A'}
+                    strokeWidth={c.type === 'conflict' ? 2 : 1.5} strokeDasharray={c.type === 'conflict' ? '6,4' : 'none'} opacity={0.6} />
+                ) : null })}
+                {stackNodes.map(n => { const p = getPeptideById(n.peptideId); if (!p) return null; const col = riskColors[p.riskProfile] || '#00E5FF'; return (
+                  <g key={n.peptideId} onMouseDown={(e) => handleMouseDown(n.peptideId, e)} onTouchStart={(e) => handleMouseDown(n.peptideId, e)} style={{ cursor: 'grab' }}>
+                    <circle cx={n.x} cy={n.y} r={28} fill={col} opacity={0.1} />
+                    <circle cx={n.x} cy={n.y} r={22} fill="#12121A" stroke={col} strokeWidth={2} />
+                    <text x={n.x} y={n.y} textAnchor="middle" dominantBaseline="middle" fill="white" fontSize="9" fontFamily="monospace" fontWeight="600">{p.abbreviation.substring(0, 6)}</text>
+                    <g onClick={(e) => { e.stopPropagation(); removeFromStack(n.peptideId) }} style={{ cursor: 'pointer' }}>
+                      <circle cx={n.x + 16} cy={n.y + 16} r={8} fill="#1A1A28" stroke="#2A2A3A" strokeWidth={1} />
+                      <text x={n.x + 16} y={n.y + 17} textAnchor="middle" dominantBaseline="middle" fill="#6B7280" fontSize="10">×</text>
                     </g>
-                  )
-                })}
-                <g transform="translate(10, 370)">
-                  <circle cx={5} cy={0} r={4} fill="#00D68F" /><text x={14} y={4} fill="#6B7280" fontSize="8">Synergy</text>
-                  <circle cx={80} cy={0} r={4} fill="#FF4D6A" /><text x={89} y={4} fill="#6B7280" fontSize="8">Conflict</text>
-                </g>
+                  </g>
+                ) })}
               </svg>
             </div>
-
             {compatibility && (
               <div className="grid grid-cols-3 gap-3 mb-4">
-                {[
-                  { label: 'Synergy', value: `${compatibility.score}/10`, color: compatibility.score >= 6 ? 'text-accent-emerald' : compatibility.score >= 3 ? 'text-accent-amber' : 'text-accent-rose' },
-                  { label: 'Peptides', value: stackPeptides.length, color: 'text-accent-cyan' },
-                  { label: 'Conflicts', value: compatibility.conflicts.length, color: compatibility.conflicts.length > 0 ? 'text-accent-rose' : 'text-accent-emerald' },
+                {[{ l: 'Synergy', v: `${compatibility.score}/10`, c: compatibility.score >= 6 ? 'text-accent-emerald' : 'text-accent-amber' },
+                  { l: 'Peptides', v: stackPeptides.length, c: 'text-accent-cyan' },
+                  { l: 'Conflicts', v: compatibility.conflicts.length, c: compatibility.conflicts.length > 0 ? 'text-accent-rose' : 'text-accent-emerald' }
                 ].map((s, i) => (
                   <div key={i} className="rounded-xl p-3 text-center bg-surface-tertiary">
-                    <div className="text-xs text-text-muted mb-1">{s.label}</div>
-                    <div className={cn('text-lg font-display font-bold', s.color)}>{s.value}</div>
+                    <div className="text-xs text-text-muted mb-1">{s.l}</div>
+                    <div className={cn('text-lg font-display font-bold', s.c)}>{s.v}</div>
                   </div>
                 ))}
               </div>
             )}
-
-            <div className="flex flex-wrap gap-2">
-              {quickAddOptions.map(id => {
-                const p = getPeptideById(id)
-                if (!p) return null
-                return (
-                  <button key={id} onClick={() => addToStack(id)}
-                    className="px-2.5 py-1.5 rounded-lg text-xs text-text-muted hover:text-accent-cyan transition-all min-h-[32px]"
-                    className="bg-surface-tertiary">
-                    + {p.abbreviation}
-                  </button>
-                )
-              })}
-            </div>
           </>
         )}
       </div>
 
-      {/* Saved Stacks */}
       {savedStacks.length > 0 && (
         <div className="glass-panel p-5 sm:p-8">
-          <h3 className="font-display font-semibold text-base sm:text-lg mb-4 flex items-center gap-2">
-            <span>📁</span> Saved Stacks
-            <span className="text-xs font-mono text-text-muted ml-auto">{savedStacks.length}</span>
-          </h3>
+          <h3 className="font-display font-semibold text-base mb-4 flex items-center gap-2"><span>📁</span> Saved Stacks</h3>
           <div className="space-y-3">
-            {savedStacks.map(stack => (
-              <div key={stack.id} className="p-3 sm:p-4 rounded-xl flex items-center justify-between gap-3"
-                className="bg-surface-tertiary">
-                <div className="min-w-0 flex-1">
-                  <h4 className="font-display font-semibold text-sm">{stack.name}</h4>
+            {savedStacks.map(st => (
+              <div key={st.id} className="p-3 rounded-xl bg-surface-tertiary flex items-center justify-between gap-3">
+                <div className="min-w-0">
+                  <h4 className="font-display font-semibold text-sm">{st.name}</h4>
                   <div className="flex flex-wrap gap-1 mt-1">
-                    {stack.peptide_ids.map(id => {
-                      const p = getPeptideById(id)
-                      return p ? (
-                        <span key={id} className="text-[10px] font-mono text-text-muted">{p.abbreviation}</span>
-                      ) : null
-                    })}
-                  </div>
-                  <div className="flex items-center gap-3 mt-1">
-                    {stack.synergy_score !== null && (
-                      <span className="text-[10px] text-accent-cyan font-mono">Synergy: {stack.synergy_score}/10</span>
-                    )}
-                    <span className="text-[10px] text-text-muted">
-                      {new Date(stack.created_at).toLocaleDateString()}
-                    </span>
+                    {st.peptide_ids.map(id => { const p = getPeptideById(id); return p ? <span key={id} className="text-[10px] font-mono text-text-muted">{p.abbreviation}</span> : null })}
                   </div>
                 </div>
                 <div className="flex gap-2 flex-shrink-0">
-                  <button onClick={() => loadStackFromSaved(stack)}
-                    className="text-xs text-accent-cyan hover:underline min-h-[32px] flex items-center">Load</button>
-                  <button onClick={() => handleDeleteStack(stack.id)}
-                    className="text-xs text-text-muted hover:text-accent-rose min-h-[32px] flex items-center">×</button>
+                  <button onClick={() => loadStackFromSaved(st)} className="text-xs text-accent-cyan">Load</button>
+                  <button onClick={() => handleDelete(st.id)} className="text-xs text-text-muted hover:text-accent-rose">×</button>
                 </div>
               </div>
             ))}
@@ -475,7 +334,7 @@ function StackBuilderPro() {
 }
 
 // ============================================
-// AI COACH — EMPTY STATE FOR NO PROTOCOLS
+// AI COACH — Shows real data
 // ============================================
 function CoachingPanel() {
   const { protocols } = useAppStore()
@@ -483,157 +342,137 @@ function CoachingPanel() {
   if (protocols.length === 0) {
     return (
       <div className="glass-panel p-5 sm:p-8">
-        <h3 className="font-display font-semibold text-base sm:text-lg mb-4 flex items-center gap-2">
-          <span>🤖</span> AI Coach
-        </h3>
+        <h3 className="font-display font-semibold text-base sm:text-lg mb-4 flex items-center gap-2"><span>🤖</span> AI Coach</h3>
         <div className="text-center py-8">
           <span className="text-3xl block mb-3">🤖</span>
-          <p className="text-text-muted text-sm">Generate a protocol to unlock AI coaching suggestions</p>
+          <p className="text-text-muted text-sm mb-4">Generate a protocol to unlock coaching</p>
+          <Link href="/generator" className="btn-primary text-xs">Generate Protocol</Link>
         </div>
       </div>
     )
   }
 
-  // Real suggestions based on actual protocol data
-  const activeProtocol = protocols.find((p: any) => p.status === 'active')
-  const suggestions = []
-
-  if (activeProtocol) {
-    suggestions.push({
-      icon: '📊',
-      title: `${activeProtocol.goal} — Active`,
-      desc: `Started ${new Date(activeProtocol.created_at).toLocaleDateString()}. Track your progress and log weekly updates.`,
-      accent: 'text-accent-cyan',
-    })
-  }
-
-  if (protocols.length >= 2) {
-    suggestions.push({
-      icon: '🔄',
-      title: 'Compare Protocols',
-      desc: `You have ${protocols.length} protocols. Review past stacks to optimize your next cycle.`,
-      accent: 'text-accent-violet',
-    })
-  }
-
-  suggestions.push({
-    icon: '💡',
-    title: 'Explore New Goals',
-    desc: 'Try generating a protocol for a different goal to see alternative stack approaches.',
-    accent: 'text-accent-amber',
-  })
+  const active = protocols.find((p: any) => p.status === 'active')
 
   return (
     <div className="glass-panel p-5 sm:p-8">
-      <h3 className="font-display font-semibold text-base sm:text-lg mb-4 flex items-center gap-2">
-        <span>🤖</span> AI Coach
-      </h3>
+      <h3 className="font-display font-semibold text-base sm:text-lg mb-4 flex items-center gap-2"><span>🤖</span> AI Coach</h3>
       <div className="space-y-3">
-        {suggestions.map((s, i) => (
-          <div key={i} className="flex items-start gap-3 p-3 sm:p-4 rounded-xl bg-surface-tertiary">
-            <span className="text-xl flex-shrink-0">{s.icon}</span>
+        {active && (
+          <Link href={`/protocol/${active.id}`} className="flex items-start gap-3 p-3 rounded-xl bg-surface-tertiary group">
+            <span className="text-xl">📊</span>
             <div className="min-w-0 flex-1">
-              <p className={cn('font-display font-semibold text-sm', s.accent)}>{s.title}</p>
-              <p className="text-xs text-text-muted mt-0.5">{s.desc}</p>
+              <p className="font-display font-semibold text-sm text-accent-cyan group-hover:underline">{active.goal} — Active</p>
+              <p className="text-xs text-text-muted mt-0.5">View details, timeline, and track progress</p>
+            </div>
+          </Link>
+        )}
+        {protocols.length >= 2 && (
+          <div className="flex items-start gap-3 p-3 rounded-xl bg-surface-tertiary">
+            <span className="text-xl">🔄</span>
+            <div>
+              <p className="font-display font-semibold text-sm text-accent-violet">{protocols.length} Protocols Generated</p>
+              <p className="text-xs text-text-muted mt-0.5">Compare and optimize across different goals</p>
             </div>
           </div>
-        ))}
+        )}
+        <Link href="/generator" className="flex items-start gap-3 p-3 rounded-xl bg-surface-tertiary group">
+          <span className="text-xl">💡</span>
+          <div>
+            <p className="font-display font-semibold text-sm text-accent-amber group-hover:underline">Generate New Protocol</p>
+            <p className="text-xs text-text-muted mt-0.5">Try a different goal for alternative approaches</p>
+          </div>
+        </Link>
       </div>
     </div>
   )
 }
 
 // ============================================
-// PROGRESS TRACKER — EMPTY FOR NO PROTOCOLS
+// PROGRESS TRACKER — Linked to active protocol
 // ============================================
 function ProgressTracker() {
   const { protocols } = useAppStore()
+  const active = protocols.find((p: any) => p.status === 'active')
 
-  if (protocols.length === 0) {
+  if (!active) {
     return (
       <div className="glass-panel p-5 sm:p-8">
-        <h3 className="font-display font-semibold text-base sm:text-lg mb-4 flex items-center gap-2">
-          <span>📈</span> Progress Tracker
-        </h3>
+        <h3 className="font-display font-semibold text-base sm:text-lg mb-4 flex items-center gap-2"><span>📈</span> Progress Tracker</h3>
         <div className="text-center py-8">
           <span className="text-3xl block mb-3">📈</span>
-          <p className="text-text-muted text-sm">No active protocols to track yet</p>
+          <p className="text-text-muted text-sm">No active protocol to track</p>
         </div>
       </div>
     )
   }
 
-  // Show empty week grid for 12 weeks — no fake data
-  const weeks = Array.from({ length: 12 }, (_, i) => ({ week: i + 1 }))
+  const totalWeeks = active.protocol?.weeklyTimeline?.length || 12
+  const weeks = Array.from({ length: totalWeeks }, (_, i) => ({ week: i + 1 }))
 
   return (
     <div className="glass-panel p-5 sm:p-8">
-      <h3 className="font-display font-semibold text-base sm:text-lg mb-4 flex items-center gap-2">
+      <h3 className="font-display font-semibold text-base sm:text-lg mb-2 flex items-center gap-2">
         <span>📈</span> Progress Tracker
       </h3>
+      <p className="text-xs text-text-muted mb-4">Tracking: <span className="text-accent-cyan">{active.goal}</span></p>
       <div className="grid grid-cols-6 sm:grid-cols-12 gap-1.5 sm:gap-2">
         {weeks.map(w => (
-          <div key={w.week} className="aspect-square rounded-lg flex flex-col items-center justify-center text-center border border-surface-border bg-surface-tertiary transition-all">
+          <div key={w.week} className="aspect-square rounded-lg flex flex-col items-center justify-center text-center border border-surface-border bg-surface-tertiary transition-all hover:border-accent-cyan/30 cursor-pointer">
             <span className="text-[9px] sm:text-[10px] text-text-muted">W{w.week}</span>
           </div>
         ))}
       </div>
-      <p className="text-xs text-text-muted mt-3 text-center">Log your weekly progress as you follow your protocol</p>
+      <p className="text-xs text-text-muted mt-3 text-center">
+        <Link href={`/protocol/${active.id}`} className="text-accent-cyan hover:underline">View full protocol details →</Link>
+      </p>
     </div>
   )
 }
 
 // ============================================
-// MAIN DASHBOARD
+// MAIN
 // ============================================
 export default function DashboardPage() {
   const { user, plan } = useAppStore()
-
   return (
     <main className="min-h-screen">
       <Navigation />
-
       <div className="pt-24 sm:pt-28 pb-20 max-w-7xl mx-auto px-4 sm:px-6">
         <div className="mb-8 sm:mb-10">
           <h1 className="font-display font-bold text-3xl sm:text-4xl md:text-5xl mb-2">Dashboard</h1>
           <p className="text-text-secondary text-sm sm:text-base">
-            {user ? 'Manage your protocols, track progress, and optimize.' : 'Sign up to unlock your personal command center.'}
+            {user ? 'Manage your protocols, track progress, and optimize.' : 'Sign up to unlock your command center.'}
           </p>
         </div>
 
-        {/* Top: Plan + Quick Actions + Protocol History */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6 mb-6 sm:mb-8">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6 mb-6">
           <div className="lg:col-span-1 space-y-4 sm:space-y-6">
             <PlanCard />
             <QuickActions />
           </div>
-
           <div className="lg:col-span-2">
-            <PaywallSection title="Protocol History" description="Generate your first AI protocol to see it tracked here.">
+            <PaywallSection title="Protocol History" description="Generate your first protocol to see it here.">
               <ProtocolTimeline />
             </PaywallSection>
           </div>
         </div>
 
-        {/* Stack Builder + AI Coach */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 mb-6 sm:mb-8">
-          <PaywallSection title="Stack Builder" description="Sign up to build and analyze peptide stacks." requiresPro={false}>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 mb-6">
+          <PaywallSection title="Stack Builder" description="Sign up to build stacks." requiresPro={false}>
             <StackBuilderPro />
           </PaywallSection>
-
-          <PaywallSection title="AI Coaching" description="Generate a protocol to unlock AI coaching.">
+          <PaywallSection title="AI Coaching" description="Pro feature — upgrade to unlock.">
             <CoachingPanel />
           </PaywallSection>
         </div>
 
-        {/* Progress Tracker */}
-        <div className="mb-6 sm:mb-8">
-          <PaywallSection title="Progress Tracking" description="Track weekly progress with your active protocol.">
+        <div className="mb-6">
+          <PaywallSection title="Progress Tracking" description="Pro feature — track your protocol progress.">
             <ProgressTracker />
           </PaywallSection>
         </div>
       </div>
-
       <Footer />
     </main>
   )
