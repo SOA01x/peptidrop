@@ -9,10 +9,10 @@ module.exports = {
     extend: {
       colors: {
         surface: {
-          DEFAULT: '#0A0A0F',
-          secondary: '#12121A',
-          tertiary: '#1A1A28',
-          border: '#2A2A3A',
+          DEFAULT: 'var(--color-surface)',
+          secondary: 'var(--color-surface-secondary)',
+          tertiary: 'var(--color-surface-tertiary)',
+          border: 'var(--color-surface-border)',
         },
         accent: {
           cyan: '#00E5FF',
@@ -22,9 +22,9 @@ module.exports = {
           rose: '#FF4D6A',
         },
         text: {
-          primary: '#FFFFFF',
-          secondary: '#9CA3AF',
-          muted: '#6B7280',
+          primary: 'var(--color-text-primary)',
+          secondary: 'var(--color-text-secondary)',
+          muted: 'var(--color-text-muted)',
         }
       },
       fontFamily: {
@@ -41,10 +41,6 @@ module.exports = {
         card: '0 4px 24px -4px rgba(0, 0, 0, 0.5)',
         'card-hover': '0 8px 40px -4px rgba(0, 0, 0, 0.7)',
       },
-      backgroundImage: {
-        'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
-        'gradient-mesh': 'linear-gradient(135deg, #0A0A0F 0%, #12121A 50%, #0A0A0F 100%)',
-      },
       animation: {
         'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
         'float': 'float 6s ease-in-out infinite',
@@ -52,14 +48,8 @@ module.exports = {
         'glow-pulse': 'glow-pulse 3s ease-in-out infinite',
       },
       keyframes: {
-        float: {
-          '0%, 100%': { transform: 'translateY(0)' },
-          '50%': { transform: 'translateY(-10px)' },
-        },
-        shimmer: {
-          '0%': { backgroundPosition: '-200% 0' },
-          '100%': { backgroundPosition: '200% 0' },
-        },
+        float: { '0%, 100%': { transform: 'translateY(0)' }, '50%': { transform: 'translateY(-10px)' } },
+        shimmer: { '0%': { backgroundPosition: '-200% 0' }, '100%': { backgroundPosition: '200% 0' } },
         'glow-pulse': {
           '0%, 100%': { boxShadow: '0 0 20px -5px rgba(0, 229, 255, 0.2)' },
           '50%': { boxShadow: '0 0 40px -5px rgba(0, 229, 255, 0.4)' },

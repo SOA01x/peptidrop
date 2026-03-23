@@ -29,8 +29,9 @@ export async function middleware(request: NextRequest) {
     }
   )
 
-  // Refresh session
-  await supabase.auth.getSession()
+  // Use getUser() instead of getSession() — getSession() is deprecated
+  // and doesn't properly refresh the token in middleware
+  await supabase.auth.getUser()
 
   return response
 }

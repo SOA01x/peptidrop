@@ -1,120 +1,102 @@
 // components/AuthProvider.tsx
 'use client'
 
-import { useEffect } from 'react'
+import { useEffect, useCallback } from 'react'
 import { createClient } from '@/lib/supabase'
 import { useAppStore } from '@/lib/store'
 import type { PlanTier } from '@/lib/utils'
+import type { User } from '@supabase/supabase-js'
 
 export default function AuthProvider({ children }: { children: React.ReactNode }) {
-  const { setUser, user } = useAppStore()
+  const setUser = useAppStore((s) => s.setUser)
+
+  const loadProfile = useCallback(async (authUser: User) => {
+    try {
+      const supabase = createClient()
+      const { data: profile, error } = await supabase
+        .from('profiles')
+        .select('*')
+        .eq('id', authUser.id)
+        .single()
+
+      if (error) {
+        console.error('[Auth] Profile fetch error:', error.message)
+        // Profile might not exist yet (new signup, trigger delay)
+        // Set user from auth data with defaults
+        setUser({
+          id: authUser.id,
+          email: authUser.email || '',
+          credits: 0,
+          plan: 'free' as PlanTier,
+          favorites: [],
+          created_at: authUser.created_at || new Date().toISOString(),
+        })
+        return
+      }
+
+      console.log('[Auth] Profile loaded:', profile.email, 'plan:', profile.plan)
+
+      setUser({
+        id: profile.id,
+        email: profile.email,
+        credits: profile.credits || 0,
+        plan: (profile.plan || 'free') as PlanTier,
+        favorites: profile.favorites || [],
+        created_at: profile.created_at,
+      })
+    } catch (err) {
+      console.error('[Auth] Unexpected error:', err)
+    }
+  }, [setUser])
 
   useEffect(() => {
     const supabase = createClient()
 
-    // Load session on mount
-    const loadSession = async () => {
+    // 1. Check current session on mount
+    const initAuth = async () => {
       try {
-        const { data: { session } } = await supabase.auth.getSession()
+        // getUser() validates the JWT with Supabase server
+        // This is more reliable than getSession() which only reads local storage
+        const { data: { user }, error } = await supabase.auth.getUser()
 
-        if (session?.user) {
-          // Fetch profile from Supabase
-          const { data: profile } = await supabase
-            .from('profiles')
-            .select('*')
-            .eq('id', session.user.id)
-            .single()
+        if (error) {
+          console.log('[Auth] No active session:', error.message)
+          setUser(null)
+          return
+        }
 
-          if (profile) {
-            setUser({
-              id: profile.id,
-              email: profile.email,
-              credits: profile.credits || 0,
-              plan: (profile.plan || 'free') as PlanTier,
-              favorites: profile.favorites || [],
-              created_at: profile.created_at,
-            })
-          } else {
-            // Profile doesn't exist yet (maybe trigger hasn't fired)
-            // Set user from auth data with defaults
-            setUser({
-              id: session.user.id,
-              email: session.user.email || '',
-              credits: 0,
-              plan: 'free',
-              favorites: [],
-              created_at: session.user.created_at || new Date().toISOString(),
-            })
-          }
+        if (user) {
+          console.log('[Auth] Session found for:', user.email)
+          await loadProfile(user)
         } else {
+          console.log('[Auth] No user in session')
           setUser(null)
         }
       } catch (err) {
-        console.error('Auth load error:', err)
+        console.error('[Auth] Init error:', err)
         setUser(null)
       }
     }
 
-    loadSession()
+    initAuth()
 
-    // Listen for auth state changes (login, logout, token refresh)
+    // 2. Listen for auth changes
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       async (event, session) => {
-        console.log('[Auth]', event)
+        console.log('[Auth] State change:', event)
 
-        if (event === 'SIGNED_IN' && session?.user) {
-          // Small delay to let the DB trigger create the profile
-          await new Promise(r => setTimeout(r, 500))
-
-          const { data: profile } = await supabase
-            .from('profiles')
-            .select('*')
-            .eq('id', session.user.id)
-            .single()
-
-          if (profile) {
-            setUser({
-              id: profile.id,
-              email: profile.email,
-              credits: profile.credits || 0,
-              plan: (profile.plan || 'free') as PlanTier,
-              favorites: profile.favorites || [],
-              created_at: profile.created_at,
-            })
-          } else {
-            setUser({
-              id: session.user.id,
-              email: session.user.email || '',
-              credits: 0,
-              plan: 'free',
-              favorites: [],
-              created_at: session.user.created_at || new Date().toISOString(),
-            })
+        if (event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED') {
+          if (session?.user) {
+            // Small delay for SIGNED_IN to let DB trigger create profile
+            if (event === 'SIGNED_IN') {
+              await new Promise(r => setTimeout(r, 800))
+            }
+            await loadProfile(session.user)
           }
         }
 
         if (event === 'SIGNED_OUT') {
           setUser(null)
-        }
-
-        if (event === 'TOKEN_REFRESHED' && session?.user) {
-          // Re-fetch profile on token refresh to get latest credits/plan
-          const { data: profile } = await supabase
-            .from('profiles')
-            .select('*')
-            .eq('id', session.user.id)
-            .single()
-
-          if (profile) {
-            setUser({
-              id: profile.id,
-              email: profile.email,
-              credits: profile.credits || 0,
-              plan: (profile.plan || 'free') as PlanTier,
-              favorites: profile.favorites || [],
-              created_at: profile.created_at,
-            })
-          }
         }
       }
     )
@@ -122,7 +104,7 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
     return () => {
       subscription.unsubscribe()
     }
-  }, [setUser])
+  }, [setUser, loadProfile])
 
   return <>{children}</>
 }
