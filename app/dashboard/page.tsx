@@ -144,7 +144,7 @@ function ProtocolTimeline() {
                 p.status === 'completed' ? 'bg-accent-cyan' : 'bg-accent-amber'
               )} style={{ border: '2px solid var(--color-surface)' }} />
 
-              <div className="glass-panel-light p-4 sm:p-5 card-hover">
+              <Link href={`/protocol/${p.id}`} className="glass-panel-light p-4 sm:p-5 card-hover block">
                 <div className="flex items-start justify-between gap-2 mb-3 flex-wrap">
                   <div className="min-w-0">
                     <h4 className="font-display font-semibold text-sm sm:text-base">{p.goal}</h4>
@@ -177,7 +177,7 @@ function ProtocolTimeline() {
                     ))}
                   </div>
                 )}
-              </div>
+              </Link>
             </div>
           ))}
         </div>

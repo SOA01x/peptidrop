@@ -305,7 +305,7 @@ export default function GeneratorPage() {
   const [genStep, setGenStep] = useState('')
   const [protocol, setProtocol] = useState<GeneratedProtocol | null>(null)
   const [error, setError] = useState('')
-  const { plan } = useAppStore()
+  const { plan, addProtocol, setCredits } = useAppStore()
 
   const handleGenerate = async () => {
     if (!goal) { setError('Please select a goal'); return }
@@ -333,6 +333,22 @@ export default function GeneratorPage() {
       if (!res.ok) { const err = await res.json(); throw new Error(err.error || 'Generation failed') }
       const data = await res.json()
       setProtocol(data.protocol)
+
+      // Update store with new protocol and credits
+      if (data.saved && data.protocolId) {
+        addProtocol({
+          id: data.protocolId,
+          goal: goal,
+          created_at: new Date().toISOString(),
+          protocol: data.protocol,
+          credits_used: 1,
+          status: 'active',
+          currentWeek: 1,
+        })
+      }
+      if (data.creditsRemaining !== undefined) {
+        setCredits(data.creditsRemaining)
+      }
     } catch (err: any) {
       setError(err.message || 'Failed to generate protocol.')
     } finally {

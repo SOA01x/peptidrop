@@ -1,27 +1,58 @@
 // app/api/generate/route.ts
 import { NextRequest, NextResponse } from 'next/server'
+import { createServerClient } from '@supabase/ssr'
+import { cookies } from 'next/headers'
 import { buildProtocolPrompt, type ProtocolInput } from '@/lib/ai-engine'
 
 export async function POST(req: NextRequest) {
   try {
     const body: ProtocolInput = await req.json()
 
-    // Validate required fields
     if (!body.goal || !body.experienceLevel || !body.age) {
-      return NextResponse.json(
-        { error: 'Missing required fields: goal, experienceLevel, age' },
-        { status: 400 }
-      )
+      return NextResponse.json({ error: 'Missing required fields' }, { status: 400 })
     }
 
-    // TODO: Validate user credits via Supabase
-    // const supabase = createServiceRoleClient()
-    // const user = await getAuthenticatedUser(req)
-    // if (user.credits < 1) return NextResponse.json({ error: 'Insufficient credits' }, { status: 402 })
+    // Get authenticated user via Supabase
+    const cookieStore = cookies()
+    const supabase = createServerClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+      {
+        cookies: {
+          getAll() { return cookieStore.getAll() },
+          setAll(cookiesToSet) {
+            cookiesToSet.forEach(({ name, value, options }) => {
+              try { cookieStore.set(name, value, options) } catch {}
+            })
+          },
+        },
+      }
+    )
 
+    const { data: { user }, error: authError } = await supabase.auth.getUser()
+
+    if (authError || !user) {
+      return NextResponse.json({ error: 'Not authenticated. Please sign in.' }, { status: 401 })
+    }
+
+    // Check credits
+    const { data: profile } = await supabase
+      .from('profiles')
+      .select('credits, plan')
+      .eq('id', user.id)
+      .single()
+
+    if (!profile) {
+      return NextResponse.json({ error: 'Profile not found' }, { status: 404 })
+    }
+
+    if (profile.plan !== 'pro' && profile.credits < 1) {
+      return NextResponse.json({ error: 'Insufficient credits. Upgrade to Pro or purchase credits.' }, { status: 402 })
+    }
+
+    // Build prompt and call Claude
     const prompt = buildProtocolPrompt(body)
 
-    // Call Anthropic Claude API
     const response = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
       headers: {
@@ -32,58 +63,70 @@ export async function POST(req: NextRequest) {
       body: JSON.stringify({
         model: 'claude-sonnet-4-20250514',
         max_tokens: 4096,
-        messages: [
-          { role: 'user', content: prompt }
-        ],
+        messages: [{ role: 'user', content: prompt }],
       }),
     })
 
     if (!response.ok) {
       const err = await response.text()
       console.error('Claude API error:', err)
-      return NextResponse.json(
-        { error: 'AI generation failed. Please try again.' },
-        { status: 500 }
-      )
+      return NextResponse.json({ error: 'AI generation failed. Please try again.' }, { status: 500 })
     }
 
     const data = await response.json()
     const textContent = data.content.find((c: any) => c.type === 'text')?.text
 
     if (!textContent) {
-      return NextResponse.json(
-        { error: 'No response from AI' },
-        { status: 500 }
-      )
+      return NextResponse.json({ error: 'No response from AI' }, { status: 500 })
     }
 
     // Parse JSON response
     let protocol
     try {
-      // Strip any markdown code fences if present
       const cleaned = textContent.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim()
       protocol = JSON.parse(cleaned)
     } catch (parseErr) {
       console.error('JSON parse error:', parseErr)
-      console.error('Raw response:', textContent)
-      return NextResponse.json(
-        { error: 'Failed to parse AI response. Please try again.' },
-        { status: 500 }
-      )
+      return NextResponse.json({ error: 'Failed to parse AI response. Please try again.' }, { status: 500 })
     }
 
-    // TODO: Deduct credits
-    // await supabase.from('profiles').update({ credits: user.credits - 1 }).eq('id', user.id)
+    // Deduct 1 credit (Pro users still use credits for tracking)
+    await supabase
+      .from('profiles')
+      .update({ credits: Math.max(0, profile.credits - 1) })
+      .eq('id', user.id)
 
-    // TODO: Save protocol to history
-    // await supabase.from('protocols').insert({ user_id: user.id, goal: body.goal, protocol, credits_used: 1 })
+    // Save protocol to database
+    const { data: savedProtocol, error: saveError } = await supabase
+      .from('protocols')
+      .insert({
+        user_id: user.id,
+        goal: body.goal,
+        gender: body.gender || null,
+        input: body,
+        protocol: protocol,
+        status: 'active',
+        current_week: 1,
+        credits_used: 1,
+      })
+      .select()
+      .single()
 
-    return NextResponse.json({ protocol, creditsUsed: 1 })
+    if (saveError) {
+      console.error('Save protocol error:', saveError)
+      // Still return the protocol even if save fails
+      return NextResponse.json({ protocol, creditsUsed: 1, saved: false })
+    }
+
+    return NextResponse.json({
+      protocol,
+      protocolId: savedProtocol.id,
+      creditsUsed: 1,
+      saved: true,
+      creditsRemaining: Math.max(0, profile.credits - 1),
+    })
   } catch (error: any) {
     console.error('Generate error:', error)
-    return NextResponse.json(
-      { error: 'Internal server error' },
-      { status: 500 }
-    )
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
   }
 }
