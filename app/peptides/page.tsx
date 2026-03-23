@@ -265,19 +265,19 @@ export default function PeptidesPage() {
     <main className="min-h-screen">
       <Navigation />
 
-      <div className="pt-28 pb-20 max-w-7xl mx-auto px-6">
+      <div className="pt-24 sm:pt-28 pb-20 max-w-7xl mx-auto px-4 sm:px-6">
         {/* Header */}
-        <div className="mb-12">
-          <h1 className="font-display font-bold text-4xl md:text-5xl mb-4">
+        <div className="mb-8 sm:mb-12">
+          <h1 className="font-display font-bold text-3xl sm:text-4xl md:text-5xl mb-3 sm:mb-4">
             Peptide <span className="text-gradient">Explorer</span>
           </h1>
-          <p className="text-text-secondary max-w-xl">
+          <p className="text-text-secondary max-w-xl text-sm sm:text-base">
             Research our comprehensive database of peptides. Filter by category, risk level, and search for specific compounds.
           </p>
         </div>
 
         {/* Search & Filters */}
-        <div className="mb-8 space-y-4">
+        <div className="mb-6 sm:mb-8 space-y-3 sm:space-y-4">
           <input
             type="text"
             placeholder="Search peptides, tags, effects..."
@@ -287,14 +287,14 @@ export default function PeptidesPage() {
           />
 
           {/* Category Filters */}
-          <div className="flex flex-wrap gap-2">
+          <div className="flex flex-nowrap gap-2 overflow-x-auto pb-2 -mx-1 px-1 scrollbar-none">
             <button
               onClick={() => setSelectedCategory('all')}
               className={cn(
-                'px-3 py-1.5 rounded-lg text-sm font-medium transition-all',
+                'px-3 py-2 rounded-lg text-xs sm:text-sm font-medium transition-all flex-shrink-0 min-h-[36px]',
                 selectedCategory === 'all'
                   ? 'bg-accent-cyan/20 text-accent-cyan'
-                  : 'bg-surface-secondary text-text-muted hover:text-text-primary'
+                  : 'bg-surface-secondary text-text-muted active:bg-surface-tertiary'
               )}
             >
               All
@@ -304,10 +304,10 @@ export default function PeptidesPage() {
                 key={key}
                 onClick={() => setSelectedCategory(key)}
                 className={cn(
-                  'px-3 py-1.5 rounded-lg text-sm font-medium transition-all flex items-center gap-1.5',
+                  'px-3 py-2 rounded-lg text-xs sm:text-sm font-medium transition-all flex items-center gap-1.5 flex-shrink-0 min-h-[36px] whitespace-nowrap',
                   selectedCategory === key
                     ? 'bg-accent-cyan/20 text-accent-cyan'
-                    : 'bg-surface-secondary text-text-muted hover:text-text-primary'
+                    : 'bg-surface-secondary text-text-muted active:bg-surface-tertiary'
                 )}
               >
                 <span className="text-xs">{val.icon}</span>
@@ -323,10 +323,10 @@ export default function PeptidesPage() {
                 key={risk}
                 onClick={() => setSelectedRisk(risk)}
                 className={cn(
-                  'px-3 py-1.5 rounded-lg text-sm font-medium transition-all',
+                  'px-3 py-2 rounded-lg text-xs sm:text-sm font-medium transition-all min-h-[36px]',
                   selectedRisk === risk
                     ? 'bg-accent-cyan/20 text-accent-cyan'
-                    : 'bg-surface-secondary text-text-muted hover:text-text-primary'
+                    : 'bg-surface-secondary text-text-muted active:bg-surface-tertiary'
                 )}
               >
                 {risk === 'all' ? 'All Risks' : risk.charAt(0).toUpperCase() + risk.slice(1)}
@@ -336,12 +336,12 @@ export default function PeptidesPage() {
         </div>
 
         {/* Results Count */}
-        <div className="mb-6 text-sm text-text-muted">
+        <div className="mb-4 sm:mb-6 text-xs sm:text-sm text-text-muted">
           Showing {filtered.length} of {peptides.length} peptides
         </div>
 
         {/* Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
           {filtered.map(peptide => (
             <PeptideCard
               key={peptide.id}
