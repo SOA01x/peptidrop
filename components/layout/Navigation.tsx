@@ -121,6 +121,7 @@ export default function Navigation() {
           )}
         </div>
 
+        {/* Mobile Right */}
         <div className="flex lg:hidden items-center gap-1">
           <ThemeToggle />
           {user ? (

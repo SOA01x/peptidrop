@@ -12,9 +12,11 @@ import Link from 'next/link'
 // ============================================
 // PAYWALL BLUR WRAPPER
 // ============================================
-function PaywallSection({ children, title, description }: { children: React.ReactNode; title: string; description: string }) {
+function PaywallSection({ children, title, description, requiresPro = true }: { children: React.ReactNode; title: string; description: string; requiresPro?: boolean }) {
   const { user, plan } = useAppStore()
-  const showPaywall = !user || plan === 'free'
+  // requiresPro=true: blocks non-logged-in and free users (AI features)
+  // requiresPro=false: only blocks non-logged-in users (basic features like stack builder)
+  const showPaywall = requiresPro ? (!user || plan === 'free') : !user
 
   if (!showPaywall) return <>{children}</>
 
@@ -505,7 +507,7 @@ export default function DashboardPage() {
 
         {/* Stack Builder Pro + AI Coach */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 mb-6 sm:mb-8">
-          <PaywallSection title="Stack Builder Pro" description="Drag & drop peptides, see real-time synergy scores and risk analysis.">
+          <PaywallSection title="Stack Builder" description="Sign up to build and analyze peptide stacks." requiresPro={false}>
             <StackBuilderPro />
           </PaywallSection>
 
