@@ -9,10 +9,10 @@ module.exports = {
     extend: {
       colors: {
         surface: {
-          DEFAULT: 'var(--color-surface)',
-          secondary: 'var(--color-surface-secondary)',
-          tertiary: 'var(--color-surface-tertiary)',
-          border: 'var(--color-surface-border)',
+          DEFAULT: '#0A0A0F',
+          secondary: '#12121A',
+          tertiary: '#1A1A28',
+          border: '#2A2A3A',
         },
         accent: {
           cyan: '#00E5FF',
@@ -22,9 +22,9 @@ module.exports = {
           rose: '#FF4D6A',
         },
         text: {
-          primary: 'var(--color-text-primary)',
-          secondary: 'var(--color-text-secondary)',
-          muted: 'var(--color-text-muted)',
+          primary: '#FFFFFF',
+          secondary: '#9CA3AF',
+          muted: '#6B7280',
         }
       },
       fontFamily: {

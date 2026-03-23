@@ -19,15 +19,12 @@ export default function LoginPage() {
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
   const router = useRouter()
-  const { setUser } = useAppStore()
+  const setUser = useAppStore((s) => s.setUser)
 
   useEffect(() => {
     try {
       const saved = localStorage.getItem(SAVED_EMAIL_KEY)
-      if (saved) {
-        setEmail(saved)
-        setRememberEmail(true)
-      }
+      if (saved) { setEmail(saved); setRememberEmail(true) }
     } catch {}
   }, [])
 
@@ -37,24 +34,38 @@ export default function LoginPage() {
     setLoading(true)
 
     try {
-      if (rememberEmail) {
-        localStorage.setItem(SAVED_EMAIL_KEY, email)
-      } else {
-        localStorage.removeItem(SAVED_EMAIL_KEY)
-      }
+      if (rememberEmail) localStorage.setItem(SAVED_EMAIL_KEY, email)
+      else localStorage.removeItem(SAVED_EMAIL_KEY)
     } catch {}
 
     try {
       const supabase = createClient()
+
+      console.log('[Login] Attempting sign in for:', email)
       const { data, error: authError } = await supabase.auth.signInWithPassword({ email, password })
-      if (authError) throw authError
+
+      if (authError) {
+        console.error('[Login] Auth error:', authError.message, authError.status)
+        setError(authError.message)
+        setLoading(false)
+        return
+      }
+
+      console.log('[Login] Sign in successful, user:', data.user?.id)
 
       if (data.user) {
-        const { data: profile } = await supabase
+        // Load profile
+        const { data: profile, error: profileError } = await supabase
           .from('profiles')
           .select('*')
           .eq('id', data.user.id)
-          .single()
+          .maybeSingle()
+
+        if (profileError) {
+          console.warn('[Login] Profile query error:', profileError.message)
+        }
+
+        console.log('[Login] Profile:', profile?.email, profile?.plan)
 
         setUser(profile ? {
           id: profile.id, email: profile.email,
@@ -72,8 +83,8 @@ export default function LoginPage() {
       router.push('/dashboard')
       router.refresh()
     } catch (err: any) {
-      setError(err.message || 'Login failed')
-    } finally {
+      console.error('[Login] Unexpected error:', err)
+      setError(err.message || 'Login failed. Please try again.')
       setLoading(false)
     }
   }
@@ -115,7 +126,11 @@ export default function LoginPage() {
               <span className="text-sm text-text-muted group-hover:text-text-secondary transition-colors">Remember my email</span>
             </label>
 
-            {error && <p className="text-accent-rose text-sm text-center">{error}</p>}
+            {error && (
+              <div className="p-3 rounded-xl bg-accent-rose/10 border border-accent-rose/20">
+                <p className="text-accent-rose text-sm text-center">{error}</p>
+              </div>
+            )}
 
             <button type="submit" disabled={loading} className="btn-primary w-full py-3.5 disabled:opacity-50">
               {loading ? 'Signing in...' : 'Sign In'}
