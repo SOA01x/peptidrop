@@ -1,8 +1,30 @@
 // app/api/generate/route.ts
 import { NextRequest, NextResponse } from 'next/server'
 import { createServerClient } from '@supabase/ssr'
-import { cookies } from 'next/headers'
 import { buildProtocolPrompt, type ProtocolInput } from '@/lib/ai-engine'
+
+function createSupabaseFromRequest(req: NextRequest) {
+  const response = NextResponse.next()
+
+  const supabase = createServerClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    {
+      cookies: {
+        getAll() {
+          return req.cookies.getAll()
+        },
+        setAll(cookiesToSet) {
+          cookiesToSet.forEach(({ name, value, options }) => {
+            response.cookies.set(name, value, options)
+          })
+        },
+      },
+    }
+  )
+
+  return { supabase, response }
+}
 
 export async function POST(req: NextRequest) {
   try {
@@ -12,23 +34,8 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Missing required fields' }, { status: 400 })
     }
 
-    // Get authenticated user via Supabase
-    const cookieStore = cookies()
-    const supabase = createServerClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-      {
-        cookies: {
-          getAll() { return cookieStore.getAll() },
-          setAll(cookiesToSet) {
-            cookiesToSet.forEach(({ name, value, options }) => {
-              try { cookieStore.set(name, value, options) } catch {}
-            })
-          },
-        },
-      }
-    )
-
+    // Get authenticated user
+    const { supabase } = createSupabaseFromRequest(req)
     const { data: { user }, error: authError } = await supabase.auth.getUser()
 
     if (authError || !user) {
@@ -80,8 +87,8 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'No response from AI' }, { status: 500 })
     }
 
-    // Parse JSON response
-    let protocol
+    // Parse JSON
+    let protocol: any
     try {
       const cleaned = textContent.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim()
       protocol = JSON.parse(cleaned)
@@ -90,13 +97,13 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Failed to parse AI response. Please try again.' }, { status: 500 })
     }
 
-    // Deduct 1 credit (Pro users still use credits for tracking)
+    // Deduct credit
     await supabase
       .from('profiles')
       .update({ credits: Math.max(0, profile.credits - 1) })
       .eq('id', user.id)
 
-    // Save protocol to database
+    // Save protocol
     const { data: savedProtocol, error: saveError } = await supabase
       .from('protocols')
       .insert({
@@ -114,7 +121,6 @@ export async function POST(req: NextRequest) {
 
     if (saveError) {
       console.error('Save protocol error:', saveError)
-      // Still return the protocol even if save fails
       return NextResponse.json({ protocol, creditsUsed: 1, saved: false })
     }
 
