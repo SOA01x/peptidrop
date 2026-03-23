@@ -187,13 +187,17 @@ function ProtocolTimeline() {
 }
 
 // ============================================
-// STACK BUILDER — REAL, NO FAKE DATA
+// STACK BUILDER — WITH SAVE/LOAD
 // ============================================
 function StackBuilderPro() {
-  const { selectedPeptides, stackNodes, removeFromStack, clearStack, addToStack, updateNodePosition } = useAppStore()
+  const { selectedPeptides, stackNodes, removeFromStack, clearStack, addToStack, updateNodePosition,
+    savedStacks, addSavedStack, removeSavedStack, loadStackFromSaved, user } = useAppStore()
   const svgRef = useRef<SVGSVGElement>(null)
   const [dragging, setDragging] = useState<string | null>(null)
   const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 })
+  const [saving, setSaving] = useState(false)
+  const [stackName, setStackName] = useState('')
+  const [showSaveForm, setShowSaveForm] = useState(false)
 
   const stackPeptides = selectedPeptides.map(id => getPeptideById(id)).filter(Boolean) as Peptide[]
   const compatibility = selectedPeptides.length >= 2 ? getStackCompatibility(selectedPeptides) : null
@@ -254,115 +258,218 @@ function StackBuilderPro() {
     }
   }, [dragging, dragOffset, updateNodePosition])
 
+  const handleSaveStack = async () => {
+    if (!user || !stackName.trim() || selectedPeptides.length === 0) return
+    setSaving(true)
+    try {
+      const supabase = (await import('@/lib/supabase')).createClient()
+      const { data, error } = await supabase
+        .from('saved_stacks')
+        .insert({
+          user_id: user.id,
+          name: stackName.trim(),
+          peptide_ids: selectedPeptides,
+          node_positions: stackNodes,
+          synergy_score: compatibility?.score || null,
+          notes: null,
+        })
+        .select()
+        .single()
+
+      if (!error && data) {
+        addSavedStack({
+          id: data.id, name: data.name,
+          peptide_ids: data.peptide_ids,
+          node_positions: data.node_positions,
+          synergy_score: data.synergy_score,
+          notes: data.notes, created_at: data.created_at,
+        })
+        setStackName('')
+        setShowSaveForm(false)
+      }
+    } catch (e) { console.error('Save stack error:', e) }
+    setSaving(false)
+  }
+
+  const handleDeleteStack = async (stackId: string) => {
+    try {
+      const supabase = (await import('@/lib/supabase')).createClient()
+      await supabase.from('saved_stacks').delete().eq('id', stackId)
+      removeSavedStack(stackId)
+    } catch (e) { console.error('Delete stack error:', e) }
+  }
+
   const popularIds = ['bpc-157', 'ipamorelin', 'cjc-1295-no-dac', 'tb-500', 'semax', 'mk-677']
   const quickAddOptions = popularIds.filter(id => !selectedPeptides.includes(id)).slice(0, 4)
 
   return (
-    <div className="glass-panel p-5 sm:p-8">
-      <div className="flex items-center justify-between mb-4 flex-wrap gap-2">
-        <h3 className="font-display font-semibold text-base sm:text-lg flex items-center gap-2">
-          <span>🧬</span> Stack Builder
-        </h3>
-        <div className="flex gap-2">
-          {selectedPeptides.length > 0 && (
-            <button onClick={clearStack} className="text-xs text-text-muted hover:text-accent-rose transition-colors px-2 py-1">Clear All</button>
-          )}
-          <Link href="/peptides" className="text-xs text-accent-cyan hover:underline px-2 py-1">+ Add from Explorer</Link>
+    <div className="space-y-4">
+      {/* Active Stack Builder */}
+      <div className="glass-panel p-5 sm:p-8">
+        <div className="flex items-center justify-between mb-4 flex-wrap gap-2">
+          <h3 className="font-display font-semibold text-base sm:text-lg flex items-center gap-2">
+            <span>🧬</span> Stack Builder
+          </h3>
+          <div className="flex gap-2">
+            {selectedPeptides.length > 0 && (
+              <>
+                <button onClick={() => setShowSaveForm(!showSaveForm)}
+                  className="text-xs text-accent-cyan hover:underline px-2 py-1">💾 Save</button>
+                <button onClick={clearStack}
+                  className="text-xs text-text-muted hover:text-accent-rose transition-colors px-2 py-1">Clear</button>
+              </>
+            )}
+            <Link href="/peptides" className="text-xs text-accent-cyan hover:underline px-2 py-1">+ Add</Link>
+          </div>
         </div>
+
+        {/* Save Form */}
+        {showSaveForm && selectedPeptides.length > 0 && (
+          <div className="mb-4 p-3 rounded-xl flex gap-2" style={{ backgroundColor: 'var(--color-surface-tertiary)' }}>
+            <input type="text" value={stackName} onChange={(e) => setStackName(e.target.value)}
+              placeholder="Stack name..." className="input-field !min-h-[36px] !py-1.5 !text-sm flex-1" />
+            <button onClick={handleSaveStack} disabled={saving || !stackName.trim()}
+              className="btn-primary !py-1.5 !px-4 text-xs disabled:opacity-50">
+              {saving ? '...' : 'Save'}
+            </button>
+          </div>
+        )}
+
+        {stackPeptides.length === 0 ? (
+          <div className="text-center py-8 sm:py-12">
+            <span className="text-3xl sm:text-4xl block mb-4">🧬</span>
+            <h4 className="font-display font-semibold text-sm mb-2">Start building your stack</h4>
+            <p className="text-text-muted text-xs mb-4">Add peptides to see synergy scores and interactions</p>
+            <div className="flex flex-wrap justify-center gap-2">
+              {quickAddOptions.map(id => {
+                const p = getPeptideById(id)
+                if (!p) return null
+                return (
+                  <button key={id} onClick={() => addToStack(id)}
+                    className="px-3 py-2 rounded-lg text-xs text-text-secondary hover:text-accent-cyan transition-all min-h-[36px]"
+                    style={{ backgroundColor: 'var(--color-surface-tertiary)' }}>
+                    + {p.abbreviation}
+                  </button>
+                )
+              })}
+            </div>
+          </div>
+        ) : (
+          <>
+            {/* SVG Node Graph */}
+            <div className="rounded-xl border mb-4 overflow-hidden" style={{ backgroundColor: 'var(--color-surface)', borderColor: 'var(--color-surface-border)' }}>
+              <svg ref={svgRef} viewBox="0 0 500 400" className="w-full h-[250px] sm:h-[320px] touch-none select-none">
+                {connections.map((conn, i) => {
+                  const fromNode = getNode(conn.from)
+                  const toNode = getNode(conn.to)
+                  if (!fromNode || !toNode) return null
+                  return (
+                    <line key={i} x1={fromNode.x} y1={fromNode.y} x2={toNode.x} y2={toNode.y}
+                      stroke={conn.type === 'synergy' ? '#00D68F' : '#FF4D6A'}
+                      strokeWidth={conn.type === 'conflict' ? 2 : 1.5}
+                      strokeDasharray={conn.type === 'conflict' ? '6,4' : 'none'} opacity={0.6} />
+                  )
+                })}
+                {stackNodes.map(node => {
+                  const p = getPeptideById(node.peptideId)
+                  if (!p) return null
+                  const color = riskColors[p.riskProfile] || '#00E5FF'
+                  return (
+                    <g key={node.peptideId} onMouseDown={(e) => handleMouseDown(node.peptideId, e)}
+                      onTouchStart={(e) => handleMouseDown(node.peptideId, e)} style={{ cursor: 'grab' }}>
+                      <circle cx={node.x} cy={node.y} r={28} fill={color} opacity={0.1} />
+                      <circle cx={node.x} cy={node.y} r={22} fill="#12121A" stroke={color} strokeWidth={2} />
+                      <text x={node.x} y={node.y - 1} textAnchor="middle" dominantBaseline="middle"
+                        fill="white" fontSize="9" fontFamily="monospace" fontWeight="600">
+                        {p.abbreviation.substring(0, 6)}
+                      </text>
+                      <circle cx={node.x + 16} cy={node.y - 16} r={4} fill={color} />
+                      <g onClick={(e) => { e.stopPropagation(); removeFromStack(node.peptideId) }} style={{ cursor: 'pointer' }}>
+                        <circle cx={node.x + 16} cy={node.y + 16} r={8} fill="#1A1A28" stroke="#2A2A3A" strokeWidth={1} />
+                        <text x={node.x + 16} y={node.y + 17} textAnchor="middle" dominantBaseline="middle" fill="#6B7280" fontSize="10">×</text>
+                      </g>
+                    </g>
+                  )
+                })}
+                <g transform="translate(10, 370)">
+                  <circle cx={5} cy={0} r={4} fill="#00D68F" /><text x={14} y={4} fill="#6B7280" fontSize="8">Synergy</text>
+                  <circle cx={80} cy={0} r={4} fill="#FF4D6A" /><text x={89} y={4} fill="#6B7280" fontSize="8">Conflict</text>
+                </g>
+              </svg>
+            </div>
+
+            {compatibility && (
+              <div className="grid grid-cols-3 gap-3 mb-4">
+                {[
+                  { label: 'Synergy', value: `${compatibility.score}/10`, color: compatibility.score >= 6 ? 'text-accent-emerald' : compatibility.score >= 3 ? 'text-accent-amber' : 'text-accent-rose' },
+                  { label: 'Peptides', value: stackPeptides.length, color: 'text-accent-cyan' },
+                  { label: 'Conflicts', value: compatibility.conflicts.length, color: compatibility.conflicts.length > 0 ? 'text-accent-rose' : 'text-accent-emerald' },
+                ].map((s, i) => (
+                  <div key={i} className="rounded-xl p-3 text-center" style={{ backgroundColor: 'var(--color-surface-tertiary)' }}>
+                    <div className="text-xs text-text-muted mb-1">{s.label}</div>
+                    <div className={cn('text-lg font-display font-bold', s.color)}>{s.value}</div>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            <div className="flex flex-wrap gap-2">
+              {quickAddOptions.map(id => {
+                const p = getPeptideById(id)
+                if (!p) return null
+                return (
+                  <button key={id} onClick={() => addToStack(id)}
+                    className="px-2.5 py-1.5 rounded-lg text-xs text-text-muted hover:text-accent-cyan transition-all min-h-[32px]"
+                    style={{ backgroundColor: 'var(--color-surface-tertiary)' }}>
+                    + {p.abbreviation}
+                  </button>
+                )
+              })}
+            </div>
+          </>
+        )}
       </div>
 
-      {stackPeptides.length === 0 ? (
-        <div className="text-center py-8 sm:py-12">
-          <span className="text-3xl sm:text-4xl block mb-4">🧬</span>
-          <h4 className="font-display font-semibold text-sm mb-2">Start building your stack</h4>
-          <p className="text-text-muted text-xs mb-4">Add peptides to see synergy scores and interactions</p>
-          <div className="flex flex-wrap justify-center gap-2">
-            {quickAddOptions.map(id => {
-              const p = getPeptideById(id)
-              if (!p) return null
-              return (
-                <button key={id} onClick={() => addToStack(id)}
-                  className="px-3 py-2 rounded-lg text-xs text-text-secondary hover:text-accent-cyan transition-all min-h-[36px]"
-                  style={{ backgroundColor: 'var(--color-surface-tertiary)' }}>
-                  + {p.abbreviation}
-                </button>
-              )
-            })}
+      {/* Saved Stacks */}
+      {savedStacks.length > 0 && (
+        <div className="glass-panel p-5 sm:p-8">
+          <h3 className="font-display font-semibold text-base sm:text-lg mb-4 flex items-center gap-2">
+            <span>📁</span> Saved Stacks
+            <span className="text-xs font-mono text-text-muted ml-auto">{savedStacks.length}</span>
+          </h3>
+          <div className="space-y-3">
+            {savedStacks.map(stack => (
+              <div key={stack.id} className="p-3 sm:p-4 rounded-xl flex items-center justify-between gap-3"
+                style={{ backgroundColor: 'var(--color-surface-tertiary)' }}>
+                <div className="min-w-0 flex-1">
+                  <h4 className="font-display font-semibold text-sm">{stack.name}</h4>
+                  <div className="flex flex-wrap gap-1 mt-1">
+                    {stack.peptide_ids.map(id => {
+                      const p = getPeptideById(id)
+                      return p ? (
+                        <span key={id} className="text-[10px] font-mono text-text-muted">{p.abbreviation}</span>
+                      ) : null
+                    })}
+                  </div>
+                  <div className="flex items-center gap-3 mt-1">
+                    {stack.synergy_score !== null && (
+                      <span className="text-[10px] text-accent-cyan font-mono">Synergy: {stack.synergy_score}/10</span>
+                    )}
+                    <span className="text-[10px] text-text-muted">
+                      {new Date(stack.created_at).toLocaleDateString()}
+                    </span>
+                  </div>
+                </div>
+                <div className="flex gap-2 flex-shrink-0">
+                  <button onClick={() => loadStackFromSaved(stack)}
+                    className="text-xs text-accent-cyan hover:underline min-h-[32px] flex items-center">Load</button>
+                  <button onClick={() => handleDeleteStack(stack.id)}
+                    className="text-xs text-text-muted hover:text-accent-rose min-h-[32px] flex items-center">×</button>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
-      ) : (
-        <>
-          {/* SVG Node Graph */}
-          <div className="rounded-xl border mb-4 overflow-hidden" style={{ backgroundColor: 'var(--color-surface)', borderColor: 'var(--color-surface-border)' }}>
-            <svg ref={svgRef} viewBox="0 0 500 400" className="w-full h-[250px] sm:h-[320px] touch-none select-none">
-              {connections.map((conn, i) => {
-                const fromNode = getNode(conn.from)
-                const toNode = getNode(conn.to)
-                if (!fromNode || !toNode) return null
-                return (
-                  <line key={i} x1={fromNode.x} y1={fromNode.y} x2={toNode.x} y2={toNode.y}
-                    stroke={conn.type === 'synergy' ? '#00D68F' : '#FF4D6A'}
-                    strokeWidth={conn.type === 'conflict' ? 2 : 1.5}
-                    strokeDasharray={conn.type === 'conflict' ? '6,4' : 'none'} opacity={0.6} />
-                )
-              })}
-              {stackNodes.map(node => {
-                const p = getPeptideById(node.peptideId)
-                if (!p) return null
-                const color = riskColors[p.riskProfile] || '#00E5FF'
-                return (
-                  <g key={node.peptideId} onMouseDown={(e) => handleMouseDown(node.peptideId, e)}
-                    onTouchStart={(e) => handleMouseDown(node.peptideId, e)} style={{ cursor: 'grab' }}>
-                    <circle cx={node.x} cy={node.y} r={28} fill={color} opacity={0.1} />
-                    <circle cx={node.x} cy={node.y} r={22} fill="#12121A" stroke={color} strokeWidth={2} />
-                    <text x={node.x} y={node.y - 1} textAnchor="middle" dominantBaseline="middle"
-                      fill="white" fontSize="9" fontFamily="monospace" fontWeight="600">
-                      {p.abbreviation.substring(0, 6)}
-                    </text>
-                    <circle cx={node.x + 16} cy={node.y - 16} r={4} fill={color} />
-                    <g onClick={(e) => { e.stopPropagation(); removeFromStack(node.peptideId) }} style={{ cursor: 'pointer' }}>
-                      <circle cx={node.x + 16} cy={node.y + 16} r={8} fill="#1A1A28" stroke="#2A2A3A" strokeWidth={1} />
-                      <text x={node.x + 16} y={node.y + 17} textAnchor="middle" dominantBaseline="middle" fill="#6B7280" fontSize="10">×</text>
-                    </g>
-                  </g>
-                )
-              })}
-              <g transform="translate(10, 370)">
-                <circle cx={5} cy={0} r={4} fill="#00D68F" /><text x={14} y={4} fill="#6B7280" fontSize="8">Synergy</text>
-                <circle cx={80} cy={0} r={4} fill="#FF4D6A" /><text x={89} y={4} fill="#6B7280" fontSize="8">Conflict</text>
-              </g>
-            </svg>
-          </div>
-
-          {compatibility && (
-            <div className="grid grid-cols-3 gap-3 mb-4">
-              {[
-                { label: 'Synergy', value: `${compatibility.score}/10`, color: compatibility.score >= 6 ? 'text-accent-emerald' : compatibility.score >= 3 ? 'text-accent-amber' : 'text-accent-rose' },
-                { label: 'Peptides', value: stackPeptides.length, color: 'text-accent-cyan' },
-                { label: 'Conflicts', value: compatibility.conflicts.length, color: compatibility.conflicts.length > 0 ? 'text-accent-rose' : 'text-accent-emerald' },
-              ].map((s, i) => (
-                <div key={i} className="rounded-xl p-3 text-center" style={{ backgroundColor: 'var(--color-surface-tertiary)' }}>
-                  <div className="text-xs text-text-muted mb-1">{s.label}</div>
-                  <div className={cn('text-lg font-display font-bold', s.color)}>{s.value}</div>
-                </div>
-              ))}
-            </div>
-          )}
-
-          <div className="flex flex-wrap gap-2">
-            {quickAddOptions.map(id => {
-              const p = getPeptideById(id)
-              if (!p) return null
-              return (
-                <button key={id} onClick={() => addToStack(id)}
-                  className="px-2.5 py-1.5 rounded-lg text-xs text-text-muted hover:text-accent-cyan transition-all min-h-[32px]"
-                  style={{ backgroundColor: 'var(--color-surface-tertiary)' }}>
-                  + {p.abbreviation}
-                </button>
-              )
-            })}
-          </div>
-        </>
       )}
     </div>
   )

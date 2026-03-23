@@ -37,6 +37,16 @@ interface StackBuilderNode {
   y: number
 }
 
+export interface SavedStack {
+  id: string
+  name: string
+  peptide_ids: string[]
+  node_positions: StackBuilderNode[] | null
+  synergy_score: number | null
+  notes: string | null
+  created_at: string
+}
+
 interface AppState {
   // Auth
   user: UserProfile | null
@@ -65,13 +75,20 @@ interface AppState {
   addProgressEntry: (entry: ProgressEntry) => void
   setProgressEntries: (entries: ProgressEntry[]) => void
 
-  // Stack Builder
+  // Stack Builder (current working stack)
   selectedPeptides: string[]
   stackNodes: StackBuilderNode[]
   addToStack: (peptideId: string) => void
   removeFromStack: (peptideId: string) => void
   clearStack: () => void
   updateNodePosition: (peptideId: string, x: number, y: number) => void
+  loadStackFromSaved: (stack: SavedStack) => void
+
+  // Saved Stacks (persisted to Supabase)
+  savedStacks: SavedStack[]
+  setSavedStacks: (stacks: SavedStack[]) => void
+  addSavedStack: (stack: SavedStack) => void
+  removeSavedStack: (id: string) => void
 
   // UI State
   isGenerating: boolean
@@ -137,6 +154,18 @@ export const useAppStore = create<AppState>((set, get) => ({
   updateNodePosition: (peptideId, x, y) => set((s) => ({
     stackNodes: s.stackNodes.map(n => n.peptideId === peptideId ? { ...n, x, y } : n),
   })),
+  loadStackFromSaved: (stack) => {
+    const nodes = stack.node_positions || stack.peptide_ids.map((id, i) => {
+      const angle = (i * 72) * (Math.PI / 180)
+      return { peptideId: id, x: 250 + Math.cos(angle) * 120, y: 200 + Math.sin(angle) * 120 }
+    })
+    set({ selectedPeptides: [...stack.peptide_ids], stackNodes: nodes })
+  },
+
+  savedStacks: [],
+  setSavedStacks: (stacks) => set({ savedStacks: stacks }),
+  addSavedStack: (stack) => set((s) => ({ savedStacks: [stack, ...s.savedStacks] })),
+  removeSavedStack: (id) => set((s) => ({ savedStacks: s.savedStacks.filter(st => st.id !== id) })),
 
   isGenerating: false,
   setIsGenerating: (v) => set({ isGenerating: v }),
