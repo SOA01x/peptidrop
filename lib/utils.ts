@@ -56,13 +56,15 @@ export const PRICING_PLANS = [
 export const PDF_REPORT_PRICE = 9.99
 
 export const REPORT_TYPES = [
-  { id: 'fat-loss', label: 'Fat Loss Optimization Protocol', price: 9.99 },
-  { id: 'muscle', label: 'Muscle Growth Protocol', price: 9.99 },
-  { id: 'cognition', label: 'Cognitive Enhancement Plan', price: 9.99 },
-  { id: 'libido', label: 'Libido Restoration Stack', price: 9.99 },
-  { id: 'longevity', label: 'Anti-Aging & Longevity Protocol', price: 9.99 },
-  { id: 'recovery', label: 'Healing & Recovery Blueprint', price: 9.99 },
-  { id: 'custom', label: 'Custom Clinical Report', price: 14.99 },
+  { id: 'fat-loss', label: 'Fat Loss Optimization Protocol', price: 14.99 },
+  { id: 'muscle', label: 'Muscle Growth Protocol', price: 14.99 },
+  { id: 'cognition', label: 'Cognitive Enhancement Plan', price: 19.99 },
+  { id: 'libido', label: 'Libido Restoration Stack', price: 14.99 },
+  { id: 'longevity', label: 'Anti-Aging & Longevity Protocol', price: 24.99 },
+  { id: 'recovery', label: 'Healing & Recovery Blueprint', price: 12.99 },
+  { id: 'sleep', label: 'Sleep Optimization Protocol', price: 12.99 },
+  { id: 'immune', label: 'Immune Defense Protocol', price: 14.99 },
+  { id: 'custom', label: 'Custom Multi-Goal Clinical Report', price: 29.99 },
 ] as const
 
 export const GOALS = [

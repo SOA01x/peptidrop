@@ -8,6 +8,7 @@ import { useAppStore } from '@/lib/store'
 import { getPeptideById, getStackCompatibility, type Peptide } from '@/data/peptides'
 import { cn } from '@/lib/utils'
 import { createClient } from '@/lib/supabase'
+import ProgressJournal from '@/components/dashboard/ProgressJournal'
 import Link from 'next/link'
 
 // ============================================
@@ -389,48 +390,6 @@ function CoachingPanel() {
 }
 
 // ============================================
-// PROGRESS TRACKER — Linked to active protocol
-// ============================================
-function ProgressTracker() {
-  const { protocols } = useAppStore()
-  const active = protocols.find((p: any) => p.status === 'active')
-
-  if (!active) {
-    return (
-      <div className="glass-panel p-5 sm:p-8">
-        <h3 className="font-display font-semibold text-base sm:text-lg mb-4 flex items-center gap-2"><span>📈</span> Progress Tracker</h3>
-        <div className="text-center py-8">
-          <span className="text-3xl block mb-3">📈</span>
-          <p className="text-text-muted text-sm">No active protocol to track</p>
-        </div>
-      </div>
-    )
-  }
-
-  const totalWeeks = active.protocol?.weeklyTimeline?.length || 12
-  const weeks = Array.from({ length: totalWeeks }, (_, i) => ({ week: i + 1 }))
-
-  return (
-    <div className="glass-panel p-5 sm:p-8">
-      <h3 className="font-display font-semibold text-base sm:text-lg mb-2 flex items-center gap-2">
-        <span>📈</span> Progress Tracker
-      </h3>
-      <p className="text-xs text-text-muted mb-4">Tracking: <span className="text-accent-cyan">{active.goal}</span></p>
-      <div className="grid grid-cols-6 sm:grid-cols-12 gap-1.5 sm:gap-2">
-        {weeks.map(w => (
-          <div key={w.week} className="aspect-square rounded-lg flex flex-col items-center justify-center text-center border border-surface-border bg-surface-tertiary transition-all hover:border-accent-cyan/30 cursor-pointer">
-            <span className="text-[9px] sm:text-[10px] text-text-muted">W{w.week}</span>
-          </div>
-        ))}
-      </div>
-      <p className="text-xs text-text-muted mt-3 text-center">
-        <Link href={`/protocol/${active.id}`} className="text-accent-cyan hover:underline">View full protocol details →</Link>
-      </p>
-    </div>
-  )
-}
-
-// ============================================
 // MAIN
 // ============================================
 export default function DashboardPage() {
@@ -468,8 +427,8 @@ export default function DashboardPage() {
         </div>
 
         <div className="mb-6">
-          <PaywallSection title="Progress Tracking" description="Pro feature — track your protocol progress.">
-            <ProgressTracker />
+          <PaywallSection title="Progress Journal" description="Pro feature — track your protocol with daily entries.">
+            <ProgressJournal />
           </PaywallSection>
         </div>
       </div>

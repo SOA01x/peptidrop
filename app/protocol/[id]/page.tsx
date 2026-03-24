@@ -111,6 +111,7 @@ export default function ProtocolDetailPage() {
               {data.gender && <span className="text-xs text-text-muted capitalize">{data.gender}</span>}
             </div>
           </div>
+          <Link href={`/protocol/${params.id}/journal`} className="btn-primary text-sm !py-2">📓 Progress Journal</Link>
         </div>
 
         {/* Tabs */}

@@ -145,11 +145,11 @@ function PricingPreview() {
           <div className="glass-panel p-6 sm:p-8 text-left">
             <h3 className="font-display font-bold text-lg mb-1">Clinical Report</h3>
             <div className="mb-4">
-              <span className="text-3xl font-display font-bold">$19</span>
-              <span className="text-text-muted text-sm">/report</span>
+              <span className="text-2xl font-display font-bold">$12.99</span>
+              <span className="text-text-muted text-sm"> — $29.99</span>
             </div>
-            <p className="text-sm text-text-muted mb-6">Clinic-grade PDF export</p>
-            <Link href="/pricing" className="btn-secondary text-sm w-full">Learn More</Link>
+            <p className="text-sm text-text-muted mb-6">Clinic-grade PDF exports, per report</p>
+            <Link href="/pricing" className="btn-secondary text-sm w-full">View Report Types</Link>
           </div>
         </div>
       </div>

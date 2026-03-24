@@ -1,6 +1,7 @@
 // app/profile/page.tsx
 'use client'
 
+import { useState } from 'react'
 import Navigation from '@/components/layout/Navigation'
 import Footer from '@/components/layout/Footer'
 import { useAppStore } from '@/lib/store'
@@ -9,15 +10,32 @@ import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 
 export default function ProfilePage() {
-  const { user, credits, protocols, favorites, plan, setUser } = useAppStore()
+  const user = useAppStore((s) => s.user)
+  const plan = useAppStore((s) => s.plan)
+  const protocols = useAppStore((s) => s.protocols)
+  const favorites = useAppStore((s) => s.favorites)
+  const setUser = useAppStore((s) => s.setUser)
+  const setProtocols = useAppStore((s) => s.setProtocols)
+  const setSavedStacks = useAppStore((s) => s.setSavedStacks)
   const router = useRouter()
+  const [loggingOut, setLoggingOut] = useState(false)
 
   const handleLogout = async () => {
-    const supabase = createClient()
-    await supabase.auth.signOut()
-    setUser(null) // Clear store immediately
-    router.push('/')
-    router.refresh()
+    setLoggingOut(true)
+    try {
+      const supabase = createClient()
+      await supabase.auth.signOut()
+      // Clear all store data
+      setUser(null)
+      setProtocols([])
+      setSavedStacks([])
+      // Navigate
+      router.push('/')
+      router.refresh()
+    } catch (e) {
+      console.error('Logout error:', e)
+    }
+    setLoggingOut(false)
   }
 
   if (!user) {
@@ -38,12 +56,10 @@ export default function ProfilePage() {
   return (
     <main className="min-h-screen">
       <Navigation />
-
       <div className="pt-24 sm:pt-28 pb-20 max-w-3xl mx-auto px-4 sm:px-6">
         <h1 className="font-display font-bold text-3xl sm:text-4xl mb-8">Profile</h1>
 
         <div className="space-y-6">
-          {/* Account Info */}
           <div className="glass-panel p-6 sm:p-8">
             <h3 className="font-display font-semibold text-lg mb-4">Account</h3>
             <div className="space-y-4">
@@ -53,11 +69,7 @@ export default function ProfilePage() {
               </div>
               <div className="flex justify-between items-center py-3 border-b border-surface-border/30">
                 <span className="text-text-muted text-sm">Plan</span>
-                <span className="text-sm font-mono text-accent-cyan capitalize">{plan}</span>
-              </div>
-              <div className="flex justify-between items-center py-3 border-b border-surface-border/30">
-                <span className="text-text-muted text-sm">Credits</span>
-                <span className="text-sm font-mono text-accent-cyan">{credits}</span>
+                <span className="text-sm font-display font-semibold text-accent-cyan capitalize">{plan}</span>
               </div>
               <div className="flex justify-between items-center py-3 border-b border-surface-border/30">
                 <span className="text-text-muted text-sm">Protocols Generated</span>
@@ -70,28 +82,26 @@ export default function ProfilePage() {
             </div>
           </div>
 
-          {/* Upgrade */}
           {plan === 'free' && (
             <div className="glass-panel glow-border p-6 sm:p-8 text-center">
               <h3 className="font-display font-bold text-lg mb-2">Upgrade to Pro</h3>
-              <p className="text-text-muted text-sm mb-4">Unlock AI protocols, tracking, and advanced analysis</p>
-              <Link href="/pricing" className="btn-primary text-sm">View Plans — $29/mo</Link>
+              <p className="text-text-muted text-sm mb-4">Unlimited AI protocols, tracking, and analysis</p>
+              <Link href="/pricing" className="btn-primary text-sm">Upgrade — $29/mo</Link>
             </div>
           )}
 
-          {/* Sign Out */}
-          <div className="glass-panel p-6 sm:p-8 border-accent-rose/20">
+          <div className="glass-panel p-6 sm:p-8">
             <h3 className="font-display font-semibold text-lg mb-4 text-accent-rose">Account Actions</h3>
             <button
               onClick={handleLogout}
-              className="px-6 py-2.5 border border-accent-rose/30 text-accent-rose rounded-xl text-sm font-medium hover:bg-accent-rose/10 transition-colors min-h-[44px]"
+              disabled={loggingOut}
+              className="px-6 py-3 border border-accent-rose/30 text-accent-rose rounded-xl text-sm font-medium hover:bg-accent-rose/10 transition-colors min-h-[44px] disabled:opacity-50"
             >
-              Sign Out
+              {loggingOut ? 'Signing out...' : 'Sign Out'}
             </button>
           </div>
         </div>
       </div>
-
       <Footer />
     </main>
   )
