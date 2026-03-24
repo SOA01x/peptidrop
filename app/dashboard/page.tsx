@@ -8,7 +8,6 @@ import { useAppStore } from '@/lib/store'
 import { getPeptideById, getStackCompatibility, type Peptide } from '@/data/peptides'
 import { cn } from '@/lib/utils'
 import { createClient } from '@/lib/supabase'
-import ProgressJournal from '@/components/dashboard/ProgressJournal'
 import Link from 'next/link'
 
 // ============================================
@@ -390,6 +389,57 @@ function CoachingPanel() {
 }
 
 // ============================================
+// PROGRESS TRACKER — Links to full journal
+// ============================================
+function ProgressTrackerInline() {
+  const { protocols } = useAppStore()
+  const active = protocols.find((p: any) => p.status === 'active')
+
+  if (!active) {
+    return (
+      <div className="glass-panel p-5 sm:p-8">
+        <h3 className="font-display font-semibold text-base sm:text-lg mb-4 flex items-center gap-2">
+          <span>📓</span> Progress Journal
+        </h3>
+        <div className="text-center py-8">
+          <span className="text-3xl block mb-3">📓</span>
+          <p className="text-text-muted text-sm mb-4">Generate a protocol to start tracking</p>
+          <Link href="/generator" className="btn-primary text-xs">Generate Protocol</Link>
+        </div>
+      </div>
+    )
+  }
+
+  const totalWeeks = active.protocol?.weeklyTimeline?.length || 12
+
+  return (
+    <div className="glass-panel p-5 sm:p-8">
+      <h3 className="font-display font-semibold text-base sm:text-lg mb-2 flex items-center gap-2">
+        <span>📓</span> Progress Journal
+      </h3>
+      <p className="text-xs text-text-muted mb-4">
+        Tracking: <span className="text-accent-cyan">{active.goal}</span>
+      </p>
+
+      <div className="grid grid-cols-6 sm:grid-cols-12 gap-1.5 sm:gap-2 mb-4">
+        {Array.from({ length: totalWeeks }, (_, i) => (
+          <div key={i} className="aspect-square rounded-lg flex flex-col items-center justify-center text-center border border-surface-border bg-surface-tertiary transition-all hover:border-accent-cyan/30 cursor-pointer">
+            <span className="text-[9px] sm:text-[10px] text-text-muted">W{i + 1}</span>
+          </div>
+        ))}
+      </div>
+
+      <div className="text-center">
+        <Link href={`/protocol/${active.id}/journal`} className="btn-primary text-sm">
+          📓 Open Full Journal
+        </Link>
+        <p className="text-xs text-text-muted mt-2">Log daily mood, side effects, bloodwork, and notes</p>
+      </div>
+    </div>
+  )
+}
+
+// ============================================
 // MAIN
 // ============================================
 export default function DashboardPage() {
@@ -428,7 +478,7 @@ export default function DashboardPage() {
 
         <div className="mb-6">
           <PaywallSection title="Progress Journal" description="Pro feature — track your protocol with daily entries.">
-            <ProgressJournal />
+            <ProgressTrackerInline />
           </PaywallSection>
         </div>
       </div>
