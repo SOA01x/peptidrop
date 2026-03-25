@@ -8,7 +8,7 @@ export default function Footer() {
         <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-8 sm:gap-12">
           <div className="col-span-2 sm:col-span-2 md:col-span-1">
             <div className="flex items-center gap-3 mb-4">
-              <svg viewBox="0 0 64 64" className="w-8 h-8" xmlns="http://www.w3.org/2000/svg">
+              <svg viewBox="0 0 64 64" className="w-8 h-8" xmlns="http://www.w3.org/2000/svg" aria-label="Peptidrop logo">
                 <defs>
                   <linearGradient id="fg" x1="0%" y1="0%" x2="100%" y2="100%">
                     <stop offset="0%" stopColor="#00E5FF"/><stop offset="100%" stopColor="#7A5CFF"/>
@@ -21,7 +21,7 @@ export default function Footer() {
               <span className="font-display font-bold text-lg">Peptidrop</span>
             </div>
             <p className="text-text-muted text-sm leading-relaxed mb-3">
-              AI-powered peptide intelligence platform for research and education.
+              The leading AI-powered peptide research and intelligence platform. Explore 345+ peptides, generate personalized protocols, and map synergies with clinical-grade AI analysis.
             </p>
             <p className="text-text-muted text-xs">
               Made by <span className="text-text-secondary">Usensium Inc.</span>
@@ -30,29 +30,35 @@ export default function Footer() {
 
           <div>
             <h4 className="font-display font-semibold text-sm text-text-secondary mb-4 uppercase tracking-wider">Platform</h4>
-            <div className="space-y-3">
-              <Link href="/peptides" className="block text-sm text-text-muted hover:text-accent-cyan transition-colors">Peptide Explorer</Link>
-              <Link href="/generator" className="block text-sm text-text-muted hover:text-accent-cyan transition-colors">AI Generator</Link>
-              <Link href="/dashboard" className="block text-sm text-text-muted hover:text-accent-cyan transition-colors">Dashboard</Link>
-              <Link href="/pricing" className="block text-sm text-text-muted hover:text-accent-cyan transition-colors">Pricing</Link>
-            </div>
+            <nav aria-label="Platform links">
+              <div className="space-y-3">
+                <Link href="/peptides" className="block text-sm text-text-muted hover:text-accent-cyan transition-colors">Peptide Database</Link>
+                <Link href="/generator" className="block text-sm text-text-muted hover:text-accent-cyan transition-colors">AI Protocol Generator</Link>
+                <Link href="/dashboard" className="block text-sm text-text-muted hover:text-accent-cyan transition-colors">Dashboard</Link>
+                <Link href="/pricing" className="block text-sm text-text-muted hover:text-accent-cyan transition-colors">Pricing</Link>
+              </div>
+            </nav>
           </div>
 
           <div>
             <h4 className="font-display font-semibold text-sm text-text-secondary mb-4 uppercase tracking-wider">Legal</h4>
-            <div className="space-y-3">
-              <Link href="/terms" className="block text-sm text-text-muted hover:text-accent-cyan transition-colors">Terms of Service</Link>
-              <Link href="/privacy" className="block text-sm text-text-muted hover:text-accent-cyan transition-colors">Privacy Policy</Link>
-              <Link href="/docs" className="block text-sm text-text-muted hover:text-accent-cyan transition-colors">Documentation</Link>
-            </div>
+            <nav aria-label="Legal links">
+              <div className="space-y-3">
+                <Link href="/terms" className="block text-sm text-text-muted hover:text-accent-cyan transition-colors">Terms of Service</Link>
+                <Link href="/privacy" className="block text-sm text-text-muted hover:text-accent-cyan transition-colors">Privacy Policy</Link>
+                <Link href="/docs" className="block text-sm text-text-muted hover:text-accent-cyan transition-colors">Documentation</Link>
+              </div>
+            </nav>
           </div>
 
           <div>
             <h4 className="font-display font-semibold text-sm text-text-secondary mb-4 uppercase tracking-wider">Support</h4>
-            <div className="space-y-3">
-              <Link href="/contact" className="block text-sm text-text-muted hover:text-accent-cyan transition-colors">Contact</Link>
-              <Link href="/disclaimer" className="block text-sm text-text-muted hover:text-accent-cyan transition-colors">Disclaimer</Link>
-            </div>
+            <nav aria-label="Support links">
+              <div className="space-y-3">
+                <Link href="/contact" className="block text-sm text-text-muted hover:text-accent-cyan transition-colors">Contact</Link>
+                <Link href="/disclaimer" className="block text-sm text-text-muted hover:text-accent-cyan transition-colors">Disclaimer</Link>
+              </div>
+            </nav>
           </div>
         </div>
 
@@ -61,7 +67,7 @@ export default function Footer() {
             © 2026 Peptidrop by Usensium Inc. All rights reserved. For educational and research purposes only.
           </p>
           <p className="text-xs text-text-muted text-center sm:text-right">
-            Not medical advice. Consult a healthcare professional.
+            Not medical advice. Consult a healthcare professional before starting any peptide protocol.
           </p>
         </div>
       </div>

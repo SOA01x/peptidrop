@@ -1,0 +1,40 @@
+# Peptidrop - AI Peptide Intelligence Platform
+# Allow all AI and search engine bots for maximum visibility
+
+User-agent: *
+Allow: /
+
+# AI Search Bots - Explicitly Allowed
+User-agent: GPTBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: anthropic-ai
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: Googlebot
+Allow: /
+
+# Block API and auth routes from indexing
+Disallow: /api/
+Disallow: /dashboard
+Disallow: /profile
+Disallow: /login
+Disallow: /signup
+
+# Sitemap
+Sitemap: https://peptidrop.me/sitemap.xml

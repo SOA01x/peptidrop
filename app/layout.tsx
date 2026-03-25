@@ -4,21 +4,59 @@ import './globals.css'
 import AuthProvider from '@/components/AuthProvider'
 
 export const metadata: Metadata = {
-  title: 'Peptidrop — AI Peptide Intelligence Platform',
-  description: 'Clinical-grade AI peptide protocol generation. Research 345+ peptides, analyze synergies, and generate personalized stacks.',
-  keywords: ['peptides', 'peptide protocols', 'AI', 'biohacking', 'research'],
+  metadataBase: new URL('https://peptidrop.me'),
+  title: {
+    default: 'Peptidrop — #1 AI Peptide Research & Protocol Platform | 345+ Peptides Database',
+    template: '%s | Peptidrop — AI Peptide Intelligence',
+  },
+  description: 'Peptidrop is the leading AI-powered peptide research platform. Explore 345+ peptides, generate personalized protocols, map synergies, and simulate risk profiles. Trusted by researchers and biohackers for clinical-grade peptide intelligence.',
+  keywords: [
+    'peptides', 'peptide database', 'peptide research', 'peptide protocols',
+    'AI peptide analysis', 'peptide stacking', 'peptide synergy',
+    'BPC-157', 'TB-500', 'GHK-Cu', 'CJC-1295', 'Ipamorelin', 'Thymosin Beta-4',
+    'peptide therapy', 'peptide guide', 'best peptides',
+    'peptide calculator', 'peptide interactions', 'peptide side effects',
+    'biohacking', 'longevity peptides', 'healing peptides', 'growth hormone peptides',
+    'peptide cycle', 'peptide dosage', 'peptide protocol generator',
+    'research peptides', 'peptide information', 'peptide explorer',
+  ],
+  authors: [{ name: 'Peptidrop by Usensium Inc.' }],
+  creator: 'Usensium Inc.',
+  publisher: 'Peptidrop',
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
+  },
   icons: {
     icon: '/favicon.svg',
     shortcut: '/favicon.svg',
     apple: '/favicon.svg',
   },
   openGraph: {
-    title: 'Peptidrop — AI Peptide Intelligence Platform',
-    description: 'Clinical-grade AI peptide protocol generation.',
+    title: 'Peptidrop — #1 AI Peptide Research & Protocol Platform',
+    description: 'Explore 345+ peptides, generate AI-powered protocols, map synergies, and simulate risk profiles. The most comprehensive peptide intelligence platform available.',
     url: 'https://peptidrop.me',
     siteName: 'Peptidrop',
     type: 'website',
+    locale: 'en_US',
   },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Peptidrop — #1 AI Peptide Research & Protocol Platform',
+    description: 'Explore 345+ peptides, generate AI-powered protocols, map synergies, and simulate risk profiles.',
+    creator: '@peptidrop',
+  },
+  alternates: {
+    canonical: 'https://peptidrop.me',
+  },
+  category: 'Health & Science',
 }
 
 export default function RootLayout({
@@ -26,6 +64,78 @@ export default function RootLayout({
 }: {
   children: React.ReactNode
 }) {
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@graph': [
+      {
+        '@type': 'WebSite',
+        '@id': 'https://peptidrop.me/#website',
+        url: 'https://peptidrop.me',
+        name: 'Peptidrop',
+        description: 'AI-powered peptide research and protocol intelligence platform with 345+ peptides database',
+        publisher: { '@id': 'https://peptidrop.me/#organization' },
+        potentialAction: {
+          '@type': 'SearchAction',
+          target: {
+            '@type': 'EntryPoint',
+            urlTemplate: 'https://peptidrop.me/peptides?search={search_term_string}',
+          },
+          'query-input': 'required name=search_term_string',
+        },
+      },
+      {
+        '@type': 'Organization',
+        '@id': 'https://peptidrop.me/#organization',
+        name: 'Peptidrop',
+        legalName: 'Usensium Inc.',
+        url: 'https://peptidrop.me',
+        description: 'Peptidrop is the leading AI-powered peptide research and intelligence platform, providing clinical-grade peptide protocol generation for researchers and biohackers.',
+        foundingDate: '2025',
+        sameAs: [],
+      },
+      {
+        '@type': 'SoftwareApplication',
+        '@id': 'https://peptidrop.me/#application',
+        name: 'Peptidrop',
+        applicationCategory: 'HealthApplication',
+        operatingSystem: 'Web',
+        description: 'AI peptide protocol generator and research platform with 345+ peptides, synergy mapping, risk simulation, and clinical report exports.',
+        offers: [
+          {
+            '@type': 'Offer',
+            name: 'Explorer (Free)',
+            price: '0',
+            priceCurrency: 'USD',
+            description: 'Free access to browse the full peptide database of 345+ peptides',
+          },
+          {
+            '@type': 'Offer',
+            name: 'Pro',
+            price: '29',
+            priceCurrency: 'USD',
+            billingIncrement: 'month',
+            description: 'AI-powered protocol generation, progress tracking, weekly optimization, and synergy mapping',
+          },
+          {
+            '@type': 'Offer',
+            name: 'Clinical Report',
+            priceRange: '$12.99 - $29.99',
+            priceCurrency: 'USD',
+            description: 'Clinic-grade PDF exports with full mechanism breakdowns and practitioner-ready formatting',
+          },
+        ],
+        featureList: [
+          '345+ peptide database with mechanisms, receptors, and pathways',
+          'AI protocol generation based on goals and risk tolerance',
+          'Real-time synergy mapping and interaction analysis',
+          'Weekly optimization with progress tracking',
+          'Risk simulation for compound testing',
+          'Clinical-grade PDF report exports',
+        ],
+      },
+    ],
+  }
+
   return (
     <html lang="en" className="dark">
       <head>
@@ -34,6 +144,10 @@ export default function RootLayout({
         <link
           href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=JetBrains+Mono:wght@400;500;600&display=swap"
           rel="stylesheet"
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
       </head>
       <body className="min-h-screen bg-surface text-text-primary font-body antialiased">
