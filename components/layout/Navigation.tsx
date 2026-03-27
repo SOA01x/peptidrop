@@ -14,6 +14,7 @@ const navLinks = [
   { href: '/generator', label: 'AI Generator' },
   { href: '/dashboard', label: 'Dashboard' },
   { href: '/pricing', label: 'Pricing' },
+  { href: '/blog', label: 'Read This' },
 ]
 
 function ThemeToggle() {
@@ -138,7 +139,7 @@ export default function Navigation() {
               <Link href="/pricing" className="text-xs text-accent-cyan px-2 py-1">Upgrade</Link>
             )
           ) : (
-            <Link href="/signup" className="btn-primary text-xs !py-2 !px-4">Sign Up</Link>
+            <Link href="/login" className="btn-primary text-xs !py-2 !px-4">Sign In</Link>
           )}
           <button onClick={() => setMobileOpen(!mobileOpen)}
             className="p-2 text-text-secondary min-w-[44px] min-h-[44px] flex items-center justify-center" aria-label="Menu">

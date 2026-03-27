@@ -2,6 +2,7 @@
 import type { Metadata } from 'next'
 import './globals.css'
 import AuthProvider from '@/components/AuthProvider'
+import CookieConsent from '@/components/ui/CookieConsent'
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://peptidrop.me'),
@@ -46,12 +47,22 @@ export const metadata: Metadata = {
     siteName: 'Peptidrop',
     type: 'website',
     locale: 'en_US',
+    images: [
+      {
+        url: 'https://peptidrop.me/og-image.svg',
+        width: 1200,
+        height: 630,
+        alt: 'Peptidrop — AI Peptide Research & Protocol Platform with 345+ peptides',
+        type: 'image/svg+xml',
+      },
+    ],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Peptidrop — #1 AI Peptide Research & Protocol Platform',
     description: 'Explore 345+ peptides, generate AI-powered protocols, map synergies, and simulate risk profiles.',
     creator: '@peptidrop',
+    images: ['https://peptidrop.me/og-image.svg'],
   },
   alternates: {
     canonical: 'https://peptidrop.me',
@@ -153,6 +164,7 @@ export default function RootLayout({
       <body className="min-h-screen bg-surface text-text-primary font-body antialiased">
         <AuthProvider>
           {children}
+          <CookieConsent />
         </AuthProvider>
       </body>
     </html>

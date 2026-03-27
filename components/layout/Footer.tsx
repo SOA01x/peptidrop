@@ -8,15 +8,21 @@ export default function Footer() {
         <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-8 sm:gap-12">
           <div className="col-span-2 sm:col-span-2 md:col-span-1">
             <div className="flex items-center gap-3 mb-4">
-              <svg viewBox="0 0 64 64" className="w-8 h-8" xmlns="http://www.w3.org/2000/svg" aria-label="Peptidrop logo">
-                <defs>
-                  <linearGradient id="fg" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" stopColor="#00E5FF"/><stop offset="100%" stopColor="#7A5CFF"/>
-                  </linearGradient>
-                </defs>
-                <path d="M32 4 C32 4, 8 30, 8 42 C8 55.2 18.8 62 32 62 C45.2 62 56 55.2 56 42 C56 30 32 4 32 4Z" fill="url(#fg)" opacity="0.9"/>
-                <path d="M32 8 C32 8, 12 31, 12 42 C12 53 20.9 58 32 58 C43.1 58 52 53 52 42 C52 31 32 8 32 8Z" fill="#0A0A0F"/>
-                <text x="25" y="49" fontFamily="Arial" fontWeight="800" fontSize="30" fill="#00E5FF">P</text>
+              <svg viewBox="0 0 200 200" className="w-8 h-8" xmlns="http://www.w3.org/2000/svg" aria-label="Peptidrop logo">
+                <g fill="#00E5FF">
+                  <circle cx="100" cy="12" r="8"/><circle cx="119.6" cy="13.5" r="7.5"/><circle cx="138" cy="18.5" r="7.5"/>
+                  <circle cx="154.5" cy="27" r="7"/><circle cx="168.5" cy="38.5" r="7"/><circle cx="179" cy="52.5" r="7"/>
+                  <circle cx="186.5" cy="68.5" r="7"/><circle cx="190" cy="86" r="7.5"/><circle cx="189.5" cy="104" r="7.5"/>
+                  <circle cx="185" cy="121.5" r="7.5"/><circle cx="177" cy="137.5" r="7.5"/><circle cx="166" cy="151.5" r="7.5"/>
+                  <circle cx="152.5" cy="163" r="7.5"/><circle cx="137" cy="171.5" r="7.5"/><circle cx="120" cy="177" r="8"/>
+                  <circle cx="100" cy="179" r="8.5"/><circle cx="80" cy="177" r="8"/><circle cx="63" cy="171.5" r="7.5"/>
+                  <circle cx="47.5" cy="163" r="7.5"/><circle cx="34" cy="151.5" r="7.5"/><circle cx="23" cy="137.5" r="7.5"/>
+                  <circle cx="15" cy="121.5" r="7.5"/><circle cx="10.5" cy="104" r="7.5"/><circle cx="10" cy="86" r="7.5"/>
+                  <circle cx="13.5" cy="68.5" r="7"/><circle cx="21" cy="52.5" r="7"/><circle cx="31.5" cy="38.5" r="7"/>
+                  <circle cx="45.5" cy="27" r="7"/><circle cx="62" cy="18.5" r="7.5"/><circle cx="80.4" cy="13.5" r="7.5"/>
+                </g>
+                <circle cx="100" cy="100" r="52" fill="none" stroke="#00E5FF" strokeWidth="12"/>
+                <circle cx="100" cy="100" r="6" fill="#00E5FF"/>
               </svg>
               <span className="font-display font-bold text-lg">Peptidrop</span>
             </div>
@@ -36,6 +42,7 @@ export default function Footer() {
                 <Link href="/generator" className="block text-sm text-text-muted hover:text-accent-cyan transition-colors">AI Protocol Generator</Link>
                 <Link href="/dashboard" className="block text-sm text-text-muted hover:text-accent-cyan transition-colors">Dashboard</Link>
                 <Link href="/pricing" className="block text-sm text-text-muted hover:text-accent-cyan transition-colors">Pricing</Link>
+                <Link href="/blog" className="block text-sm text-text-muted hover:text-accent-cyan transition-colors">Read This (Blog)</Link>
               </div>
             </nav>
           </div>

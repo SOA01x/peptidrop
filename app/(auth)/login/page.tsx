@@ -41,31 +41,28 @@ export default function LoginPage() {
     try {
       const supabase = createClient()
 
-      console.log('[Login] Attempting sign in for:', email)
+      // Clear any stale session before attempting sign-in
+      const { data: { session: existingSession } } = await supabase.auth.getSession()
+      if (existingSession) {
+        await supabase.auth.signOut()
+        // Small delay to let the sign-out propagate
+        await new Promise(r => setTimeout(r, 300))
+      }
+
       const { data, error: authError } = await supabase.auth.signInWithPassword({ email, password })
 
       if (authError) {
-        console.error('[Login] Auth error:', authError.message, authError.status)
         setError(authError.message)
         setLoading(false)
         return
       }
 
-      console.log('[Login] Sign in successful, user:', data.user?.id)
-
       if (data.user) {
-        // Load profile
-        const { data: profile, error: profileError } = await supabase
+        const { data: profile } = await supabase
           .from('profiles')
           .select('*')
           .eq('id', data.user.id)
           .maybeSingle()
-
-        if (profileError) {
-          console.warn('[Login] Profile query error:', profileError.message)
-        }
-
-        console.log('[Login] Profile:', profile?.email, profile?.plan)
 
         setUser(profile ? {
           id: profile.id, email: profile.email,
@@ -83,8 +80,8 @@ export default function LoginPage() {
       router.push('/dashboard')
       router.refresh()
     } catch (err: any) {
-      console.error('[Login] Unexpected error:', err)
       setError(err.message || 'Login failed. Please try again.')
+    } finally {
       setLoading(false)
     }
   }

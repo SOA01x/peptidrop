@@ -17,13 +17,13 @@
   }
 
   .light {
-    --c-surface: 248, 249, 251;
-    --c-surface-sec: 255, 255, 255;
-    --c-surface-ter: 240, 241, 243;
-    --c-border: 226, 228, 233;
-    --c-text: 17, 17, 24;
-    --c-text-sec: 75, 85, 99;
-    --c-text-mut: 156, 163, 175;
+    --c-surface: 255, 255, 255;
+    --c-surface-sec: 245, 247, 250;
+    --c-surface-ter: 235, 238, 243;
+    --c-border: 210, 214, 222;
+    --c-text: 15, 15, 20;
+    --c-text-sec: 55, 65, 81;
+    --c-text-mut: 107, 114, 128;
   }
 
   * { box-sizing: border-box; }

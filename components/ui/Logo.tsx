@@ -13,25 +13,44 @@ export function DropletLogo({ size = 'md', className }: { size?: 'sm' | 'md' | '
 
   return (
     <div className={cn('relative flex-shrink-0', sizes[size], className)}>
-      <svg viewBox="0 0 64 64" className="w-full h-full" xmlns="http://www.w3.org/2000/svg">
-        <defs>
-          <linearGradient id={`drop-grad-${size}`} x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stopColor="#00E5FF"/>
-            <stop offset="100%" stopColor="#7A5CFF"/>
-          </linearGradient>
-        </defs>
-        {/* Rounded square background */}
-        <rect x="2" y="2" width="60" height="60" rx="14" ry="14"
-          fill={`url(#drop-grad-${size})`} opacity="1"/>
-        {/* Inner dark square */}
-        <rect x="4" y="4" width="56" height="56" rx="12" ry="12" fill="#0A0A0F"/>
-        {/* Droplet shape inside */}
-        <path d="M32 12 C32 12, 18 28, 18 36 C18 43.7 24.3 50 32 50 C39.7 50 46 43.7 46 36 C46 28 32 12 32 12Z"
-          fill={`url(#drop-grad-${size})`} opacity="0.9"/>
-        {/* P letter inside droplet */}
-        <text x="27" y="42" fontFamily="Arial, Helvetica, sans-serif" fontWeight="800" fontSize="18" fill="#0A0A0F">P</text>
-        {/* Subtle highlight on droplet */}
-        <ellipse cx="28" cy="28" rx="3" ry="5" fill="white" opacity="0.15" transform="rotate(-15 28 28)"/>
+      <svg viewBox="0 0 200 200" className="w-full h-full" xmlns="http://www.w3.org/2000/svg">
+        {/* Outer ring of dots */}
+        <g fill="#00E5FF">
+          <circle cx="100" cy="12" r="8"/>
+          <circle cx="119.6" cy="13.5" r="7.5"/>
+          <circle cx="138" cy="18.5" r="7.5"/>
+          <circle cx="154.5" cy="27" r="7"/>
+          <circle cx="168.5" cy="38.5" r="7"/>
+          <circle cx="179" cy="52.5" r="7"/>
+          <circle cx="186.5" cy="68.5" r="7"/>
+          <circle cx="190" cy="86" r="7.5"/>
+          <circle cx="189.5" cy="104" r="7.5"/>
+          <circle cx="185" cy="121.5" r="7.5"/>
+          <circle cx="177" cy="137.5" r="7.5"/>
+          <circle cx="166" cy="151.5" r="7.5"/>
+          <circle cx="152.5" cy="163" r="7.5"/>
+          <circle cx="137" cy="171.5" r="7.5"/>
+          <circle cx="120" cy="177" r="8"/>
+          <circle cx="100" cy="179" r="8.5"/>
+          <circle cx="80" cy="177" r="8"/>
+          <circle cx="63" cy="171.5" r="7.5"/>
+          <circle cx="47.5" cy="163" r="7.5"/>
+          <circle cx="34" cy="151.5" r="7.5"/>
+          <circle cx="23" cy="137.5" r="7.5"/>
+          <circle cx="15" cy="121.5" r="7.5"/>
+          <circle cx="10.5" cy="104" r="7.5"/>
+          <circle cx="10" cy="86" r="7.5"/>
+          <circle cx="13.5" cy="68.5" r="7"/>
+          <circle cx="21" cy="52.5" r="7"/>
+          <circle cx="31.5" cy="38.5" r="7"/>
+          <circle cx="45.5" cy="27" r="7"/>
+          <circle cx="62" cy="18.5" r="7.5"/>
+          <circle cx="80.4" cy="13.5" r="7.5"/>
+        </g>
+        {/* Middle solid circle ring */}
+        <circle cx="100" cy="100" r="52" fill="none" stroke="#00E5FF" strokeWidth="12"/>
+        {/* Center dot */}
+        <circle cx="100" cy="100" r="6" fill="#00E5FF"/>
       </svg>
     </div>
   )

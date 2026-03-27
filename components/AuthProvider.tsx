@@ -16,7 +16,6 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
     const supabase = createClient()
 
     const loadUserData = async (userId: string, email: string, fallbackCreatedAt: string) => {
-      // Profile
       const { data: profile } = await supabase
         .from('profiles').select('*').eq('id', userId).maybeSingle()
 
@@ -32,7 +31,6 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
         favorites: [], created_at: fallbackCreatedAt,
       })
 
-      // Protocols
       const { data: protocols } = await supabase
         .from('protocols').select('*').eq('user_id', userId)
         .order('created_at', { ascending: false })
@@ -43,7 +41,6 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
         status: p.status || 'active', currentWeek: p.current_week || 1,
       })))
 
-      // Saved Stacks
       const { data: stacks } = await supabase
         .from('saved_stacks').select('*').eq('user_id', userId)
         .order('created_at', { ascending: false })
@@ -60,9 +57,26 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
 
     const init = async () => {
       try {
-        const { data: { user } } = await supabase.auth.getUser()
-        if (!user) { setUser(null); setProtocols([]); setSavedStacks([]); return }
-        await loadUserData(user.id, user.email || '', new Date().toISOString())
+        // Use getSession first (reads from storage, no network call)
+        // Then validate with getUser if session exists
+        const { data: { session } } = await supabase.auth.getSession()
+
+        if (!session) {
+          setUser(null); setProtocols([]); setSavedStacks([])
+          return
+        }
+
+        // Validate the session is still valid
+        const { data: { user }, error } = await supabase.auth.getUser()
+
+        if (error || !user) {
+          // Session expired but token was in storage — clean up quietly
+          await supabase.auth.signOut()
+          setUser(null); setProtocols([]); setSavedStacks([])
+          return
+        }
+
+        await loadUserData(user.id, user.email || '', user.created_at || new Date().toISOString())
       } catch (e) {
         console.error('[Auth] init error', e)
         setUser(null); setProtocols([]); setSavedStacks([])
@@ -77,7 +91,7 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
         return
       }
       if ((event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED') && session?.user) {
-        if (event === 'SIGNED_IN') await new Promise(r => setTimeout(r, 500))
+        if (event === 'SIGNED_IN') await new Promise(r => setTimeout(r, 300))
         try {
           await loadUserData(session.user.id, session.user.email || '', new Date().toISOString())
         } catch (e) { console.error('[Auth] load error', e) }

@@ -170,11 +170,14 @@ function PeptideModal({ peptide, onClose }: { peptide: Peptide; onClose: () => v
   )
 }
 
+const ITEMS_PER_PAGE = 24
+
 export default function PeptidesPage() {
   const [search, setSearch] = useState('')
   const [selectedCategory, setSelectedCategory] = useState<Category | 'all'>('all')
   const [selectedRisk, setSelectedRisk] = useState<RiskLevel | 'all'>('all')
   const [modalPeptide, setModalPeptide] = useState<Peptide | null>(null)
+  const [visibleCount, setVisibleCount] = useState(ITEMS_PER_PAGE)
 
   const filtered = useMemo(() => {
     return peptides.filter(p => {
@@ -187,6 +190,17 @@ export default function PeptidesPage() {
       return matchSearch && matchCat && matchRisk
     })
   }, [search, selectedCategory, selectedRisk])
+
+  // Reset visible count when filters change
+  const prevFilterKey = `${search}-${selectedCategory}-${selectedRisk}`
+  const [lastFilterKey, setLastFilterKey] = useState(prevFilterKey)
+  if (prevFilterKey !== lastFilterKey) {
+    setLastFilterKey(prevFilterKey)
+    setVisibleCount(ITEMS_PER_PAGE)
+  }
+
+  const displayedPeptides = filtered.slice(0, visibleCount)
+  const hasMore = visibleCount < filtered.length
 
   const categories = Object.entries(peptideCategories) as [Category, typeof peptideCategories[Category]][]
 
@@ -233,14 +247,25 @@ export default function PeptidesPage() {
         </div>
 
         <div className="mb-4 sm:mb-6 text-xs sm:text-sm text-text-muted">
-          Showing {filtered.length} of {peptides.length} peptides
+          Showing {displayedPeptides.length} of {filtered.length} peptides
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
-          {filtered.map(peptide => (
+          {displayedPeptides.map(peptide => (
             <PeptideCard key={peptide.id} peptide={peptide} onSelect={setModalPeptide} />
           ))}
         </div>
+
+        {hasMore && (
+          <div className="text-center mt-10 sm:mt-12">
+            <button
+              onClick={() => setVisibleCount(prev => prev + ITEMS_PER_PAGE)}
+              className="btn-secondary text-sm px-8 py-3"
+            >
+              Show More ({filtered.length - visibleCount} remaining)
+            </button>
+          </div>
+        )}
 
         {filtered.length === 0 && (
           <div className="text-center py-20"><p className="text-text-muted text-lg">No peptides match your filters</p></div>
