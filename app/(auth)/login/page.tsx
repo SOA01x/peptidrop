@@ -6,8 +6,6 @@ import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import Navigation from '@/components/layout/Navigation'
 import { createClient } from '@/lib/supabase'
-import { useAppStore } from '@/lib/store'
-import type { PlanTier } from '@/lib/utils'
 import { cn } from '@/lib/utils'
 
 const SAVED_EMAIL_KEY = 'peptidrop_saved_email'
@@ -19,7 +17,6 @@ export default function LoginPage() {
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
   const router = useRouter()
-  const setUser = useAppStore((s) => s.setUser)
 
   useEffect(() => {
     try {
@@ -41,44 +38,34 @@ export default function LoginPage() {
     try {
       const supabase = createClient()
 
-      // Clear any stale session before attempting sign-in
-      const { data: { session: existingSession } } = await supabase.auth.getSession()
-      if (existingSession) {
-        await supabase.auth.signOut()
-        // Small delay to let the sign-out propagate
-        await new Promise(r => setTimeout(r, 300))
-      }
-
       const { data, error: authError } = await supabase.auth.signInWithPassword({ email, password })
 
       if (authError) {
+        // If session is stale/corrupt, clear it and retry once
+        if (authError.message.includes('session') || authError.status === 403) {
+          await supabase.auth.signOut()
+          const { data: retryData, error: retryError } = await supabase.auth.signInWithPassword({ email, password })
+          if (retryError) {
+            setError(retryError.message)
+            setLoading(false)
+            return
+          }
+          if (retryData.session) {
+            router.push('/dashboard')
+            return
+          }
+        }
         setError(authError.message)
         setLoading(false)
         return
       }
 
-      if (data.user) {
-        const { data: profile } = await supabase
-          .from('profiles')
-          .select('*')
-          .eq('id', data.user.id)
-          .maybeSingle()
-
-        setUser(profile ? {
-          id: profile.id, email: profile.email,
-          credits: profile.credits || 0,
-          plan: (profile.plan || 'free') as PlanTier,
-          favorites: profile.favorites || [],
-          created_at: profile.created_at,
-        } : {
-          id: data.user.id, email: data.user.email || '',
-          credits: 0, plan: 'free', favorites: [],
-          created_at: new Date().toISOString(),
-        })
+      if (data.session) {
+        // Let AuthProvider's onAuthStateChange handle loading user data
+        // Just navigate — the SIGNED_IN event will fire and load profile
+        router.push('/dashboard')
+        return
       }
-
-      router.push('/dashboard')
-      router.refresh()
     } catch (err: any) {
       setError(err.message || 'Login failed. Please try again.')
     } finally {

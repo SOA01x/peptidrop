@@ -139,6 +139,7 @@ function renderContent(content: string) {
 
 function formatInline(text: string): string {
   return text
+    .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" class="text-accent-cyan hover:underline">$1</a>')
     .replace(/\*\*(.+?)\*\*/g, '<strong class="text-text-primary font-semibold">$1</strong>')
 }
 

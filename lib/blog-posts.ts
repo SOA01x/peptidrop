@@ -24,7 +24,7 @@ export const blogPosts: BlogPost[] = [
 
 When a peptide enters the body, it binds to specific receptors on cell surfaces, triggering biological cascades. Unlike pharmaceutical drugs that often force a single pathway, peptides work with the body's existing signaling systems. This is why they tend to have fewer side effects compared to synthetic drugs.
 
-For example, BPC-157 (Body Protection Compound-157) binds to growth factor receptors and activates angiogenesis — the formation of new blood vessels — which accelerates healing in tendons, ligaments, muscles, and even the gut lining.
+For example, [BPC-157 (Body Protection Compound-157)](/blog/bpc-157-complete-guide) binds to growth factor receptors and activates angiogenesis — the formation of new blood vessels — which accelerates healing in tendons, ligaments, muscles, and even the gut lining.
 
 ## Types of Peptides
 
@@ -42,11 +42,11 @@ Peptides fall into several major categories based on their primary function:
 
 The peptide therapy market has exploded because peptides offer targeted biological effects with relatively favorable safety profiles. Researchers use peptides to study tissue repair mechanisms, and biohackers use them to optimize recovery, cognition, and longevity.
 
-Platforms like Peptidrop provide comprehensive databases of 345+ peptides with mechanisms, evidence levels, and AI-powered protocol generation to help users navigate the complex landscape of peptide research.
+Platforms like Peptidrop provide comprehensive databases of [345+ peptides](/peptides) with mechanisms, evidence levels, and [AI-powered protocol generation](/generator) to help users navigate the complex landscape of peptide research.
 
 ## Key Takeaway
 
-Peptides are not drugs — they are naturally occurring signaling molecules that researchers are learning to leverage for specific biological outcomes. Understanding how they work is the first step toward informed peptide research.`,
+Peptides are not drugs — they are naturally occurring signaling molecules that researchers are learning to leverage for specific biological outcomes. Understanding how they work is the first step toward informed peptide research. For practical guidance on combining peptides, see our [peptide stacking guide](/blog/peptide-stacking-guide).`,
   },
   {
     slug: 'bpc-157-complete-guide',
@@ -79,13 +79,13 @@ Studies have shown BPC-157's effects on:
 
 ## BPC-157 in Peptide Stacks
 
-BPC-157 is frequently combined with TB-500 (Thymosin Beta-4) in healing protocols. This combination is popular because BPC-157 works locally at the injury site while TB-500 promotes systemic healing through cell migration and blood vessel formation.
+BPC-157 is frequently combined with [TB-500 (Thymosin Beta-4)](/blog/tb-500-thymosin-beta-4-guide) in healing protocols. This combination is popular because BPC-157 works locally at the injury site while TB-500 promotes systemic healing through cell migration and blood vessel formation. For more on combining peptides, see our [peptide stacking guide](/blog/peptide-stacking-guide).
 
-Peptidrop's AI protocol generator can analyze the synergy between BPC-157 and other peptides to create optimized healing stacks based on your specific research goals.
+Peptidrop's [AI protocol generator](/generator) can analyze the synergy between BPC-157 and other peptides to create optimized healing stacks based on your specific research goals.
 
 ## Risk Profile
 
-BPC-157 has a relatively favorable safety profile in research studies. It is classified as a "low risk" peptide by most researchers. However, as with all peptides, proper dosing and sourcing are critical considerations.`,
+BPC-157 has a relatively favorable safety profile in research studies. It is classified as a "low risk" peptide by most researchers. However, as with all peptides, proper [dosing](/blog/peptide-dosing-guide) and sourcing are critical considerations.`,
   },
   {
     slug: 'tb-500-thymosin-beta-4-guide',
@@ -108,7 +108,7 @@ Key mechanisms include:
 
 ## TB-500 + BPC-157: The Healing Stack
 
-The combination of TB-500 and BPC-157 is one of the most popular peptide stacks in research. They complement each other:
+The combination of TB-500 and [BPC-157](/blog/bpc-157-complete-guide) is one of the most popular peptide stacks in research. They complement each other:
 - TB-500 works systemically to promote cell migration
 - BPC-157 works locally to accelerate tissue-specific repair
 - Together, they target healing from both systemic and local pathways
@@ -122,7 +122,7 @@ TB-500 has been studied for:
 - Dermal wound healing
 - Neuroprotection
 
-Peptidrop's database includes comprehensive data on TB-500 including receptor targets, biological pathways, and synergy scores with other healing peptides.`,
+Peptidrop's [peptide database](/peptides) includes comprehensive data on TB-500 including receptor targets, biological pathways, and synergy scores with other [healing peptides](/blog/best-peptides-healing-recovery).`,
   },
   {
     slug: 'ghk-cu-copper-peptide-anti-aging',
@@ -155,7 +155,7 @@ GHK-Cu is used in both topical and systemic applications:
 
 ## In the Peptidrop Database
 
-Peptidrop categorizes GHK-Cu in both the "Skin & Cosmetic" and "Longevity" categories, reflecting its dual role. The AI protocol generator can incorporate GHK-Cu into anti-aging stacks alongside other longevity peptides like Epithalon and FOXO4-DRI.`,
+Peptidrop categorizes GHK-Cu in both the "Skin & Cosmetic" and "Longevity" categories in our [peptide database](/peptides), reflecting its dual role. The [AI protocol generator](/generator) can incorporate GHK-Cu into anti-aging stacks alongside other longevity peptides like [Epithalon](/blog/epithalon-telomere-longevity) and [FOXO4-DRI](/blog/foxo4-dri-senescent-cells).`,
   },
   {
     slug: 'cjc-1295-ipamorelin-growth-hormone',
@@ -192,13 +192,13 @@ The combination is synergistic:
 
 - Increased lean muscle mass
 - Improved fat metabolism
-- Better sleep quality (GH is primarily released during deep sleep)
+- Better [sleep quality](/blog/peptides-for-sleep) (GH is primarily released during deep sleep)
 - Enhanced recovery from training
 - Improved skin quality and collagen synthesis
 
 ## Peptidrop's AI Analysis
 
-Peptidrop's protocol generator frequently recommends CJC-1295 + Ipamorelin as a foundational stack for muscle growth, recovery, and anti-aging goals. The synergy mapping tool shows high compatibility scores between these two peptides.`,
+Peptidrop's [protocol generator](/generator) frequently recommends CJC-1295 + Ipamorelin as a foundational stack for [muscle growth](/blog/best-peptides-muscle-growth), recovery, and anti-aging goals. The synergy mapping tool shows high compatibility scores between these two peptides. Explore all growth hormone peptides in our [peptide database](/peptides).`,
   },
   {
     slug: 'semaglutide-weight-loss-peptide',
@@ -227,13 +227,13 @@ The STEP clinical trial program showed:
 
 ## Semaglutide vs. Tirzepatide
 
-Tirzepatide (a dual GIP/GLP-1 agonist) has shown even greater weight loss in some studies. Peptidrop's database includes both peptides with side-by-side comparison data:
+Tirzepatide (a dual GIP/GLP-1 agonist) has shown even greater weight loss in some studies. Peptidrop's [peptide database](/peptides) includes both peptides with side-by-side comparison data:
 - Semaglutide: Targets GLP-1 receptor only
 - Tirzepatide: Targets both GIP and GLP-1 receptors (dual agonist)
 
 ## Important Considerations
 
-Semaglutide is a prescription medication and should only be used under medical supervision. Peptidrop provides research data for educational purposes — always consult a qualified healthcare professional for medical decisions.`,
+Semaglutide is a prescription medication and should only be used under medical supervision. Peptidrop provides research data for educational purposes — always consult a qualified healthcare professional for medical decisions. For a broader look at weight management peptides, see our guide on the [best peptides for fat loss](/blog/best-peptides-fat-loss).`,
   },
   {
     slug: 'epithalon-telomere-longevity',
@@ -264,11 +264,11 @@ Studies on Epithalon have shown:
 ## Epithalon in Longevity Stacks
 
 Epithalon is often combined with other longevity peptides:
-- GHK-Cu (gene expression modulation + tissue remodeling)
-- Thymosin Alpha-1 (immune system rejuvenation)
-- FOXO4-DRI (senescent cell clearance)
+- [GHK-Cu](/blog/ghk-cu-copper-peptide-anti-aging) (gene expression modulation + tissue remodeling)
+- [Thymosin Alpha-1](/blog/thymosin-alpha-1-immune-peptide) (immune system rejuvenation)
+- [FOXO4-DRI](/blog/foxo4-dri-senescent-cells) (senescent cell clearance)
 
-Peptidrop's AI can generate comprehensive longevity protocols that incorporate Epithalon alongside complementary peptides.`,
+Peptidrop's [AI protocol generator](/generator) can generate comprehensive longevity protocols that incorporate Epithalon alongside complementary peptides. Learn more about [the best peptides for anti-aging](/blog/best-peptides-anti-aging-longevity).`,
   },
   {
     slug: 'peptide-stacking-guide',
@@ -283,8 +283,8 @@ Peptidrop's AI can generate comprehensive longevity protocols that incorporate E
 
 ### 1. Complementary Mechanisms
 Choose peptides that work through different pathways targeting the same goal. For example:
-- BPC-157 (local tissue repair) + TB-500 (systemic cell migration) = enhanced healing
-- CJC-1295 (extended GH release) + Ipamorelin (GH pulse trigger) = amplified growth hormone
+- [BPC-157](/blog/bpc-157-complete-guide) (local tissue repair) + [TB-500](/blog/tb-500-thymosin-beta-4-guide) (systemic cell migration) = enhanced healing
+- [CJC-1295 + Ipamorelin](/blog/cjc-1295-ipamorelin-growth-hormone) (extended GH release + GH pulse trigger) = amplified growth hormone
 
 ### 2. Receptor Compatibility
 Peptides that compete for the same receptors should generally not be stacked. Peptidrop's synergy mapping tool identifies potential receptor conflicts.
@@ -317,7 +317,7 @@ BPC-157 + GHK-Cu + TB-500 — Comprehensive tissue repair
 
 ## How Peptidrop Helps
 
-Peptidrop's AI protocol generator automates the stacking process. It analyzes all 345+ peptides, calculates synergy scores, evaluates receptor interactions, and generates optimized stacks for your specific goals. The synergy mapping tool provides visual representation of how peptides in your stack interact.`,
+Peptidrop's [AI protocol generator](/generator) automates the stacking process. It analyzes all [345+ peptides](/peptides), calculates synergy scores, evaluates receptor interactions, and generates optimized stacks for your specific goals. Be sure to review [peptide cycling protocols](/blog/peptide-cycling-guide) to time your stacks correctly.`,
   },
   {
     slug: 'selank-semax-cognitive-peptides',
@@ -362,12 +362,12 @@ Semax (Met-Glu-His-Phe-Pro-Gly-Pro) is a synthetic analogue of ACTH (adrenocorti
 
 ## The Selank + Semax Stack
 
-These two peptides are frequently combined:
+These two peptides are frequently combined in a [peptide stack](/blog/peptide-stacking-guide):
 - Selank addresses anxiety and emotional regulation
 - Semax boosts cognitive performance and focus
 - Together, they provide calm, focused cognitive enhancement
 
-Peptidrop's database includes both peptides with detailed mechanism data and synergy analysis for cognitive optimization protocols.`,
+Peptidrop's [peptide database](/peptides) includes both peptides with detailed mechanism data and synergy analysis for cognitive optimization protocols. For another powerful cognitive peptide, see our guide on [Dihexa](/blog/dihexa-cognitive-peptide).`,
   },
   {
     slug: 'peptide-dosing-guide',
@@ -402,7 +402,7 @@ Applied to the skin.
 
 ## Reconstitution Basics
 
-Most research peptides come as lyophilized (freeze-dried) powder and must be reconstituted:
+Most research peptides come as lyophilized (freeze-dried) powder and must be [reconstituted](/blog/how-to-reconstitute-peptides):
 1. Use bacteriostatic water (BAC water) for reconstitution
 2. Inject the water slowly along the vial wall — never directly onto the powder
 3. Gently swirl (never shake) until fully dissolved
@@ -420,7 +420,7 @@ These are general ranges found in published research — not medical recommendat
 
 ## Peptidrop's Protocol Generator
 
-Peptidrop's AI considers these factors when generating protocols: body weight, experience level, goals, and the specific combination of peptides. The AI calculates appropriate ranges and timing based on half-lives and receptor dynamics.
+Peptidrop's [AI protocol generator](/generator) considers these factors when generating protocols: body weight, experience level, goals, and the specific combination of peptides. The AI calculates appropriate ranges and timing based on half-lives and receptor dynamics. For important safety information, read our guide on [peptide side effects and safety](/blog/peptide-side-effects-safety).
 
 **Disclaimer**: Always consult a qualified healthcare professional. This information is for educational and research purposes only.`,
   },
@@ -467,7 +467,7 @@ Peptidrop classifies peptides into three risk tiers:
 
 ## How to Minimize Risks
 
-1. **Start Low, Go Slow**: Begin with the lowest effective dose
+1. **Start Low, Go Slow**: Begin with the lowest effective dose — see our [peptide dosing guide](/blog/peptide-dosing-guide)
 2. **Source Quality**: Only use research-grade peptides from reputable sources
 3. **Medical Supervision**: Always work with a healthcare professional
 4. **Monitor Biomarkers**: Regular blood work to track key markers
@@ -475,7 +475,7 @@ Peptidrop classifies peptides into three risk tiers:
 
 ## Peptidrop's Risk Simulation
 
-Peptidrop's risk simulation tool allows you to test peptide combinations before committing to a protocol. It evaluates cumulative risk profiles and flags potential interactions or contraindications.`,
+Peptidrop's risk simulation tool allows you to test peptide combinations before committing to a protocol. It evaluates cumulative risk profiles and flags potential interactions or contraindications. Browse all peptide safety profiles in our [peptide database](/peptides) or try the [AI protocol generator](/generator) for risk-aware recommendations.`,
   },
   {
     slug: 'best-peptides-muscle-growth',
@@ -488,7 +488,7 @@ Peptidrop's risk simulation tool allows you to test peptide combinations before 
 
 ## Top Peptides for Muscle Growth
 
-### 1. CJC-1295 + Ipamorelin
+### 1. [CJC-1295 + Ipamorelin](/blog/cjc-1295-ipamorelin-growth-hormone)
 The gold standard GH secretagogue stack. Elevated growth hormone levels promote:
 - Increased muscle protein synthesis
 - Enhanced recovery between training sessions
@@ -528,7 +528,7 @@ Based on Peptidrop's synergy analysis, an optimal muscle growth protocol often c
 - A healing peptide (BPC-157) for recovery and tissue repair
 - Proper cycling and timing based on half-lives
 
-Peptidrop's AI protocol generator creates personalized muscle growth stacks considering your experience level, training intensity, and risk tolerance.`,
+Peptidrop's [AI protocol generator](/generator) creates personalized muscle growth stacks considering your experience level, training intensity, and risk tolerance. Learn how peptides compare to traditional approaches in our [peptides vs. steroids](/blog/peptides-vs-steroids) comparison.`,
   },
   {
     slug: 'best-peptides-fat-loss',
@@ -569,7 +569,7 @@ Elevated GH levels promote lipolysis (fat breakdown):
 
 ## Other Fat Loss Peptides
 
-### AOD-9604
+### [AOD-9604](/blog/aod-9604-fat-loss-peptide)
 - A modified fragment of human growth hormone (HGH 176-191)
 - Stimulates lipolysis without affecting blood sugar or growth
 - Targets fat cells specifically
@@ -581,7 +581,7 @@ Elevated GH levels promote lipolysis (fat breakdown):
 
 ## Peptidrop's Approach
 
-Peptidrop's AI protocol generator evaluates fat loss goals alongside safety profiles. It can generate stacks that combine appetite regulation (GLP-1 pathway) with metabolic enhancement (GH pathway) while monitoring for potential interactions.`,
+Peptidrop's [AI protocol generator](/generator) evaluates fat loss goals alongside safety profiles. It can generate stacks that combine appetite regulation (GLP-1 pathway) with metabolic enhancement (GH pathway) while monitoring for potential interactions. For more on Semaglutide specifically, see our [complete Semaglutide guide](/blog/semaglutide-weight-loss-peptide).`,
   },
   {
     slug: 'best-peptides-healing-recovery',
@@ -594,7 +594,7 @@ Peptidrop's AI protocol generator evaluates fat loss goals alongside safety prof
 
 ## Top Healing Peptides
 
-### BPC-157 — The Healing Powerhouse
+### [BPC-157](/blog/bpc-157-complete-guide) — The Healing Powerhouse
 - Accelerates healing in tendons, ligaments, muscles, and gut
 - Promotes angiogenesis (new blood vessel formation)
 - Anti-inflammatory without immunosuppression
@@ -634,7 +634,7 @@ Based on research evidence and Peptidrop's synergy data:
 2. **TB-500** — Systemic repair support
 3. **GHK-Cu** — Collagen and tissue remodeling
 
-This three-peptide stack targets healing from multiple pathways simultaneously. Peptidrop's AI can customize dosing and timing based on the specific type and severity of tissue damage.`,
+This three-peptide stack targets healing from multiple pathways simultaneously. Peptidrop's [AI protocol generator](/generator) can customize dosing and timing based on the specific type and severity of tissue damage. For joint-specific concerns, see our guide on [peptides for joint pain](/blog/peptides-for-joint-pain).`,
   },
   {
     slug: 'best-peptides-anti-aging-longevity',
@@ -647,7 +647,7 @@ This three-peptide stack targets healing from multiple pathways simultaneously. 
 
 ## Top Longevity Peptides
 
-### Epithalon — Telomere Extension
+### [Epithalon](/blog/epithalon-telomere-longevity) — Telomere Extension
 - Activates telomerase to rebuild telomere length
 - Restores pineal gland function and melatonin production
 - Extended lifespan up to 13% in animal models
@@ -659,7 +659,7 @@ This three-peptide stack targets healing from multiple pathways simultaneously. 
 - Powerful anti-inflammatory and antioxidant
 - Decreases naturally with age (making supplementation relevant)
 
-### FOXO4-DRI — Senescent Cell Clearance
+### [FOXO4-DRI](/blog/foxo4-dri-senescent-cells) — Senescent Cell Clearance
 - Targets and clears senescent (zombie) cells
 - Senescent cells accumulate with age and cause chronic inflammation
 - Studies show rejuvenation effects in aged animal models
@@ -685,7 +685,7 @@ A research-grade longevity protocol might include:
 3. **FOXO4-DRI** — Clear senescent cells
 4. **Thymosin Alpha-1** — Restore immune function
 
-Peptidrop's AI protocol generator considers the interactions between these longevity peptides and creates phased protocols with proper cycling for long-term research.`,
+Peptidrop's [AI protocol generator](/generator) considers the interactions between these longevity peptides and creates phased protocols with proper [cycling](/blog/peptide-cycling-guide) for long-term research.`,
   },
   {
     slug: 'peptides-for-sleep',
@@ -698,7 +698,7 @@ Peptidrop's AI protocol generator considers the interactions between these longe
 
 ## Top Sleep Peptides
 
-### DSIP (Delta Sleep-Inducing Peptide)
+### [DSIP (Delta Sleep-Inducing Peptide)](/blog/dsip-delta-sleep-peptide)
 - Named for its ability to induce delta wave (deep) sleep
 - Modulates sleep-wake cycles without sedation
 - Also shows stress-reducing properties
@@ -727,7 +727,7 @@ Peptidrop's AI protocol generator considers the interactions between these longe
 - Avoid stimulating peptides (Semax) close to bedtime
 - Consistent timing is crucial for circadian regulation
 
-Peptidrop's protocol generator considers sleep optimization as a factor in every protocol, since sleep quality directly impacts recovery, muscle growth, cognitive function, and longevity.`,
+Peptidrop's [protocol generator](/generator) considers sleep optimization as a factor in every protocol, since sleep quality directly impacts recovery, [muscle growth](/blog/best-peptides-muscle-growth), cognitive function, and longevity. Explore sleep peptides and more in our [peptide database](/peptides).`,
   },
   {
     slug: 'peptides-for-immune-system',
@@ -740,7 +740,7 @@ Peptidrop's protocol generator considers sleep optimization as a factor in every
 
 ## Top Immune Peptides
 
-### Thymosin Alpha-1 (Ta1)
+### [Thymosin Alpha-1](/blog/thymosin-alpha-1-immune-peptide) (Ta1)
 - Produced naturally by the thymus gland
 - Enhances T-cell function and maturation
 - Activates dendritic cells and natural killer cells
@@ -772,7 +772,7 @@ Immune peptides require careful consideration:
 - Always consult with an immunologist or healthcare provider
 - Some immune peptides should be cycled to prevent tolerance
 
-Peptidrop's database classifies immune peptides with specific safety notes for autoimmune considerations and provides AI-generated protocols that account for immune system balance.`,
+Peptidrop's [peptide database](/peptides) classifies immune peptides with specific safety notes for autoimmune considerations and provides AI-generated protocols that account for immune system balance. For safety considerations, review our [peptide side effects guide](/blog/peptide-side-effects-safety).`,
   },
   {
     slug: 'peptides-vs-steroids',
@@ -807,14 +807,14 @@ Peptidrop's database classifies immune peptides with specific safety notes for a
 
 ## When Peptides May Be Preferred
 
-- Researchers seeking to enhance natural GH production
-- Focus on healing and recovery rather than supraphysiological performance
+- Researchers seeking to enhance natural GH production via [GH secretagogues](/blog/cjc-1295-ipamorelin-growth-hormone)
+- Focus on [healing and recovery](/blog/best-peptides-healing-recovery) rather than supraphysiological performance
 - Lower risk tolerance
 - Long-term health optimization over short-term gains
 
 ## Peptidrop's Position
 
-Peptidrop is a peptide-focused platform. Our database of 345+ peptides provides research-grade information for educational purposes. We do not cover anabolic steroids. All information is for research and education — consult a healthcare professional for medical decisions.`,
+Peptidrop is a peptide-focused platform. Our [database of 345+ peptides](/peptides) provides research-grade information for educational purposes. We do not cover anabolic steroids. All information is for research and education — consult a healthcare professional for medical decisions.`,
   },
   {
     slug: 'how-to-reconstitute-peptides',
@@ -856,6 +856,8 @@ The solution should be clear. If it's cloudy or has particles, something may hav
 
 ## Storage Guidelines
 
+For complete storage details, see our [peptide storage and handling guide](/blog/peptide-storage-handling).
+
 - Store reconstituted peptides at 2-8°C (refrigerator)
 - Use within 4-6 weeks after reconstitution
 - Never freeze reconstituted peptides
@@ -869,7 +871,7 @@ If you added 1 mL (100 units on insulin syringe) to 5 mg:
 - 10 units = 500 mcg
 - 4 units = 200 mcg
 
-Peptidrop's protocol generator includes dosing calculations in every generated protocol to simplify the math for researchers.`,
+Peptidrop's [protocol generator](/generator) includes dosing calculations in every generated protocol to simplify the math for researchers. For dosing ranges by peptide, see our [peptide dosing guide](/blog/peptide-dosing-guide).`,
   },
   {
     slug: 'peptide-cycling-guide',
@@ -898,7 +900,7 @@ Some peptides may lose effectiveness over time due to physiological adaptation. 
 - Prevents GH receptor desensitization
 - Maintains pituitary sensitivity
 
-### MK-677 (Ibutamoren)
+### [MK-677 (Ibutamoren)](/blog/mk-677-ibutamoren-guide)
 - Often cycled 8-12 weeks on, 4 weeks off
 - Monitor insulin sensitivity during use
 - Some researchers use 5 days on, 2 days off
@@ -924,7 +926,7 @@ Some peptides may lose effectiveness over time due to physiological adaptation. 
 
 ## Peptidrop's Protocol Timing
 
-Peptidrop's AI protocol generator automatically includes cycling recommendations in every generated protocol. It considers the specific peptides, their half-lives, receptor dynamics, and your goals to create optimal cycling schedules.`,
+Peptidrop's [AI protocol generator](/generator) automatically includes cycling recommendations in every generated protocol. It considers the specific peptides, their half-lives, receptor dynamics, and your goals to create optimal cycling schedules. For foundational knowledge, start with our guide on [what peptides are](/blog/what-are-peptides).`,
   },
   {
     slug: 'peptides-for-skin-hair',
@@ -937,7 +939,7 @@ Peptidrop's AI protocol generator automatically includes cycling recommendations
 
 ## Top Skin Peptides
 
-### GHK-Cu (Copper Peptide)
+### [GHK-Cu (Copper Peptide)](/blog/ghk-cu-copper-peptide-anti-aging)
 - The most studied skin peptide
 - Stimulates collagen I, III, and V production
 - Reduces fine lines and wrinkles
@@ -987,7 +989,7 @@ Peptidrop's AI protocol generator automatically includes cycling recommendations
 - Results typically take 4-12 weeks to become visible
 - Consistency is key for skin and hair applications
 
-Peptidrop categorizes skin and hair peptides separately in the database, with specific protocol recommendations for cosmetic goals.`,
+Peptidrop categorizes skin and hair peptides separately in the [peptide database](/peptides), with specific protocol recommendations for cosmetic goals. Women may want to review our guide on [peptides for women](/blog/peptides-for-women) for additional considerations.`,
   },
   {
     slug: 'mk-677-ibutamoren-guide',
@@ -1026,6 +1028,8 @@ MK-677 works through several pathways:
 
 ## MK-677 vs. Injectable GH Peptides
 
+For a deep dive into the injectable alternative, see our [CJC-1295 + Ipamorelin guide](/blog/cjc-1295-ipamorelin-growth-hormone).
+
 | Factor | MK-677 | CJC-1295 + Ipamorelin |
 |--------|--------|----------------------|
 | Administration | Oral (pill/liquid) | Subcutaneous injection |
@@ -1037,7 +1041,7 @@ MK-677 works through several pathways:
 
 ## Peptidrop's Analysis
 
-Peptidrop's database includes MK-677 with detailed comparison data against injectable alternatives. The AI protocol generator considers whether oral or injectable GH secretagogues are more appropriate based on your goals and preferences.`,
+Peptidrop's [peptide database](/peptides) includes MK-677 with detailed comparison data against injectable alternatives. The [AI protocol generator](/generator) considers whether oral or injectable GH secretagogues are more appropriate based on your goals and preferences. Review [side effects and safety](/blog/peptide-side-effects-safety) before starting any GH secretagogue.`,
   },
   {
     slug: 'peptides-for-gut-health',
@@ -1050,7 +1054,7 @@ Peptidrop's database includes MK-677 with detailed comparison data against injec
 
 ## Top Gut Health Peptides
 
-### BPC-157 — The Gut Guardian
+### [BPC-157](/blog/bpc-157-complete-guide) — The Gut Guardian
 BPC-157 was originally isolated from human gastric juice, making it a natural gut-protective peptide:
 - Repairs gut lining (intestinal epithelium)
 - Protects against NSAID-induced stomach damage
@@ -1089,7 +1093,7 @@ For gut-specific effects, oral administration may be preferred:
 - BPC-157 injectable: Systemic effects that also benefit the gut
 - Some researchers use both routes simultaneously
 
-Peptidrop's database includes gut-specific protocols and the AI generator can create targeted gut health stacks based on specific gut concerns.`,
+Peptidrop's [peptide database](/peptides) includes gut-specific protocols and the [AI generator](/generator) can create targeted gut health stacks based on specific gut concerns.`,
   },
   {
     slug: 'peptides-for-joint-pain',
@@ -1102,7 +1106,7 @@ Peptidrop's database includes gut-specific protocols and the AI generator can cr
 
 ## Top Peptides for Joint Health
 
-### BPC-157 for Joints
+### [BPC-157](/blog/bpc-157-complete-guide) for Joints
 - Promotes tendon-to-bone healing
 - Accelerates ligament repair
 - Reduces joint inflammation
@@ -1141,7 +1145,7 @@ A comprehensive joint protocol typically layers:
 3. **GHK-Cu** — Collagen and remodeling
 4. Optional: PPS for cartilage-specific support
 
-Peptidrop's AI evaluates joint-specific goals and generates protocols considering the location and severity of joint issues, plus the synergy between healing peptides.`,
+Peptidrop's [AI protocol generator](/generator) evaluates joint-specific goals and generates protocols considering the location and severity of joint issues, plus the synergy between [healing peptides](/blog/best-peptides-healing-recovery). Browse joint-related peptides in our [peptide database](/peptides).`,
   },
   {
     slug: 'foxo4-dri-senescent-cells',
@@ -1179,11 +1183,11 @@ The landmark 2017 study (Cell journal, Baar et al.) showed:
 ## FOXO4-DRI in Longevity Stacks
 
 FOXO4-DRI pairs well with other longevity peptides:
-- **Epithalon**: Addresses telomere shortening
-- **GHK-Cu**: Reprograms gene expression toward youth
-- **Thymosin Alpha-1**: Restores immune surveillance
+- **[Epithalon](/blog/epithalon-telomere-longevity)**: Addresses telomere shortening
+- **[GHK-Cu](/blog/ghk-cu-copper-peptide-anti-aging)**: Reprograms gene expression toward youth
+- **[Thymosin Alpha-1](/blog/thymosin-alpha-1-immune-peptide)**: Restores immune surveillance
 
-Together, these peptides target multiple hallmarks of aging simultaneously. Peptidrop's AI protocol generator can build comprehensive anti-aging stacks that include senolytic, telomeric, and immunomodulatory peptides.`,
+Together, these peptides target multiple hallmarks of aging simultaneously. Peptidrop's [AI protocol generator](/generator) can build comprehensive anti-aging stacks that include senolytic, telomeric, and immunomodulatory peptides. See all longevity options in our [best peptides for anti-aging guide](/blog/best-peptides-anti-aging-longevity).`,
   },
   {
     slug: 'dsip-delta-sleep-peptide',
@@ -1225,11 +1229,11 @@ DSIP has been studied for:
 ## DSIP in Sleep Protocols
 
 DSIP can be combined with other sleep-supporting approaches:
-- Evening administration of CJC-1295 + Ipamorelin (GH release during sleep)
-- Epithalon (melatonin restoration in aging individuals)
-- Selank (anxiety reduction for pre-sleep calm)
+- Evening administration of [CJC-1295 + Ipamorelin](/blog/cjc-1295-ipamorelin-growth-hormone) (GH release during sleep)
+- [Epithalon](/blog/epithalon-telomere-longevity) (melatonin restoration in aging individuals)
+- [Selank](/blog/selank-semax-cognitive-peptides) (anxiety reduction for pre-sleep calm)
 
-Peptidrop includes DSIP in its sleep optimization protocols, with the AI generator considering the user's specific sleep issues and other peptides in their stack.`,
+Peptidrop includes DSIP in its sleep optimization protocols, with the [AI generator](/generator) considering the user's specific sleep issues and other peptides in their stack. Browse all [sleep peptides](/blog/peptides-for-sleep) or explore our [peptide database](/peptides).`,
   },
   {
     slug: 'thymosin-alpha-1-immune-peptide',
@@ -1271,9 +1275,9 @@ Studies have shown Tα1's effects on:
 Thymosin Alpha-1 is a key component of longevity stacks because immune decline is one of the hallmarks of aging:
 - Restores immune surveillance that wanes with age
 - Reduces chronic inflammation (inflammaging)
-- Pairs with Epithalon (telomere extension) and GHK-Cu (gene modulation)
+- Pairs with [Epithalon](/blog/epithalon-telomere-longevity) (telomere extension) and [GHK-Cu](/blog/ghk-cu-copper-peptide-anti-aging) (gene modulation)
 
-Peptidrop's immune category features Thymosin Alpha-1 prominently, with comprehensive data on dosing ranges, cycling, and synergies with other immune and longevity peptides.`,
+Peptidrop's [immune category](/peptides) features Thymosin Alpha-1 prominently, with comprehensive data on [dosing ranges](/blog/peptide-dosing-guide), cycling, and synergies with other [immune](/blog/peptides-for-immune-system) and longevity peptides.`,
   },
   {
     slug: 'peptide-research-sources',
@@ -1305,10 +1309,10 @@ Peptidrop's immune category features Thymosin Alpha-1 prominently, with comprehe
 
 ## Tier 2: Curated Databases
 
-### Peptidrop (peptidrop.me)
-- Curated database of 345+ peptides
+### [Peptidrop](/) (peptidrop.me)
+- Curated [database of 345+ peptides](/peptides)
 - Mechanisms, evidence levels, and risk profiles
-- AI-powered protocol generation
+- [AI-powered protocol generation](/generator)
 - Synergy mapping between peptides
 
 ### Examine.com
@@ -1333,7 +1337,7 @@ Peptidrop's immune category features Thymosin Alpha-1 prominently, with comprehe
 
 ## Peptidrop's Evidence Approach
 
-Every peptide in Peptidrop's database includes evidence-level ratings based on the quality and quantity of research. The AI protocol generator weights its recommendations by evidence strength, prioritizing peptides with robust research support.`,
+Every peptide in Peptidrop's database includes evidence-level ratings based on the quality and quantity of research. The AI protocol generator weights its recommendations by evidence strength, prioritizing peptides with robust research support. New to peptides? Start with our guide on [what peptides are](/blog/what-are-peptides).`,
   },
   {
     slug: 'peptide-storage-handling',
@@ -1356,7 +1360,7 @@ Every peptide in Peptidrop's database includes evidence-level ratings based on t
 - **Temperature**: Always store at 2-8°C (refrigerator)
 - **Never freeze**: Freezing reconstituted peptides damages molecular structure
 - **Shelf Life**: Use within 4-6 weeks
-- **Bacteriostatic Water**: Use BAC water (not sterile water) — the benzyl alcohol preservative prevents bacterial growth
+- **Bacteriostatic Water**: Use BAC water (not sterile water) — the benzyl alcohol preservative prevents bacterial growth. See our [reconstitution guide](/blog/how-to-reconstitute-peptides) for step-by-step instructions
 
 ## Handling Best Practices
 
@@ -1381,7 +1385,7 @@ Watch for these warning signs:
 - Keep peptides out of checked luggage (temperature extremes)
 - Minimize time outside refrigeration
 
-Peptidrop's protocol documentation includes storage requirements for every peptide, so researchers always know the specific handling needs of their compounds.`,
+Peptidrop's protocol documentation includes storage requirements for every peptide in our [peptide database](/peptides), so researchers always know the specific handling needs of their compounds. For cost estimates on supplies and peptides, see our [peptide therapy cost guide](/blog/peptide-therapy-cost-guide).`,
   },
   {
     slug: 'peptide-therapy-cost-guide',
@@ -1443,7 +1447,7 @@ Clinics charge significantly more but provide medical supervision:
 
 ## Peptidrop's Role
 
-Peptidrop helps optimize cost-effectiveness by generating protocols that maximize results with the minimum effective peptide combination. The AI considers synergy scores to ensure every peptide in your stack adds meaningful value.`,
+Peptidrop helps optimize cost-effectiveness by generating protocols that maximize results with the minimum effective peptide combination. The [AI protocol generator](/generator) considers synergy scores to ensure every peptide in your stack adds meaningful value. Compare all peptides and their profiles in our [peptide database](/peptides), and see our [pricing page](/pricing) for Peptidrop subscription options.`,
   },
   {
     slug: 'dihexa-cognitive-peptide',
@@ -1490,11 +1494,11 @@ Dihexa is classified as **high risk** in Peptidrop's database:
 ## Safer Alternatives for Cognition
 
 For those seeking cognitive enhancement with lower risk:
-- Selank (low risk, well-studied)
-- Semax (low risk, decades of research)
-- GHK-Cu (modulates BDNF with broad safety data)
+- [Selank](/blog/selank-semax-cognitive-peptides) (low risk, well-studied)
+- [Semax](/blog/selank-semax-cognitive-peptides) (low risk, decades of research)
+- [GHK-Cu](/blog/ghk-cu-copper-peptide-anti-aging) (modulates BDNF with broad safety data)
 
-Peptidrop's database clearly flags Dihexa's risk level and the AI protocol generator accounts for risk tolerance when suggesting cognitive stacks. It will not recommend Dihexa for low or moderate risk tolerance profiles.`,
+Peptidrop's [peptide database](/peptides) clearly flags Dihexa's risk level and the [AI protocol generator](/generator) accounts for risk tolerance when suggesting cognitive stacks. It will not recommend Dihexa for low or moderate risk tolerance profiles.`,
   },
   {
     slug: 'aod-9604-fat-loss-peptide',
@@ -1535,11 +1539,11 @@ Unlike full HGH which affects multiple pathways, AOD-9604 is targeted:
 ## Stacking AOD-9604
 
 AOD-9604 can be combined with:
-- CJC-1295 + Ipamorelin for GH benefits + targeted fat loss
-- BPC-157 for recovery support during caloric deficit
+- [CJC-1295 + Ipamorelin](/blog/cjc-1295-ipamorelin-growth-hormone) for GH benefits + targeted fat loss
+- [BPC-157](/blog/bpc-157-complete-guide) for recovery support during caloric deficit
 - Exercise and dietary optimization
 
-Peptidrop's AI generates fat loss protocols that can include AOD-9604 alongside complementary peptides, calculating synergy scores for optimal combinations.`,
+Peptidrop's [AI protocol generator](/generator) generates fat loss protocols that can include AOD-9604 alongside complementary peptides, calculating synergy scores for optimal combinations. See all [fat loss peptides](/blog/best-peptides-fat-loss) or browse our [peptide database](/peptides).`,
   },
   {
     slug: 'peptides-for-women',
@@ -1553,7 +1557,7 @@ Peptidrop's AI generates fat loss protocols that can include AOD-9604 alongside 
 ## Popular Peptides for Women's Health Goals
 
 ### Skin & Anti-Aging
-- **GHK-Cu**: Collagen stimulation without hormonal effects. Excellent for skin rejuvenation, wrinkle reduction, and hair health.
+- **[GHK-Cu](/blog/ghk-cu-copper-peptide-anti-aging)**: Collagen stimulation without hormonal effects. Excellent for [skin rejuvenation, wrinkle reduction, and hair health](/blog/peptides-for-skin-hair).
 - **Matrixyl**: Non-invasive topical collagen booster
 - **Argireline**: Expression line reduction
 
@@ -1590,7 +1594,7 @@ Peptidrop's AI generates fat loss protocols that can include AOD-9604 alongside 
 
 ## Peptidrop for Women
 
-Peptidrop's AI protocol generator considers biological sex as a factor in protocol design. It adjusts recommendations based on the different physiological considerations for women, including hormonal interactions and research data from female-inclusive studies.`,
+Peptidrop's [AI protocol generator](/generator) considers biological sex as a factor in protocol design. It adjusts recommendations based on the different physiological considerations for women, including hormonal interactions and research data from female-inclusive studies. Explore all options in our [peptide database](/peptides).`,
   },
   {
     slug: 'future-of-peptide-therapy',
@@ -1615,7 +1619,7 @@ This represents a shift from "one-size-fits-all" peptide advice to truly persona
 ## Trend 2: Oral Peptide Delivery
 
 Historically, most peptides required injection. New delivery technologies are changing this:
-- Oral Semaglutide (Rybelsus) proved that complex peptides can survive the GI tract
+- Oral [Semaglutide](/blog/semaglutide-weight-loss-peptide) (Rybelsus) proved that complex peptides can survive the GI tract
 - Nanoparticle encapsulation for oral delivery
 - Sublingual and buccal formulations
 - Transdermal patches for sustained release
@@ -1624,7 +1628,7 @@ Historically, most peptides required injection. New delivery technologies are ch
 
 New peptides being explored include:
 - **Mitochondrial peptides** (MOTS-c, Humanin) for metabolic health
-- **Senolytic peptides** beyond FOXO4-DRI
+- **Senolytic peptides** beyond [FOXO4-DRI](/blog/foxo4-dri-senescent-cells)
 - **Antimicrobial peptides** for antibiotic-resistant infections
 - **Peptide-drug conjugates** for targeted therapy
 - **Cyclic peptides** for improved stability and oral bioavailability
@@ -1646,7 +1650,7 @@ The future combines peptides with:
 
 ## Peptidrop's Vision
 
-Peptidrop is building the AI-powered peptide intelligence platform of the future — where every protocol is personalized, every synergy is mapped, and every risk is quantified. With 345+ peptides in our database and growing, we're creating the most comprehensive peptide research tool available.
+Peptidrop is building the AI-powered peptide intelligence platform of the future — where every protocol is personalized, every synergy is mapped, and every risk is quantified. With [345+ peptides in our database](/peptides) and growing, we're creating the most comprehensive peptide research tool available. Try the [AI protocol generator](/generator) today.
 
 The future of peptide research is intelligent, personalized, and data-driven. And it's already here.`,
   },

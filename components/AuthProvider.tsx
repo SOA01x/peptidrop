@@ -86,14 +86,13 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
     init()
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
-      if (event === 'SIGNED_OUT') {
+      if (event === 'SIGNED_OUT' || event === 'USER_DELETED') {
         setUser(null); setProtocols([]); setSavedStacks([])
         return
       }
-      if ((event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED') && session?.user) {
-        if (event === 'SIGNED_IN') await new Promise(r => setTimeout(r, 300))
+      if ((event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED' || event === 'INITIAL_SESSION') && session?.user) {
         try {
-          await loadUserData(session.user.id, session.user.email || '', new Date().toISOString())
+          await loadUserData(session.user.id, session.user.email || '', session.user.created_at || new Date().toISOString())
         } catch (e) { console.error('[Auth] load error', e) }
       }
     })
