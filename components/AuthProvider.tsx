@@ -55,45 +55,22 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
       })))
     }
 
-    const init = async () => {
-      try {
-        // Use getSession first (reads from storage, no network call)
-        // Then validate with getUser if session exists
-        const { data: { session } } = await supabase.auth.getSession()
-
-        if (!session) {
-          setUser(null); setProtocols([]); setSavedStacks([])
-          return
-        }
-
-        // Validate the session is still valid
-        const { data: { user }, error } = await supabase.auth.getUser()
-
-        if (error || !user) {
-          // Session expired but token was in storage — clean up quietly
-          await supabase.auth.signOut()
-          setUser(null); setProtocols([]); setSavedStacks([])
-          return
-        }
-
-        await loadUserData(user.id, user.email || '', user.created_at || new Date().toISOString())
-      } catch (e) {
-        console.error('[Auth] init error', e)
-        setUser(null); setProtocols([]); setSavedStacks([])
-      }
-    }
-
-    init()
-
+    // Single source of truth: onAuthStateChange handles ALL auth state.
+    // INITIAL_SESSION fires immediately on setup with the current session from cookies.
+    // The middleware already validates & refreshes the token server-side on each request,
+    // so we trust the session from cookies — no extra getUser() call needed.
     const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
       if (event === 'SIGNED_OUT') {
         setUser(null); setProtocols([]); setSavedStacks([])
         return
       }
-      if ((event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED' || event === 'INITIAL_SESSION') && session?.user) {
+      if (session?.user) {
         try {
           await loadUserData(session.user.id, session.user.email || '', session.user.created_at || new Date().toISOString())
         } catch (e) { console.error('[Auth] load error', e) }
+      } else if (event === 'INITIAL_SESSION') {
+        // No session on initial load — user is not logged in
+        setUser(null); setProtocols([]); setSavedStacks([])
       }
     })
 
