@@ -6,6 +6,7 @@ import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import Navigation from '@/components/layout/Navigation'
 import { createClient } from '@/lib/supabase'
+import { loadUserProfile } from '@/components/AuthProvider'
 import { cn } from '@/lib/utils'
 
 const SAVED_EMAIL_KEY = 'peptidrop_saved_email'
@@ -38,7 +39,7 @@ export default function LoginPage() {
     try {
       const supabase = createClient()
 
-      const { error: authError } = await supabase.auth.signInWithPassword({ email, password })
+      const { data, error: authError } = await supabase.auth.signInWithPassword({ email, password })
 
       if (authError) {
         setError(authError.message)
@@ -46,7 +47,11 @@ export default function LoginPage() {
         return
       }
 
-      // AuthProvider's onAuthStateChange(SIGNED_IN) handles loading user data
+      if (data.user) {
+        // Load profile data into store directly (don't rely on cross-client events)
+        await loadUserProfile(supabase, data.user.id, data.user.email || '', data.user.created_at || new Date().toISOString())
+      }
+
       router.push('/dashboard')
     } catch (err: any) {
       setError(err.message || 'Login failed. Please try again.')
@@ -103,7 +108,7 @@ export default function LoginPage() {
           </form>
 
           <p className="text-center text-sm text-text-muted mt-6">
-            Don't have an account?{' '}
+            Don&apos;t have an account?{' '}
             <Link href="/signup" className="text-accent-cyan hover:underline">Sign up</Link>
           </p>
         </div>

@@ -6,7 +6,7 @@ import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import Navigation from '@/components/layout/Navigation'
 import { createClient } from '@/lib/supabase'
-import { useAppStore } from '@/lib/store'
+import { loadUserProfile } from '@/components/AuthProvider'
 
 export default function SignupPage() {
   const [email, setEmail] = useState('')
@@ -16,7 +16,6 @@ export default function SignupPage() {
   const [loading, setLoading] = useState(false)
   const [success, setSuccess] = useState(false)
   const router = useRouter()
-  const { setUser } = useAppStore()
 
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -50,34 +49,9 @@ export default function SignupPage() {
         // Wait a moment for the DB trigger to create the profile
         await new Promise(r => setTimeout(r, 1000))
 
-        const { data: profile } = await supabase
-          .from('profiles')
-          .select('*')
-          .eq('id', data.user.id)
-          .single()
-
-        if (profile) {
-          setUser({
-            id: profile.id,
-            email: profile.email,
-            credits: profile.credits || 0,
-            plan: (profile.plan as any) || 'free',
-            favorites: profile.favorites || [],
-            created_at: profile.created_at,
-          })
-        } else {
-          setUser({
-            id: data.user.id,
-            email: data.user.email || '',
-            credits: 0,
-            plan: 'free',
-            favorites: [],
-            created_at: new Date().toISOString(),
-          })
-        }
+        await loadUserProfile(supabase, data.user.id, data.user.email || '', data.user.created_at || new Date().toISOString())
 
         router.push('/dashboard')
-        router.refresh()
       }
     } catch (err: any) {
       setError(err.message || 'Signup failed')
