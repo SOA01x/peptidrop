@@ -64,7 +64,7 @@ export default function Navigation() {
   const pathname = usePathname()
   const [scrolled, setScrolled] = useState(false)
   const [mobileOpen, setMobileOpen] = useState(false)
-  const { user, plan } = useAppStore()
+  const { user, plan, authReady } = useAppStore()
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20)
@@ -117,7 +117,9 @@ export default function Navigation() {
         {/* Desktop Right */}
         <div className="hidden lg:flex items-center gap-3">
           <ThemeToggle />
-          {user ? (
+          {!authReady ? (
+            <div className="w-20" />
+          ) : user ? (
             <>
               {plan === 'pro' ? (
                 <div className="flex items-center gap-2 px-4 py-2 glass-panel-light">
@@ -143,7 +145,7 @@ export default function Navigation() {
         {/* Mobile Right */}
         <div className="flex lg:hidden items-center gap-1">
           <ThemeToggle />
-          {user ? (
+          {!authReady ? null : user ? (
             plan === 'pro' ? (
               <Link href="/dashboard" className="flex items-center gap-1.5 px-3 py-1.5 glass-panel-light rounded-lg">
                 <div className="w-1.5 h-1.5 rounded-full bg-accent-cyan animate-pulse" />

@@ -38,37 +38,18 @@ export default function LoginPage() {
     try {
       const supabase = createClient()
 
-      const { data, error: authError } = await supabase.auth.signInWithPassword({ email, password })
+      const { error: authError } = await supabase.auth.signInWithPassword({ email, password })
 
       if (authError) {
-        // If session is stale/corrupt, clear it and retry once
-        if (authError.message.includes('session') || authError.status === 403) {
-          await supabase.auth.signOut()
-          const { data: retryData, error: retryError } = await supabase.auth.signInWithPassword({ email, password })
-          if (retryError) {
-            setError(retryError.message)
-            setLoading(false)
-            return
-          }
-          if (retryData.session) {
-            router.push('/dashboard')
-            return
-          }
-        }
         setError(authError.message)
         setLoading(false)
         return
       }
 
-      if (data.session) {
-        // Let AuthProvider's onAuthStateChange handle loading user data
-        // Just navigate — the SIGNED_IN event will fire and load profile
-        router.push('/dashboard')
-        return
-      }
+      // AuthProvider's onAuthStateChange(SIGNED_IN) handles loading user data
+      router.push('/dashboard')
     } catch (err: any) {
       setError(err.message || 'Login failed. Please try again.')
-    } finally {
       setLoading(false)
     }
   }

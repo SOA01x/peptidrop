@@ -22,20 +22,14 @@ export default function ProfilePage() {
 
   const handleLogout = async () => {
     setLoggingOut(true)
-    try {
-      const supabase = createClient()
-      await supabase.auth.signOut()
-      // Clear all store data
-      setUser(null)
-      setProtocols([])
-      setSavedStacks([])
-      // Navigate
-      router.push('/')
-      router.refresh()
-    } catch (e) {
-      console.error('Logout error:', e)
-    }
-    setLoggingOut(false)
+    const supabase = createClient()
+    // Always clear state and navigate, even if signOut fails
+    try { await supabase.auth.signOut() } catch (e) { console.error('signOut error:', e) }
+    setUser(null)
+    setProtocols([])
+    setSavedStacks([])
+    router.push('/')
+    router.refresh()
   }
 
   if (!user) {

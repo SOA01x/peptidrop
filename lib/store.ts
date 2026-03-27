@@ -49,6 +49,8 @@ export interface SavedStack {
 
 interface AppState {
   // Auth
+  authReady: boolean
+  setAuthReady: (ready: boolean) => void
   user: UserProfile | null
   setUser: (user: UserProfile | null) => void
 
@@ -98,6 +100,8 @@ interface AppState {
 }
 
 export const useAppStore = create<AppState>((set, get) => ({
+  authReady: false,
+  setAuthReady: (ready) => set({ authReady: ready }),
   user: null,
   setUser: (user) => set({
     user,

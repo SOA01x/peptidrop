@@ -1,7 +1,7 @@
 // components/AuthProvider.tsx
 'use client'
 
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 import { createClient } from '@/lib/supabase'
 import { useAppStore } from '@/lib/store'
 import type { PlanTier } from '@/lib/utils'
@@ -11,71 +11,106 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
   const setUser = useAppStore((s) => s.setUser)
   const setProtocols = useAppStore((s) => s.setProtocols)
   const setSavedStacks = useAppStore((s) => s.setSavedStacks)
+  const setAuthReady = useAppStore((s) => s.setAuthReady)
+  const loadingRef = useRef(false)
 
   useEffect(() => {
     const supabase = createClient()
 
-    const loadUserData = async (userId: string, email: string, fallbackCreatedAt: string) => {
-      const { data: profile } = await supabase
-        .from('profiles').select('*').eq('id', userId).maybeSingle()
+    const loadUserData = async (userId: string, email: string, createdAt: string) => {
+      // Prevent concurrent loads from racing
+      if (loadingRef.current) return
+      loadingRef.current = true
 
-      setUser(profile ? {
-        id: profile.id, email: profile.email,
-        credits: profile.credits || 0,
-        plan: (profile.plan || 'free') as PlanTier,
-        favorites: profile.favorites || [],
-        created_at: profile.created_at,
-      } : {
-        id: userId, email,
-        credits: 0, plan: 'free' as PlanTier,
-        favorites: [], created_at: fallbackCreatedAt,
-      })
+      try {
+        const { data: profile, error: profileError } = await supabase
+          .from('profiles').select('*').eq('id', userId).maybeSingle()
 
-      const { data: protocols } = await supabase
-        .from('protocols').select('*').eq('user_id', userId)
-        .order('created_at', { ascending: false })
+        if (profileError) {
+          console.error('[Auth] profile query failed:', profileError.message)
+          // Profile query failed — set basic user from session so they're at least logged in
+          // but DON'T overwrite if we already have user data in the store
+          const currentUser = useAppStore.getState().user
+          if (!currentUser) {
+            setUser({
+              id: userId, email,
+              credits: 0, plan: 'free' as PlanTier,
+              favorites: [], created_at: createdAt,
+            })
+          }
+          return
+        }
 
-      setProtocols((protocols || []).map((p: any) => ({
-        id: p.id, goal: p.goal, created_at: p.created_at,
-        protocol: p.protocol, credits_used: p.credits_used,
-        status: p.status || 'active', currentWeek: p.current_week || 1,
-      })))
+        setUser(profile ? {
+          id: profile.id, email: profile.email,
+          credits: profile.credits || 0,
+          plan: (profile.plan || 'free') as PlanTier,
+          favorites: profile.favorites || [],
+          created_at: profile.created_at,
+        } : {
+          id: userId, email,
+          credits: 0, plan: 'free' as PlanTier,
+          favorites: [], created_at: createdAt,
+        })
 
-      const { data: stacks } = await supabase
-        .from('saved_stacks').select('*').eq('user_id', userId)
-        .order('created_at', { ascending: false })
+        const { data: protocols } = await supabase
+          .from('protocols').select('*').eq('user_id', userId)
+          .order('created_at', { ascending: false })
 
-      setSavedStacks((stacks || []).map((s: any): SavedStack => ({
-        id: s.id, name: s.name,
-        peptide_ids: s.peptide_ids || [],
-        node_positions: s.node_positions || null,
-        synergy_score: s.synergy_score || null,
-        notes: s.notes || null,
-        created_at: s.created_at,
-      })))
+        setProtocols((protocols || []).map((p: any) => ({
+          id: p.id, goal: p.goal, created_at: p.created_at,
+          protocol: p.protocol, credits_used: p.credits_used,
+          status: p.status || 'active', currentWeek: p.current_week || 1,
+        })))
+
+        const { data: stacks } = await supabase
+          .from('saved_stacks').select('*').eq('user_id', userId)
+          .order('created_at', { ascending: false })
+
+        setSavedStacks((stacks || []).map((s: any): SavedStack => ({
+          id: s.id, name: s.name,
+          peptide_ids: s.peptide_ids || [],
+          node_positions: s.node_positions || null,
+          synergy_score: s.synergy_score || null,
+          notes: s.notes || null,
+          created_at: s.created_at,
+        })))
+      } catch (e) {
+        console.error('[Auth] loadUserData error:', e)
+      } finally {
+        loadingRef.current = false
+      }
     }
 
-    // Single source of truth: onAuthStateChange handles ALL auth state.
-    // INITIAL_SESSION fires immediately on setup with the current session from cookies.
-    // The middleware already validates & refreshes the token server-side on each request,
-    // so we trust the session from cookies — no extra getUser() call needed.
     const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
       if (event === 'SIGNED_OUT') {
-        setUser(null); setProtocols([]); setSavedStacks([])
+        setUser(null)
+        setProtocols([])
+        setSavedStacks([])
+        setAuthReady(true)
         return
       }
-      if (session?.user) {
-        try {
+
+      if (event === 'INITIAL_SESSION' || event === 'SIGNED_IN') {
+        if (session?.user) {
           await loadUserData(session.user.id, session.user.email || '', session.user.created_at || new Date().toISOString())
-        } catch (e) { console.error('[Auth] load error', e) }
-      } else if (event === 'INITIAL_SESSION') {
-        // No session on initial load — user is not logged in
-        setUser(null); setProtocols([]); setSavedStacks([])
+        } else {
+          // No session — user is not logged in
+          setUser(null)
+          setProtocols([])
+          setSavedStacks([])
+        }
+        setAuthReady(true)
+        return
       }
+
+      // TOKEN_REFRESHED, USER_UPDATED, etc. — do NOT reload profile.
+      // The token changed but user data hasn't. Reloading risks overwriting
+      // correct data (e.g. Pro plan) with fallback (Free) if the query fails.
     })
 
     return () => subscription.unsubscribe()
-  }, [setUser, setProtocols, setSavedStacks])
+  }, [setUser, setProtocols, setSavedStacks, setAuthReady])
 
   return <>{children}</>
 }
