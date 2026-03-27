@@ -6,7 +6,7 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
-export type PlanTier = 'free' | 'pro'
+export type PlanTier = 'free' | 'researcher' | 'pro'
 
 export const PRICING_PLANS = [
   {
@@ -32,24 +32,44 @@ export const PRICING_PLANS = [
   {
     id: 'pro' as PlanTier,
     label: 'Pro',
-    price: 29,
+    price: 49,
     period: '/month',
-    description: 'Unlimited AI-powered optimization',
+    description: 'The complete research suite',
+    features: [
+      'Everything in Researcher',
+      'PDF Clinical-Grade Reports (unlimited)',
+      'Saved stacks (unlimited)',
+      'Stack Builder Pro (drag & drop)',
+      'AI coaching suggestions',
+      'Advanced synergy analysis',
+      'Real risk simulation engine',
+      'Priority support',
+    ],
+    limitations: [],
+    cta: 'Go Pro',
+    popular: true,
+  },
+  {
+    id: 'researcher' as PlanTier,
+    label: 'Researcher',
+    price: 19,
+    period: '/month',
+    description: 'AI-powered protocol generation',
     features: [
       'Everything in Explorer',
       'AI protocol generator (unlimited)',
       'Save & revisit all protocols',
       'Protocol refinement & "what if" scenarios',
-      'Risk simulation engine',
       'Progress tracking & weekly updates',
-      'Saved stacks (unlimited)',
-      'Stack Builder Pro (drag & drop)',
-      'AI coaching suggestions',
-      'Advanced synergy analysis',
+      'Progress journal',
     ],
-    limitations: [],
-    cta: 'Get Pro Access',
-    popular: true,
+    limitations: [
+      'No clinical PDF reports',
+      'No advanced stack tools',
+      'No risk simulation',
+    ],
+    cta: 'Start Researching',
+    popular: false,
   },
 ] as const
 

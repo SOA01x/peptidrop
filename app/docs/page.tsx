@@ -131,11 +131,12 @@ export default function DocsPage() {
                 We accept USDC, USDT, BTC, ETH, SOL, and 300+ other cryptocurrencies.
               </p>
               <p>
-                <strong className="text-text-primary">Pro subscription ($29/month):</strong> Unlocks the AI protocol generator, Stack Builder Pro,
-                progress tracking, saved stacks, and all advanced analysis features. Access activates immediately upon confirmed payment.
+                <strong className="text-text-primary">Researcher subscription ($19/month):</strong> Unlocks the AI protocol generator,
+                save and revisit protocols, progress tracking, and progress journal. Access activates immediately upon confirmed payment.
               </p>
               <p>
-                <strong className="text-text-primary">Clinical reports ($19-29 each):</strong> One-time purchases for individual PDF protocol exports.
+                <strong className="text-text-primary">Pro subscription ($49/month):</strong> Everything in Researcher plus clinical-grade PDF reports (unlimited),
+                Stack Builder Pro, AI coaching, advanced synergy analysis, risk simulation engine, and priority support.
               </p>
               <p>
                 For billing issues, contact <a href="mailto:usensium@gmail.com" className="text-accent-cyan hover:underline">usensium@gmail.com</a>.

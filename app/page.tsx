@@ -273,29 +273,40 @@ function PricingPreview() {
             <Link href="/signup" className="btn-secondary text-sm w-full">Get Started Free</Link>
           </div>
 
-          {/* Pro */}
+          {/* Pro — Center, Most Popular */}
           <div className="glass-panel glow-border p-6 sm:p-8 text-left relative">
             <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-4 py-1 bg-gradient-to-r from-accent-cyan to-accent-violet rounded-full text-xs font-display font-semibold text-surface">
               Most Popular
             </div>
             <h3 className="font-display font-bold text-lg mb-1">Pro</h3>
             <div className="mb-4">
-              <span className="text-3xl font-display font-bold text-gradient">$29</span>
+              <span className="text-3xl font-display font-bold text-gradient">$49</span>
               <span className="text-text-muted text-sm">/mo</span>
             </div>
-            <p className="text-sm text-text-muted mb-6">AI protocol generation, synergy mapping, weekly optimization, progress tracking, and risk simulation</p>
-            <Link href="/signup" className="btn-primary text-sm w-full">Get Pro Access</Link>
+            <p className="text-sm text-text-muted mb-6">Full research suite: clinical PDF reports, risk simulation, AI coaching, advanced synergy analysis, and more</p>
+            <Link href="/signup" className="btn-primary text-sm w-full">Go Pro</Link>
           </div>
 
-          {/* Clinical Reports */}
+          {/* Researcher */}
           <div className="glass-panel p-6 sm:p-8 text-left">
-            <h3 className="font-display font-bold text-lg mb-1">Clinical Report</h3>
+            <h3 className="font-display font-bold text-lg mb-1">Researcher</h3>
             <div className="mb-4">
-              <span className="text-2xl font-display font-bold">$12.99</span>
-              <span className="text-text-muted text-sm"> — $29.99</span>
+              <span className="text-3xl font-display font-bold text-accent-violet">$19</span>
+              <span className="text-text-muted text-sm">/mo</span>
             </div>
-            <p className="text-sm text-text-muted mb-6">Clinic-grade PDF exports with mechanism breakdowns, timelines, and practitioner-ready formatting</p>
-            <Link href="/pricing" className="btn-secondary text-sm w-full">View Report Types</Link>
+            <p className="text-sm text-text-muted mb-6">AI protocol generation, save and revisit protocols, progress tracking, and weekly optimization</p>
+            <Link href="/signup" className="btn-secondary text-sm w-full">Start Researching</Link>
+          </div>
+        </div>
+
+        {/* Crypto Payment Badge */}
+        <div className="mt-10 text-center">
+          <div className="inline-flex items-center gap-3 px-5 py-3 glass-panel-light rounded-xl">
+            <span className="text-lg">🔗</span>
+            <div className="text-left">
+              <p className="text-xs font-display font-semibold text-text-secondary">Decentralized Payments</p>
+              <p className="text-[10px] text-text-muted">Pay with USDC, USDT, BTC, SOL &amp; 300+ cryptocurrencies</p>
+            </div>
           </div>
         </div>
       </div>
@@ -323,7 +334,7 @@ function FAQSection() {
     },
     {
       question: 'Is Peptidrop free to use?',
-      answer: 'Yes, Peptidrop offers a free Explorer plan that gives you full access to browse the entire 345+ peptide database with mechanisms, pathways, and evidence levels. The Pro plan ($29/month) adds AI protocol generation, synergy mapping, weekly optimization, and risk simulation. Clinical-grade PDF reports are available as one-time purchases from $12.99 to $29.99.',
+      answer: 'Yes, Peptidrop offers a free Explorer plan that gives you full access to browse the entire 345+ peptide database with mechanisms, pathways, and evidence levels. The Researcher plan ($19/month) adds AI protocol generation, progress tracking, and protocol management. The Pro plan ($49/month) includes everything plus clinical PDF reports, risk simulation, AI coaching, and advanced synergy analysis.',
     },
     {
       question: 'What is the best peptide for healing and recovery?',

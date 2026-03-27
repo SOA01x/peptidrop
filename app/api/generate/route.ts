@@ -37,8 +37,8 @@ export async function POST(req: NextRequest) {
     const { data: profile } = await supabase
       .from('profiles').select('plan').eq('id', user.id).single()
 
-    if (!profile || profile.plan !== 'pro') {
-      return NextResponse.json({ error: 'Pro subscription required. Upgrade at /pricing' }, { status: 402 })
+    if (!profile || (profile.plan !== 'pro' && profile.plan !== 'researcher')) {
+      return NextResponse.json({ error: 'Researcher or Pro subscription required. Upgrade at /pricing' }, { status: 402 })
     }
 
     // Call Claude

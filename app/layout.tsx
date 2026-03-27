@@ -122,17 +122,18 @@ export default function RootLayout({
           {
             '@type': 'Offer',
             name: 'Pro',
-            price: '29',
+            price: '19',
             priceCurrency: 'USD',
             billingIncrement: 'month',
-            description: 'AI-powered protocol generation, progress tracking, weekly optimization, and synergy mapping',
+            description: 'AI protocol generation, save and revisit protocols, progress tracking, and journal',
           },
           {
             '@type': 'Offer',
-            name: 'Clinical Report',
-            priceRange: '$12.99 - $29.99',
+            name: 'Pro',
+            price: '49',
             priceCurrency: 'USD',
-            description: 'Clinic-grade PDF exports with full mechanism breakdowns and practitioner-ready formatting',
+            billingIncrement: 'month',
+            description: 'Full research suite with clinical PDF reports, risk simulation, AI coaching, and advanced synergy analysis',
           },
         ],
         featureList: [

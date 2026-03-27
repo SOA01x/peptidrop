@@ -18,6 +18,7 @@ function PaywallSection({ children, title, description, requiresPro = true }: {
 }) {
   const { user, plan } = useAppStore()
   const showPaywall = requiresPro ? (!user || plan === 'free') : !user
+  const upgradeLabel = plan === 'researcher' ? 'Upgrade to Pro' : 'Upgrade'
   if (!showPaywall) return <>{children}</>
   return (
     <div className="relative">
@@ -30,7 +31,7 @@ function PaywallSection({ children, title, description, requiresPro = true }: {
           {!user ? (
             <Link href="/signup" className="btn-primary text-sm">Sign Up Free</Link>
           ) : (
-            <Link href="/pricing" className="btn-primary text-sm">Upgrade to Pro</Link>
+            <Link href="/pricing" className="btn-primary text-sm">{upgradeLabel}</Link>
           )}
         </div>
       </div>
@@ -47,20 +48,31 @@ function PlanCard() {
     <div className="glass-panel glow-border p-5 sm:p-8 relative overflow-hidden">
       <div className="relative">
         <div className="flex items-center gap-2 mb-3">
-          <div className={cn('w-3 h-3 rounded-full animate-pulse', plan === 'pro' ? 'bg-accent-cyan' : 'bg-accent-emerald')} />
+          <div className={cn('w-3 h-3 rounded-full animate-pulse',
+            plan === 'pro' ? 'bg-accent-cyan' : plan === 'researcher' ? 'bg-accent-violet' : 'bg-accent-emerald'
+          )} />
           <span className="text-sm text-text-secondary font-display">Current Plan</span>
         </div>
         {plan === 'pro' ? (
           <>
             <div className="text-4xl sm:text-5xl font-display font-bold text-gradient mb-2">Pro</div>
-            <p className="text-sm text-text-muted mb-5">Unlimited AI protocols, tracking, and analysis</p>
+            <p className="text-sm text-text-muted mb-5">Full research suite with reports, stacks, and risk simulation</p>
             <Link href="/generator" className="btn-primary text-sm">Generate Protocol</Link>
+          </>
+        ) : plan === 'researcher' ? (
+          <>
+            <div className="text-4xl sm:text-5xl font-display font-bold text-accent-violet mb-2">Researcher</div>
+            <p className="text-sm text-text-muted mb-5">AI protocols, tracking, and progress journal</p>
+            <div className="flex flex-col sm:flex-row gap-3">
+              <Link href="/generator" className="btn-primary text-sm">Generate Protocol</Link>
+              <Link href="/pricing" className="btn-secondary text-sm">Upgrade to Pro</Link>
+            </div>
           </>
         ) : (
           <>
             <div className="text-3xl font-display font-bold text-text-muted mb-2">Free</div>
             <p className="text-sm text-text-muted mb-5">Upgrade for AI protocols and full access</p>
-            <Link href="/pricing" className="btn-primary text-sm">Upgrade to Pro — $29/mo</Link>
+            <Link href="/pricing" className="btn-primary text-sm">Upgrade — Starting at $19/mo</Link>
           </>
         )}
       </div>

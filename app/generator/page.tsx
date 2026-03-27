@@ -5,7 +5,7 @@ import { useState } from 'react'
 import Navigation from '@/components/layout/Navigation'
 import Footer from '@/components/layout/Footer'
 import { useAppStore } from '@/lib/store'
-import { GOALS, GENDERS, cn, PDF_REPORT_PRICE } from '@/lib/utils'
+import { GOALS, GENDERS, cn } from '@/lib/utils'
 import { createClient } from '@/lib/supabase'
 import type { GeneratedProtocol } from '@/lib/ai-engine'
 import Link from 'next/link'
@@ -325,7 +325,7 @@ export default function GeneratorPage() {
               </p>
               {plan === 'free' && (
                 <div className="mt-4 inline-flex items-center gap-2 px-4 py-2 bg-accent-amber/10 border border-accent-amber/20 rounded-xl">
-                  <span className="text-accent-amber text-sm">🔒 Pro feature —</span>
+                  <span className="text-accent-amber text-sm">🔒 Paid feature —</span>
                   <Link href="/pricing" className="text-accent-cyan text-sm hover:underline">Upgrade to generate protocols</Link>
                 </div>
               )}
@@ -388,9 +388,9 @@ export default function GeneratorPage() {
               <div className="text-center">
                 <button onClick={handleGenerate} disabled={isGenerating || plan === 'free'}
                   className="btn-primary text-base sm:text-lg px-10 sm:px-12 py-4 sm:py-5 disabled:opacity-50 disabled:cursor-not-allowed w-full sm:w-auto">
-                  {plan === 'free' ? '🔒 Upgrade to Pro' : isGenerating ? 'Generating...' : '⚡ Generate Protocol'}
+                  {plan === 'free' ? '🔒 Upgrade to Generate' : isGenerating ? 'Generating...' : '⚡ Generate Protocol'}
                 </button>
-                {plan !== 'free' && <p className="text-xs text-text-muted mt-3">Unlimited with your Pro subscription</p>}
+                {plan !== 'free' && <p className="text-xs text-text-muted mt-3">Unlimited with your {plan === 'pro' ? 'Pro' : 'Researcher'} subscription</p>}
               </div>
             </div>
           </>
@@ -407,9 +407,15 @@ export default function GeneratorPage() {
                   <Link href={protocolId ? `/protocol/${protocolId}` : '/dashboard'}
                     className="btn-secondary text-sm !py-2">✅ Saved — View Details</Link>
                 )}
-                <button className="btn-primary text-sm !py-2" onClick={() => alert('PDF export coming soon! Price: $' + PDF_REPORT_PRICE)}>
-                  📄 Export PDF — ${PDF_REPORT_PRICE}
-                </button>
+                {plan === 'pro' ? (
+                  <button className="btn-primary text-sm !py-2" onClick={() => alert('PDF export coming soon!')}>
+                    📄 Export PDF Report
+                  </button>
+                ) : (
+                  <Link href="/pricing" className="btn-secondary text-sm !py-2 inline-flex items-center gap-1.5">
+                    🔒 PDF Reports — <span className="text-accent-cyan">Pro Only</span>
+                  </Link>
+                )}
               </div>
             </div>
             <ProtocolReport protocol={protocol} />

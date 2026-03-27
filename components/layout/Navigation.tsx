@@ -126,6 +126,11 @@ export default function Navigation() {
                   <div className="w-2 h-2 rounded-full bg-accent-cyan animate-pulse" />
                   <span className="text-sm font-display font-semibold text-accent-cyan">PRO</span>
                 </div>
+              ) : plan === 'researcher' ? (
+                <Link href="/pricing" className="flex items-center gap-2 px-4 py-2 glass-panel-light hover:border-accent-violet/30 transition-colors">
+                  <div className="w-2 h-2 rounded-full bg-accent-violet animate-pulse" />
+                  <span className="text-xs font-display font-semibold text-accent-violet">Researcher</span>
+                </Link>
               ) : (
                 <Link href="/pricing" className="flex items-center gap-2 px-4 py-2 glass-panel-light hover:border-accent-cyan/30 transition-colors">
                   <span className="text-xs text-text-muted">Free</span>
@@ -150,6 +155,11 @@ export default function Navigation() {
               <Link href="/dashboard" className="flex items-center gap-1.5 px-3 py-1.5 glass-panel-light rounded-lg">
                 <div className="w-1.5 h-1.5 rounded-full bg-accent-cyan animate-pulse" />
                 <span className="text-xs font-display font-semibold text-accent-cyan">PRO</span>
+              </Link>
+            ) : plan === 'researcher' ? (
+              <Link href="/dashboard" className="flex items-center gap-1.5 px-3 py-1.5 glass-panel-light rounded-lg">
+                <div className="w-1.5 h-1.5 rounded-full bg-accent-violet animate-pulse" />
+                <span className="text-xs font-display font-semibold text-accent-violet">RES</span>
               </Link>
             ) : (
               <Link href="/pricing" className="text-xs text-accent-cyan px-2 py-1">Upgrade</Link>
@@ -181,8 +191,12 @@ export default function Navigation() {
               {user ? (
                 <>
                   <div className="flex items-center gap-3 px-4 py-3 glass-panel">
-                    <div className="w-2 h-2 rounded-full bg-accent-cyan animate-pulse" />
-                    <span className="text-sm font-display font-semibold text-accent-cyan">{plan === 'pro' ? 'Pro Plan' : 'Free Plan'}</span>
+                    <div className={cn('w-2 h-2 rounded-full animate-pulse',
+                      plan === 'pro' ? 'bg-accent-cyan' : plan === 'researcher' ? 'bg-accent-violet' : 'bg-accent-emerald'
+                    )} />
+                    <span className={cn('text-sm font-display font-semibold',
+                      plan === 'pro' ? 'text-accent-cyan' : plan === 'researcher' ? 'text-accent-violet' : 'text-text-muted'
+                    )}>{plan === 'pro' ? 'Pro Plan' : plan === 'researcher' ? 'Researcher Plan' : 'Free Plan'}</span>
                   </div>
                   <Link href="/profile" onClick={() => setMobileOpen(false)}
                     className="block px-4 py-4 rounded-xl text-base font-medium text-text-secondary active:bg-surface-secondary">Profile</Link>
