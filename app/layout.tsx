@@ -24,6 +24,11 @@ export const metadata: Metadata = {
   authors: [{ name: 'Peptidrop by Usensium Inc.' }],
   creator: 'Usensium Inc.',
   publisher: 'Peptidrop',
+  verification: {
+    google: 'REPLACE_WITH_YOUR_GOOGLE_VERIFICATION_CODE',
+    // yandex: 'your-yandex-code',   // optional
+    // yahoo: 'your-yahoo-code',     // optional
+  },
   robots: {
     index: true,
     follow: true,
