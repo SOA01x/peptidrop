@@ -40,7 +40,7 @@ function PaywallSection({ children, title, description, requiresPro = true }: {
 }
 
 // ============================================
-// PLAN CARD — No credits, just plan status
+// PLAN CARD - No credits, just plan status
 // ============================================
 function PlanCard() {
   const { plan } = useAppStore()
@@ -72,7 +72,7 @@ function PlanCard() {
           <>
             <div className="text-3xl font-display font-bold text-text-muted mb-2">Free</div>
             <p className="text-sm text-text-muted mb-5">Upgrade for AI protocols and full access</p>
-            <Link href="/pricing" className="btn-primary text-sm">Upgrade — Starting at $19/mo</Link>
+            <Link href="/pricing" className="btn-primary text-sm">Upgrade - Starting at $19/mo</Link>
           </>
         )}
       </div>
@@ -108,7 +108,7 @@ function QuickActions() {
 }
 
 // ============================================
-// PROTOCOL HISTORY — REAL DATA, CLICKABLE
+// PROTOCOL HISTORY - REAL DATA, CLICKABLE
 // ============================================
 function ProtocolTimeline() {
   const { protocols } = useAppStore()
@@ -196,7 +196,7 @@ function StackBuilderPro() {
     }
   }
 
-  const riskColors: Record<string, string> = { low: '#00D68F', moderate: '#FFB800', high: '#FF4D6A', 'very-high': '#FF0040' }
+  const riskColors: Record<string, string> = { low: '#4ade80', moderate: '#e8c547', high: '#ef4444', 'very-high': '#FF0040' }
   const getNode = (id: string) => stackNodes.find(n => n.peptideId === id)
 
   const handleMouseDown = (peptideId: string, e: React.MouseEvent | React.TouchEvent) => {
@@ -287,10 +287,10 @@ function StackBuilderPro() {
             <div className="rounded-xl border mb-4 overflow-hidden bg-surface border-surface-border">
               <svg ref={svgRef} viewBox="0 0 500 400" className="w-full h-[250px] sm:h-[320px] touch-none select-none">
                 {connections.map((c, i) => { const f = getNode(c.from), t = getNode(c.to); return f && t ? (
-                  <line key={i} x1={f.x} y1={f.y} x2={t.x} y2={t.y} stroke={c.type === 'synergy' ? '#00D68F' : '#FF4D6A'}
+                  <line key={i} x1={f.x} y1={f.y} x2={t.x} y2={t.y} stroke={c.type === 'synergy' ? '#4ade80' : '#ef4444'}
                     strokeWidth={c.type === 'conflict' ? 2 : 1.5} strokeDasharray={c.type === 'conflict' ? '6,4' : 'none'} opacity={0.6} />
                 ) : null })}
-                {stackNodes.map(n => { const p = getPeptideById(n.peptideId); if (!p) return null; const col = riskColors[p.riskProfile] || '#00E5FF'; return (
+                {stackNodes.map(n => { const p = getPeptideById(n.peptideId); if (!p) return null; const col = riskColors[p.riskProfile] || '#e8c547'; return (
                   <g key={n.peptideId} onMouseDown={(e) => handleMouseDown(n.peptideId, e)} onTouchStart={(e) => handleMouseDown(n.peptideId, e)} style={{ cursor: 'grab' }}>
                     <circle cx={n.x} cy={n.y} r={28} fill={col} opacity={0.1} />
                     <circle cx={n.x} cy={n.y} r={22} fill="#12121A" stroke={col} strokeWidth={2} />
@@ -346,7 +346,7 @@ function StackBuilderPro() {
 }
 
 // ============================================
-// AI COACH — Shows real data
+// AI COACH - Shows real data
 // ============================================
 function CoachingPanel() {
   const { protocols } = useAppStore()
@@ -374,7 +374,7 @@ function CoachingPanel() {
           <Link href={`/protocol/${active.id}`} className="flex items-start gap-3 p-3 rounded-xl bg-surface-tertiary group">
             <span className="text-xl">📊</span>
             <div className="min-w-0 flex-1">
-              <p className="font-display font-semibold text-sm text-accent-cyan group-hover:underline">{active.goal} — Active</p>
+              <p className="font-display font-semibold text-sm text-accent-cyan group-hover:underline">{active.goal} - Active</p>
               <p className="text-xs text-text-muted mt-0.5">View details, timeline, and track progress</p>
             </div>
           </Link>
@@ -401,7 +401,7 @@ function CoachingPanel() {
 }
 
 // ============================================
-// PROGRESS TRACKER — Links to full journal
+// PROGRESS TRACKER - Links to full journal
 // ============================================
 function ProgressTrackerInline() {
   const { protocols } = useAppStore()
@@ -483,13 +483,13 @@ export default function DashboardPage() {
           <PaywallSection title="Stack Builder" description="Sign up to build stacks." requiresPro={false}>
             <StackBuilderPro />
           </PaywallSection>
-          <PaywallSection title="AI Coaching" description="Pro feature — upgrade to unlock.">
+          <PaywallSection title="AI Coaching" description="Pro feature - upgrade to unlock.">
             <CoachingPanel />
           </PaywallSection>
         </div>
 
         <div className="mb-6">
-          <PaywallSection title="Progress Journal" description="Pro feature — track your protocol with daily entries.">
+          <PaywallSection title="Progress Journal" description="Pro feature - track your protocol with daily entries.">
             <ProgressTrackerInline />
           </PaywallSection>
         </div>

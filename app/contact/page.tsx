@@ -9,7 +9,7 @@ export default function ContactPage() {
       <div className="pt-24 sm:pt-28 pb-20 max-w-3xl mx-auto px-4 sm:px-6">
         <h1 className="font-display font-bold text-3xl sm:text-4xl mb-4">Contact</h1>
         <p className="text-text-secondary mb-10 text-sm sm:text-base">
-          Questions, feedback, or partnership inquiries — we'd love to hear from you.
+          Questions, feedback, or partnership inquiries - we'd love to hear from you.
         </p>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -19,12 +19,12 @@ export default function ContactPage() {
               <svg viewBox="0 0 64 64" className="w-10 h-10" xmlns="http://www.w3.org/2000/svg">
                 <defs>
                   <linearGradient id="cg" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" stopColor="#00E5FF"/><stop offset="100%" stopColor="#7A5CFF"/>
+                    <stop offset="0%" stopColor="#e8c547"/><stop offset="100%" stopColor="#e8c547"/>
                   </linearGradient>
                 </defs>
                 <path d="M32 4 C32 4, 8 30, 8 42 C8 55.2 18.8 62 32 62 C45.2 62 56 55.2 56 42 C56 30 32 4 32 4Z" fill="url(#cg)" opacity="0.9"/>
-                <path d="M32 8 C32 8, 12 31, 12 42 C12 53 20.9 58 32 58 C43.1 58 52 53 52 42 C52 31 32 8 32 8Z" fill="#0A0A0F"/>
-                <text x="25" y="49" fontFamily="Arial" fontWeight="800" fontSize="30" fill="#00E5FF">P</text>
+                <path d="M32 8 C32 8, 12 31, 12 42 C12 53 20.9 58 32 58 C43.1 58 52 53 52 42 C52 31 32 8 32 8Z" fill="#0d1b2a"/>
+                <text x="25" y="49" fontFamily="Arial" fontWeight="800" fontSize="30" fill="#e8c547">P</text>
               </svg>
               <div>
                 <h2 className="font-display font-bold text-lg">Peptidrop</h2>

@@ -69,7 +69,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     },
   ]
 
-  // Blog posts — dynamically generated from blog-posts.ts
+  // Blog posts - dynamically generated from blog-posts.ts
   const blogPages: MetadataRoute.Sitemap = blogPosts.map((post) => ({
     url: `${baseUrl}/blog/${post.slug}`,
     lastModified: new Date(post.date),

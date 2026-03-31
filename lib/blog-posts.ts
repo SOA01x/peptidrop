@@ -18,13 +18,13 @@ export const blogPosts: BlogPost[] = [
     category: 'Fundamentals',
     readTime: '8 min',
     date: '2026-03-25',
-    content: `Peptides are short chains of amino acids — typically between 2 and 50 amino acids long — linked by peptide bonds. They are smaller than proteins but play critical roles as signaling molecules in the human body, influencing everything from hormone release to immune function, tissue repair, and neurological activity.
+    content: `Peptides are short chains of amino acids - typically between 2 and 50 amino acids long - linked by peptide bonds. They are smaller than proteins but play critical roles as signaling molecules in the human body, influencing everything from hormone release to immune function, tissue repair, and neurological activity.
 
 ## How Peptides Work
 
 When a peptide enters the body, it binds to specific receptors on cell surfaces, triggering biological cascades. Unlike pharmaceutical drugs that often force a single pathway, peptides work with the body's existing signaling systems. This is why they tend to have fewer side effects compared to synthetic drugs.
 
-For example, [BPC-157 (Body Protection Compound-157)](/blog/bpc-157-complete-guide) binds to growth factor receptors and activates angiogenesis — the formation of new blood vessels — which accelerates healing in tendons, ligaments, muscles, and even the gut lining.
+For example, [BPC-157 (Body Protection Compound-157)](/blog/bpc-157-complete-guide) binds to growth factor receptors and activates angiogenesis - the formation of new blood vessels - which accelerates healing in tendons, ligaments, muscles, and even the gut lining.
 
 ## Types of Peptides
 
@@ -46,7 +46,7 @@ Platforms like Peptidrop provide comprehensive databases of [345+ peptides](/pep
 
 ## Key Takeaway
 
-Peptides are not drugs — they are naturally occurring signaling molecules that researchers are learning to leverage for specific biological outcomes. For further reading, the [National Library of Medicine](https://pubmed.ncbi.nlm.nih.gov/?term=therapeutic+peptides) maintains a comprehensive index of peer-reviewed peptide research, and [Nature Reviews Drug Discovery](https://www.nature.com/nrd/) regularly publishes updates on peptide therapeutics.
+Peptides are not drugs - they are naturally occurring signaling molecules that researchers are learning to leverage for specific biological outcomes. For further reading, the [National Library of Medicine](https://pubmed.ncbi.nlm.nih.gov/?term=therapeutic+peptides) maintains a comprehensive index of peer-reviewed peptide research, and [Nature Reviews Drug Discovery](https://www.nature.com/nrd/) regularly publishes updates on peptide therapeutics.
 
 Understanding how they work is the first step toward informed peptide research. For practical guidance on combining peptides, see our [peptide stacking guide](/blog/peptide-stacking-guide).`,
   },
@@ -57,7 +57,7 @@ Understanding how they work is the first step toward informed peptide research. 
     category: 'Peptide Guides',
     readTime: '10 min',
     date: '2026-03-22',
-    content: `BPC-157 (Body Protection Compound-157) is a pentadecapeptide — a 15-amino-acid chain — originally derived from human gastric juice. It is one of the most studied healing peptides in research, with over 100 published studies demonstrating its tissue-protective and regenerative properties.
+    content: `BPC-157 (Body Protection Compound-157) is a pentadecapeptide - a 15-amino-acid chain - originally derived from human gastric juice. It is one of the most studied healing peptides in research, with over 100 published studies demonstrating its tissue-protective and regenerative properties.
 
 ## Mechanism of Action
 
@@ -100,7 +100,7 @@ BPC-157 has a relatively favorable safety profile in research studies. It is cla
 
 ## How TB-500 Works
 
-TB-500's primary mechanism centers on upregulation of actin, a cell-building protein that is essential for cell migration and wound healing. When tissue is damaged, cells need to migrate to the injury site — TB-500 facilitates this process.
+TB-500's primary mechanism centers on upregulation of actin, a cell-building protein that is essential for cell migration and wound healing. When tissue is damaged, cells need to migrate to the injury site - TB-500 facilitates this process.
 
 Key mechanisms include:
 - **Cell Migration**: Upregulates actin for faster cell movement to injury sites
@@ -135,11 +135,11 @@ Peptidrop's [peptide database](/peptides) includes comprehensive data on TB-500 
     category: 'Anti-Aging',
     readTime: '8 min',
     date: '2026-03-18',
-    content: `GHK-Cu (glycyl-L-histidyl-L-lysine copper complex) is a naturally occurring tripeptide-copper complex found in human plasma, saliva, and urine. Its concentration in the body decreases significantly with age — from about 200 ng/mL at age 20 to 80 ng/mL by age 60.
+    content: `GHK-Cu (glycyl-L-histidyl-L-lysine copper complex) is a naturally occurring tripeptide-copper complex found in human plasma, saliva, and urine. Its concentration in the body decreases significantly with age - from about 200 ng/mL at age 20 to 80 ng/mL by age 60.
 
 ## Gene Expression: 4,000+ Genes Modulated
 
-What makes GHK-Cu extraordinary is its ability to modulate the expression of over 4,000 human genes — roughly 6% of the human genome. Broad Genomic Analysis (2014) showed it:
+What makes GHK-Cu extraordinary is its ability to modulate the expression of over 4,000 human genes - roughly 6% of the human genome. Broad Genomic Analysis (2014) showed it:
 - Upregulates 1,584 genes (including collagen, elastin, and tissue repair genes)
 - Downregulates 2,437 genes (including many involved in inflammation and metastasis)
 
@@ -170,7 +170,7 @@ For peer-reviewed research on GHK-Cu, explore studies indexed on [PubMed](https:
     category: 'Growth Hormone',
     readTime: '9 min',
     date: '2026-03-15',
-    content: `CJC-1295 and Ipamorelin are growth hormone secretagogues (GHS) — compounds that stimulate your body's own production and release of growth hormone rather than introducing exogenous HGH.
+    content: `CJC-1295 and Ipamorelin are growth hormone secretagogues (GHS) - compounds that stimulate your body's own production and release of growth hormone rather than introducing exogenous HGH.
 
 ## How CJC-1295 Works
 
@@ -241,7 +241,7 @@ Tirzepatide (a dual GIP/GLP-1 agonist) has shown even greater weight loss in som
 
 ## Important Considerations
 
-Semaglutide is a prescription medication and should only be used under medical supervision. Peptidrop provides research data for educational purposes — always consult a qualified healthcare professional for medical decisions. For a broader look at weight management peptides, see our guide on the [best peptides for fat loss](/blog/best-peptides-fat-loss).
+Semaglutide is a prescription medication and should only be used under medical supervision. Peptidrop provides research data for educational purposes - always consult a qualified healthcare professional for medical decisions. For a broader look at weight management peptides, see our guide on the [best peptides for fat loss](/blog/best-peptides-fat-loss).
 
 For ongoing clinical trials involving Semaglutide, visit [ClinicalTrials.gov](https://clinicaltrials.gov/search?term=semaglutide). The landmark STEP trial results were published in [The New England Journal of Medicine](https://www.nejm.org/).`,
   },
@@ -289,7 +289,7 @@ For peer-reviewed research on Epithalon and telomerase activation, see [PubMed](
     category: 'Protocols',
     readTime: '12 min',
     date: '2026-03-08',
-    content: `Peptide stacking — combining two or more peptides in a protocol — is one of the most important concepts in peptide research. When done correctly, stacking can produce synergistic effects where the combined benefit exceeds what each peptide would achieve alone.
+    content: `Peptide stacking - combining two or more peptides in a protocol - is one of the most important concepts in peptide research. When done correctly, stacking can produce synergistic effects where the combined benefit exceeds what each peptide would achieve alone.
 
 ## Principles of Effective Peptide Stacking
 
@@ -313,19 +313,19 @@ Avoid stacking multiple high-risk peptides simultaneously. Peptidrop's risk simu
 ## Popular Peptide Stacks
 
 ### Healing Stack
-BPC-157 + TB-500 — The most popular healing combination
+BPC-157 + TB-500 - The most popular healing combination
 
 ### Growth Hormone Stack
-CJC-1295 + Ipamorelin — Gold standard GH secretagogue combo
+CJC-1295 + Ipamorelin - Gold standard GH secretagogue combo
 
 ### Longevity Stack
-Epithalon + GHK-Cu + Thymosin Alpha-1 — Multi-pathway anti-aging
+Epithalon + GHK-Cu + Thymosin Alpha-1 - Multi-pathway anti-aging
 
 ### Cognitive Stack
-Selank + Semax — Complementary nootropic peptides
+Selank + Semax - Complementary nootropic peptides
 
 ### Recovery Stack
-BPC-157 + GHK-Cu + TB-500 — Comprehensive tissue repair
+BPC-157 + GHK-Cu + TB-500 - Comprehensive tissue repair
 
 ## How Peptidrop Helps
 
@@ -420,14 +420,14 @@ Applied to the skin.
 
 Most research peptides come as lyophilized (freeze-dried) powder and must be [reconstituted](/blog/how-to-reconstitute-peptides):
 1. Use bacteriostatic water (BAC water) for reconstitution
-2. Inject the water slowly along the vial wall — never directly onto the powder
+2. Inject the water slowly along the vial wall - never directly onto the powder
 3. Gently swirl (never shake) until fully dissolved
 4. Store reconstituted peptides in the refrigerator (2-8°C)
 5. Use within 4-6 weeks after reconstitution
 
 ## General Dosing Ranges (Research Reference)
 
-These are general ranges found in published research — not medical recommendations:
+These are general ranges found in published research - not medical recommendations:
 - **BPC-157**: 200-500 mcg/day
 - **TB-500**: 2-5 mg twice weekly (loading), then weekly
 - **CJC-1295**: 100-300 mcg before bed
@@ -485,7 +485,7 @@ Peptidrop classifies peptides into three risk tiers:
 
 ## How to Minimize Risks
 
-1. **Start Low, Go Slow**: Begin with the lowest effective dose — see our [peptide dosing guide](/blog/peptide-dosing-guide)
+1. **Start Low, Go Slow**: Begin with the lowest effective dose - see our [peptide dosing guide](/blog/peptide-dosing-guide)
 2. **Source Quality**: Only use research-grade peptides from reputable sources
 3. **Medical Supervision**: Always work with a healthcare professional
 4. **Monitor Biomarkers**: Regular blood work to track key markers
@@ -618,21 +618,21 @@ For research on peptides and fat metabolism, see [PubMed](https://pubmed.ncbi.nl
 
 ## Top Healing Peptides
 
-### [BPC-157](/blog/bpc-157-complete-guide) — The Healing Powerhouse
+### [BPC-157](/blog/bpc-157-complete-guide) - The Healing Powerhouse
 - Accelerates healing in tendons, ligaments, muscles, and gut
 - Promotes angiogenesis (new blood vessel formation)
 - Anti-inflammatory without immunosuppression
 - Can be administered systemically or locally
 - Risk profile: Low
 
-### TB-500 — Systemic Tissue Repair
+### TB-500 - Systemic Tissue Repair
 - Promotes cell migration to injury sites
 - Supports blood vessel formation
 - Reduces scar tissue formation
 - Works synergistically with BPC-157
 - Risk profile: Low
 
-### GHK-Cu — Regenerative Copper Peptide
+### GHK-Cu - Regenerative Copper Peptide
 - Stimulates collagen production (types I, III, V)
 - Modulates 4,000+ genes involved in tissue remodeling
 - Anti-inflammatory and antioxidant
@@ -654,9 +654,9 @@ For research on peptides and fat metabolism, see [PubMed](https://pubmed.ncbi.nl
 ## The Ultimate Healing Stack
 
 Based on research evidence and Peptidrop's synergy data:
-1. **BPC-157** — Local repair at injury site
-2. **TB-500** — Systemic repair support
-3. **GHK-Cu** — Collagen and tissue remodeling
+1. **BPC-157** - Local repair at injury site
+2. **TB-500** - Systemic repair support
+3. **GHK-Cu** - Collagen and tissue remodeling
 
 This three-peptide stack targets healing from multiple pathways simultaneously. Peptidrop's [AI protocol generator](/generator) can customize dosing and timing based on the specific type and severity of tissue damage. For joint-specific concerns, see our guide on [peptides for joint pain](/blog/peptides-for-joint-pain).
 
@@ -673,31 +673,31 @@ For peer-reviewed studies on peptide-mediated tissue repair, see [PubMed](https:
 
 ## Top Longevity Peptides
 
-### [Epithalon](/blog/epithalon-telomere-longevity) — Telomere Extension
+### [Epithalon](/blog/epithalon-telomere-longevity) - Telomere Extension
 - Activates telomerase to rebuild telomere length
 - Restores pineal gland function and melatonin production
 - Extended lifespan up to 13% in animal models
 - One of the most studied longevity peptides
 
-### GHK-Cu — Gene Expression Reprogramming
+### GHK-Cu - Gene Expression Reprogramming
 - Modulates 4,000+ genes toward a "younger" expression pattern
 - Stimulates collagen and tissue remodeling
 - Powerful anti-inflammatory and antioxidant
 - Decreases naturally with age (making supplementation relevant)
 
-### [FOXO4-DRI](/blog/foxo4-dri-senescent-cells) — Senescent Cell Clearance
+### [FOXO4-DRI](/blog/foxo4-dri-senescent-cells) - Senescent Cell Clearance
 - Targets and clears senescent (zombie) cells
 - Senescent cells accumulate with age and cause chronic inflammation
 - Studies show rejuvenation effects in aged animal models
 - One of the most exciting developments in longevity research
 
-### Thymosin Alpha-1 — Immune Rejuvenation
+### Thymosin Alpha-1 - Immune Rejuvenation
 - Restores immune system function that declines with age
 - Modulates T-cell activity and natural killer cells
 - Anti-inflammatory effects
 - Studied for cancer immunotherapy support
 
-### MOTS-c — Mitochondrial Optimization
+### MOTS-c - Mitochondrial Optimization
 - Mitochondrial-derived peptide that improves cellular energy
 - Enhances metabolic flexibility
 - Protects against age-related metabolic decline
@@ -706,10 +706,10 @@ For peer-reviewed studies on peptide-mediated tissue repair, see [PubMed](https:
 ## The Comprehensive Longevity Stack
 
 A research-grade longevity protocol might include:
-1. **Epithalon** — Address telomere shortening
-2. **GHK-Cu** — Reprogram gene expression
-3. **FOXO4-DRI** — Clear senescent cells
-4. **Thymosin Alpha-1** — Restore immune function
+1. **Epithalon** - Address telomere shortening
+2. **GHK-Cu** - Reprogram gene expression
+3. **FOXO4-DRI** - Clear senescent cells
+4. **Thymosin Alpha-1** - Restore immune function
 
 Peptidrop's [AI protocol generator](/generator) considers the interactions between these longevity peptides and creates phased protocols with proper [cycling](/blog/peptide-cycling-guide) for long-term research.
 
@@ -766,7 +766,7 @@ For research on sleep-promoting peptides, see [PubMed](https://pubmed.ncbi.nlm.n
     category: 'Immune',
     readTime: '8 min',
     date: '2026-02-15',
-    content: `Immune-modulating peptides represent one of the most promising areas of peptide research. Unlike immunosuppressants or stimulants, many peptides act as immunomodulators — they help balance and optimize immune function.
+    content: `Immune-modulating peptides represent one of the most promising areas of peptide research. Unlike immunosuppressants or stimulants, many peptides act as immunomodulators - they help balance and optimize immune function.
 
 ## Top Immune Peptides
 
@@ -846,7 +846,7 @@ For peer-reviewed research on immune-modulating peptides, see [PubMed](https://p
 
 ## Peptidrop's Position
 
-Peptidrop is a peptide-focused platform. Our [database of 345+ peptides](/peptides) provides research-grade information for educational purposes. We do not cover anabolic steroids. All information is for research and education — consult a healthcare professional for medical decisions.
+Peptidrop is a peptide-focused platform. Our [database of 345+ peptides](/peptides) provides research-grade information for educational purposes. We do not cover anabolic steroids. All information is for research and education - consult a healthcare professional for medical decisions.
 
 For published safety comparisons between peptides and anabolic compounds, see [PubMed](https://pubmed.ncbi.nlm.nih.gov/?term=peptide+vs+anabolic+steroid+safety). The [World Anti-Doping Agency (WADA)](https://www.wada-ama.org/) also maintains updated lists of prohibited substances including certain peptides and all anabolic steroids.`,
   },
@@ -862,7 +862,7 @@ For published safety comparisons between peptides and anabolic compounds, see [P
 ## What You Need
 
 - Lyophilized peptide vial
-- Bacteriostatic water (BAC water) — water with 0.9% benzyl alcohol as preservative
+- Bacteriostatic water (BAC water) - water with 0.9% benzyl alcohol as preservative
 - Insulin syringes (for precise measurement)
 - Alcohol swabs (for sterilizing vial tops)
 
@@ -880,7 +880,7 @@ Wipe the tops of both the peptide vial and BAC water vial with alcohol swabs.
 Using an insulin syringe, draw your calculated volume of BAC water.
 
 ### Step 4: Add Water Slowly
-**Critical**: Inject the BAC water slowly along the inside wall of the vial. Never squirt it directly onto the peptide powder — this can damage the peptide structure.
+**Critical**: Inject the BAC water slowly along the inside wall of the vial. Never squirt it directly onto the peptide powder - this can damage the peptide structure.
 
 ### Step 5: Let It Dissolve
 Allow the water to run down the wall and pool at the bottom. The peptide will begin dissolving on its own. If needed, gently swirl (never shake) the vial.
@@ -916,7 +916,7 @@ For pharmaceutical compounding standards and reconstitution best practices, refe
     category: 'Protocols',
     readTime: '7 min',
     date: '2026-02-08',
-    content: `Peptide cycling — using peptides for a set period followed by a break — is an important concept in peptide research. Not all peptides require cycling, but understanding when and why to cycle can optimize results and minimize potential issues.
+    content: `Peptide cycling - using peptides for a set period followed by a break - is an important concept in peptide research. Not all peptides require cycling, but understanding when and why to cycle can optimize results and minimize potential issues.
 
 ## Why Cycle Peptides?
 
@@ -992,7 +992,7 @@ For academic research on receptor desensitization and peptide cycling rationale,
 - Non-invasive topical application
 
 ### Argireline (Acetyl Hexapeptide-3)
-- "Botox in a bottle" — reduces expression lines
+- "Botox in a bottle" - reduces expression lines
 - Works by inhibiting neurotransmitter release at the neuromuscular junction
 - Topical application only
 - Targets forehead lines and crow's feet
@@ -1038,7 +1038,7 @@ For research on peptide-based skin rejuvenation, see [PubMed](https://pubmed.ncb
     category: 'Growth Hormone',
     readTime: '8 min',
     date: '2026-02-03',
-    content: `MK-677 (Ibutamoren) is unique among growth hormone secretagogues because it's orally bioavailable — meaning it can be taken by mouth rather than injected. It works by mimicking the hormone ghrelin and binding to ghrelin receptors in the brain.
+    content: `MK-677 (Ibutamoren) is unique among growth hormone secretagogues because it's orally bioavailable - meaning it can be taken by mouth rather than injected. It works by mimicking the hormone ghrelin and binding to ghrelin receptors in the brain.
 
 ## Mechanism of Action
 
@@ -1060,7 +1060,7 @@ MK-677 works through several pathways:
 
 ## Side Effects to Monitor
 
-- **Increased appetite** (most common — it mimics ghrelin, the hunger hormone)
+- **Increased appetite** (most common - it mimics ghrelin, the hunger hormone)
 - **Water retention** (especially in the first 2-4 weeks)
 - **Insulin resistance** (monitor blood glucose with prolonged use)
 - **Numbness/tingling** in extremities
@@ -1092,11 +1092,11 @@ For published research on Ibutamoren, see [PubMed](https://pubmed.ncbi.nlm.nih.g
     category: 'Gut Health',
     readTime: '7 min',
     date: '2026-02-01',
-    content: `The gut is often called the "second brain" — it houses 70% of the immune system and produces 90% of the body's serotonin. Peptides that support gut health can have far-reaching effects on overall wellness.
+    content: `The gut is often called the "second brain" - it houses 70% of the immune system and produces 90% of the body's serotonin. Peptides that support gut health can have far-reaching effects on overall wellness.
 
 ## Top Gut Health Peptides
 
-### [BPC-157](/blog/bpc-157-complete-guide) — The Gut Guardian
+### [BPC-157](/blog/bpc-157-complete-guide) - The Gut Guardian
 BPC-157 was originally isolated from human gastric juice, making it a natural gut-protective peptide:
 - Repairs gut lining (intestinal epithelium)
 - Protects against NSAID-induced stomach damage
@@ -1184,9 +1184,9 @@ For research on peptides and gastrointestinal healing, see [PubMed](https://pubm
 ## Joint Protocol Strategy
 
 A comprehensive joint protocol typically layers:
-1. **BPC-157** — Direct joint repair
-2. **TB-500** — Systemic support
-3. **GHK-Cu** — Collagen and remodeling
+1. **BPC-157** - Direct joint repair
+2. **TB-500** - Systemic support
+3. **GHK-Cu** - Collagen and remodeling
 4. Optional: PPS for cartilage-specific support
 
 Peptidrop's [AI protocol generator](/generator) evaluates joint-specific goals and generates protocols considering the location and severity of joint issues, plus the synergy between [healing peptides](/blog/best-peptides-healing-recovery). Browse joint-related peptides in our [peptide database](/peptides).
@@ -1196,17 +1196,17 @@ For peer-reviewed research on peptide-mediated joint repair, see [PubMed](https:
   {
     slug: 'foxo4-dri-senescent-cells',
     title: 'FOXO4-DRI: The Peptide That Clears Zombie Cells for Anti-Aging',
-    excerpt: 'FOXO4-DRI is a groundbreaking senolytic peptide that clears senescent "zombie" cells — one of the hallmarks of aging. Learn the science behind this longevity peptide.',
+    excerpt: 'FOXO4-DRI is a groundbreaking senolytic peptide that clears senescent "zombie" cells - one of the hallmarks of aging. Learn the science behind this longevity peptide.',
     category: 'Longevity',
     readTime: '7 min',
     date: '2026-01-25',
-    content: `FOXO4-DRI is one of the most exciting developments in longevity research. It's a modified peptide that specifically targets and eliminates senescent cells — cells that have stopped dividing but refuse to die, earning them the nickname "zombie cells."
+    content: `FOXO4-DRI is one of the most exciting developments in longevity research. It's a modified peptide that specifically targets and eliminates senescent cells - cells that have stopped dividing but refuse to die, earning them the nickname "zombie cells."
 
 ## What Are Senescent Cells?
 
 As we age, damaged cells that can't repair themselves enter a state called senescence:
 - They stop dividing but remain metabolically active
-- They secrete inflammatory molecules (SASP — Senescence-Associated Secretory Phenotype)
+- They secrete inflammatory molecules (SASP - Senescence-Associated Secretory Phenotype)
 - They damage neighboring healthy cells
 - They accumulate with age, driving chronic inflammation and tissue dysfunction
 
@@ -1292,7 +1292,7 @@ For published research on DSIP, see [PubMed](https://pubmed.ncbi.nlm.nih.gov/?te
     category: 'Immune',
     readTime: '8 min',
     date: '2026-01-20',
-    content: `Thymosin Alpha-1 (Tα1) is a 28-amino-acid peptide naturally produced by the thymus gland. The thymus is responsible for training T-cells — the soldiers of your immune system. As the thymus shrinks with age (thymic involution), Tα1 production declines, contributing to age-related immune dysfunction.
+    content: `Thymosin Alpha-1 (Tα1) is a 28-amino-acid peptide naturally produced by the thymus gland. The thymus is responsible for training T-cells - the soldiers of your immune system. As the thymus shrinks with age (thymic involution), Tα1 production declines, contributing to age-related immune dysfunction.
 
 ## Mechanism of Action
 
@@ -1414,7 +1414,7 @@ The most reliable sources for peptide research include [PubMed](https://pubmed.n
 - **Temperature**: Always store at 2-8°C (refrigerator)
 - **Never freeze**: Freezing reconstituted peptides damages molecular structure
 - **Shelf Life**: Use within 4-6 weeks
-- **Bacteriostatic Water**: Use BAC water (not sterile water) — the benzyl alcohol preservative prevents bacterial growth. See our [reconstitution guide](/blog/how-to-reconstitute-peptides) for step-by-step instructions
+- **Bacteriostatic Water**: Use BAC water (not sterile water) - the benzyl alcohol preservative prevents bacterial growth. See our [reconstitution guide](/blog/how-to-reconstitute-peptides) for step-by-step instructions
 
 ## Handling Best Practices
 
@@ -1509,7 +1509,7 @@ For information on peptide clinical trials and development costs, visit [Clinica
   },
   {
     slug: 'dihexa-cognitive-peptide',
-    title: 'Dihexa: The Powerful Cognitive Peptide — Mechanisms, Research & Risks',
+    title: 'Dihexa: The Powerful Cognitive Peptide - Mechanisms, Research & Risks',
     excerpt: 'Dihexa is reported to be 7 orders of magnitude more potent than BDNF for cognitive enhancement. Learn about this powerful but high-risk nootropic peptide.',
     category: 'Cognitive',
     readTime: '7 min',
@@ -1540,12 +1540,12 @@ Studies have shown Dihexa's effects on:
 - New synapse formation in hippocampal neurons
 - Potential applications for neurodegenerative conditions
 
-## Risk Profile — Important
+## Risk Profile - Important
 
 Dihexa is classified as **high risk** in Peptidrop's database:
 - Very limited human safety data
 - HGF/c-Met pathway activation raises theoretical cancer concerns
-- c-Met is a proto-oncogene — overactivation could promote tumor growth
+- c-Met is a proto-oncogene - overactivation could promote tumor growth
 - Long-term effects are completely unknown
 - NOT recommended without extensive research knowledge
 
@@ -1633,7 +1633,7 @@ For published research on AOD-9604 and obesity, see [PubMed](https://pubmed.ncbi
 - **Tirzepatide**: Strong weight loss data in female participants
 
 ### Cognitive & Mood
-- **Selank**: Anxiolytic properties — anxiety disorders are 2x more common in women
+- **Selank**: Anxiolytic properties - anxiety disorders are 2x more common in women
 - **Semax**: Cognitive enhancement
 
 ## Hormonal Considerations
@@ -1714,7 +1714,7 @@ The future combines peptides with:
 
 ## Peptidrop's Vision
 
-Peptidrop is building the AI-powered peptide intelligence platform of the future — where every protocol is personalized, every synergy is mapped, and every risk is quantified. With [345+ peptides in our database](/peptides) and growing, we're creating the most comprehensive peptide research tool available. Try the [AI protocol generator](/generator) today.
+Peptidrop is building the AI-powered peptide intelligence platform of the future - where every protocol is personalized, every synergy is mapped, and every risk is quantified. With [345+ peptides in our database](/peptides) and growing, we're creating the most comprehensive peptide research tool available. Try the [AI protocol generator](/generator) today.
 
 The future of peptide research is intelligent, personalized, and data-driven. And it's already here.
 

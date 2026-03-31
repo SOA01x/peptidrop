@@ -325,7 +325,7 @@ export default function GeneratorPage() {
               </p>
               {plan === 'free' && (
                 <div className="mt-4 inline-flex items-center gap-2 px-4 py-2 bg-accent-amber/10 border border-accent-amber/20 rounded-xl">
-                  <span className="text-accent-amber text-sm">🔒 Paid feature —</span>
+                  <span className="text-accent-amber text-sm">🔒 Paid feature -</span>
                   <Link href="/pricing" className="text-accent-cyan text-sm hover:underline">Upgrade to generate protocols</Link>
                 </div>
               )}
@@ -405,7 +405,7 @@ export default function GeneratorPage() {
                   <button onClick={handleSave} className="btn-secondary text-sm !py-2">💾 Save Protocol</button>
                 ) : (
                   <Link href={protocolId ? `/protocol/${protocolId}` : '/dashboard'}
-                    className="btn-secondary text-sm !py-2">✅ Saved — View Details</Link>
+                    className="btn-secondary text-sm !py-2">✅ Saved - View Details</Link>
                 )}
                 {plan === 'pro' ? (
                   <button className="btn-primary text-sm !py-2" onClick={() => alert('PDF export coming soon!')}>
@@ -413,7 +413,7 @@ export default function GeneratorPage() {
                   </button>
                 ) : (
                   <Link href="/pricing" className="btn-secondary text-sm !py-2 inline-flex items-center gap-1.5">
-                    🔒 PDF Reports — <span className="text-accent-cyan">Pro Only</span>
+                    🔒 PDF Reports - <span className="text-accent-cyan">Pro Only</span>
                   </Link>
                 )}
               </div>

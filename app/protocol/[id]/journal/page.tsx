@@ -148,7 +148,7 @@ export default function JournalPage() {
           <button onClick={() => router.push(`/protocol/${params.id}`)}
             className="text-sm text-text-muted hover:text-accent-cyan mb-2 flex items-center gap-1">← Back to Protocol</button>
           <h1 className="font-display font-bold text-2xl sm:text-3xl mb-1">Progress Journal</h1>
-          <p className="text-text-muted text-sm">{protocol?.goal || 'Protocol'} — Track your weekly experience</p>
+          <p className="text-text-muted text-sm">{protocol?.goal || 'Protocol'} - Track your weekly experience</p>
         </div>
 
         {/* Week Grid */}
@@ -223,7 +223,7 @@ export default function JournalPage() {
             {/* New Entry Form */}
             {showForm && (
               <div className="glass-panel p-5 sm:p-8">
-                <h4 className="font-display font-semibold text-base mb-4">New Journal Entry — Week {selectedWeek}</h4>
+                <h4 className="font-display font-semibold text-base mb-4">New Journal Entry - Week {selectedWeek}</h4>
 
                 <div className="space-y-5">
                   {/* Date */}
@@ -265,7 +265,7 @@ export default function JournalPage() {
 
                   {/* Notes */}
                   <div>
-                    <label className="text-sm font-display font-medium text-text-secondary mb-2 block">Notes — How are you feeling? What do you notice?</label>
+                    <label className="text-sm font-display font-medium text-text-secondary mb-2 block">Notes - How are you feeling? What do you notice?</label>
                     <textarea value={formNotes} onChange={(e) => setFormNotes(e.target.value)}
                       placeholder="Energy levels, physical changes, mental clarity, sleep quality, anything you noticed..."
                       rows={4} className="input-field resize-none" />

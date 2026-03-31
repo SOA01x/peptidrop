@@ -82,13 +82,13 @@ export default function ProfilePage() {
                 <>
                   <h3 className="font-display font-bold text-lg mb-2">Upgrade to Pro</h3>
                   <p className="text-text-muted text-sm mb-4">Get clinical PDF reports, advanced stacks, risk simulation, and AI coaching</p>
-                  <Link href="/pricing" className="btn-primary text-sm">Upgrade to Pro — $49/mo</Link>
+                  <Link href="/pricing" className="btn-primary text-sm">Upgrade to Pro - $49/mo</Link>
                 </>
               ) : (
                 <>
                   <h3 className="font-display font-bold text-lg mb-2">Unlock AI Protocols</h3>
                   <p className="text-text-muted text-sm mb-4">Start with Researcher for AI generation, or go Pro for the full suite</p>
-                  <Link href="/pricing" className="btn-primary text-sm">View Plans — Starting at $19/mo</Link>
+                  <Link href="/pricing" className="btn-primary text-sm">View Plans - Starting at $19/mo</Link>
                 </>
               )}
             </div>

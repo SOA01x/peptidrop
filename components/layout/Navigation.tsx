@@ -206,7 +206,7 @@ export default function Navigation() {
                   <Link href="/login" onClick={() => setMobileOpen(false)}
                     className="block w-full text-center px-4 py-4 rounded-xl text-base font-medium text-text-secondary border border-surface-border">Sign In</Link>
                   <Link href="/signup" onClick={() => setMobileOpen(false)}
-                    className="block w-full text-center px-4 py-4 rounded-xl text-base font-semibold bg-gradient-to-r from-accent-cyan to-accent-violet text-surface">Get Started — Free</Link>
+                    className="block w-full text-center px-4 py-4 rounded-xl text-base font-semibold bg-gradient-to-r from-accent-cyan to-accent-violet text-surface">Get Started - Free</Link>
                 </>
               )}
             </div>

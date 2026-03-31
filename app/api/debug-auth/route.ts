@@ -1,5 +1,5 @@
 // app/api/debug-auth/route.ts
-// TEMPORARY debug route — remove after fixing auth
+// TEMPORARY debug route - remove after fixing auth
 import { NextRequest, NextResponse } from 'next/server'
 import { createServerClient, type CookieOptions } from '@supabase/ssr'
 import { cookies } from 'next/headers'

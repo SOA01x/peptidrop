@@ -103,8 +103,8 @@ export default function ProtocolDetailPage() {
                 data.status === 'active' ? 'text-accent-emerald' :
                 data.status === 'completed' ? 'text-accent-cyan' : 'text-accent-amber'
               )} style={{
-                backgroundColor: data.status === 'active' ? 'rgba(0,214,143,0.1)' :
-                  data.status === 'completed' ? 'rgba(0,229,255,0.1)' : 'rgba(255,184,0,0.1)',
+                backgroundColor: data.status === 'active' ? 'rgba(74,222,128,0.1)' :
+                  data.status === 'completed' ? 'rgba(232,197,71,0.1)' : 'rgba(232,197,71,0.1)',
               }}>
                 {data.status}
               </span>
@@ -128,7 +128,7 @@ export default function ProtocolDetailPage() {
                 'px-4 py-2 rounded-lg text-sm font-display font-medium transition-all whitespace-nowrap min-h-[40px]',
                 activeTab === tab.key ? 'text-accent-cyan' : 'text-text-muted hover:text-text-secondary'
               )}
-              style={activeTab === tab.key ? { backgroundColor: 'rgba(0,229,255,0.1)' } : {}}>
+              style={activeTab === tab.key ? { backgroundColor: 'rgba(232,197,71,0.1)' } : {}}>
               {tab.label}
             </button>
           ))}
@@ -233,7 +233,7 @@ export default function ProtocolDetailPage() {
                   {p.weeklyTimeline.map((week: any, i: number) => (
                     <div key={i} className="glass-panel p-4 sm:p-5 flex gap-3 sm:gap-4 items-start">
                       <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-xl flex flex-col items-center justify-center flex-shrink-0"
-                        style={{ background: 'linear-gradient(135deg, rgba(0,229,255,0.1), rgba(122,92,255,0.1))' }}>
+                        style={{ background: 'linear-gradient(135deg, rgba(232,197,71,0.1), rgba(232,197,71,0.05))' }}>
                         <span className="text-[10px] sm:text-xs text-text-muted">Week</span>
                         <span className="font-display font-bold text-sm sm:text-base text-accent-cyan">{week.week}</span>
                       </div>

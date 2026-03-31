@@ -107,7 +107,7 @@ export default function PricingPage() {
                 ))}
                 {planItem.limitations.map((lim, i) => (
                   <div key={i} className="flex items-start gap-2.5">
-                    <span className="text-text-muted mt-0.5 flex-shrink-0 text-sm">—</span>
+                    <span className="text-text-muted mt-0.5 flex-shrink-0 text-sm">-</span>
                     <span className="text-sm text-text-muted">{lim}</span>
                   </div>
                 ))}
@@ -148,7 +148,7 @@ export default function PricingPage() {
           </div>
         )}
 
-        {/* Clinical Reports Section — Pro Included */}
+        {/* Clinical Reports Section - Pro Included */}
         <div className="mb-16 sm:mb-20">
           <div className="text-center mb-8 sm:mb-10">
             <h2 className="font-display font-bold text-2xl sm:text-3xl mb-3">
@@ -164,7 +164,7 @@ export default function PricingPage() {
             ) : (
               <div className="mt-4 inline-flex items-center gap-2 px-4 py-2 bg-accent-amber/10 border border-accent-amber/20 rounded-xl">
                 <span className="text-accent-amber text-sm">🔒</span>
-                <span className="text-sm text-text-secondary">Included with Pro plan — </span>
+                <span className="text-sm text-text-secondary">Included with Pro plan - </span>
                 <Link href="#" onClick={(e) => {
                   e.preventDefault()
                   if (!user) { window.location.href = '/signup'; return }
@@ -217,7 +217,7 @@ export default function PricingPage() {
               </h2>
               <p className="text-text-secondary max-w-2xl mx-auto text-sm sm:text-base mb-6 leading-relaxed">
                 Peptidrop is built for the sovereign individual. We accept cryptocurrency because we believe your health research
-                should be as private and permissionless as the science itself. No banks, no middlemen, no data harvesting — just
+                should be as private and permissionless as the science itself. No banks, no middlemen, no data harvesting - just
                 peer-to-peer value exchange powered by blockchain technology.
               </p>
               <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-4 mb-6">
@@ -231,7 +231,7 @@ export default function PricingPage() {
                 </div>
               </div>
               <p className="text-xs text-text-muted">
-                Powered by NOWPayments — instant settlement, no chargebacks, global access. Your subscription activates the moment your transaction confirms on-chain.
+                Powered by NOWPayments - instant settlement, no chargebacks, global access. Your subscription activates the moment your transaction confirms on-chain.
               </p>
             </div>
           </div>
@@ -272,9 +272,9 @@ export default function PricingPage() {
                   ].map((row, i) => (
                     <tr key={i} className="hover:bg-surface-tertiary/30 transition-colors">
                       <td className="p-4 text-text-secondary">{row.feature}</td>
-                      <td className="p-4 text-center">{row.free ? <span className="text-accent-emerald">✓</span> : <span className="text-text-muted">—</span>}</td>
-                      <td className="p-4 text-center">{row.pro ? <span className="text-accent-cyan">✓</span> : <span className="text-text-muted">—</span>}</td>
-                      <td className="p-4 text-center">{row.researcher ? <span className="text-accent-violet">✓</span> : <span className="text-text-muted">—</span>}</td>
+                      <td className="p-4 text-center">{row.free ? <span className="text-accent-emerald">✓</span> : <span className="text-text-muted">-</span>}</td>
+                      <td className="p-4 text-center">{row.pro ? <span className="text-accent-cyan">✓</span> : <span className="text-text-muted">-</span>}</td>
+                      <td className="p-4 text-center">{row.researcher ? <span className="text-accent-violet">✓</span> : <span className="text-text-muted">-</span>}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -298,11 +298,11 @@ export default function PricingPage() {
               },
               {
                 q: 'Are clinical reports included with Pro?',
-                a: 'Yes! Pro plan includes unlimited clinical-grade PDF reports for all protocol types. No per-report fees — generate as many as you need.',
+                a: 'Yes! Pro plan includes unlimited clinical-grade PDF reports for all protocol types. No per-report fees - generate as many as you need.',
               },
               {
                 q: 'What payment methods do you accept?',
-                a: 'We believe in decentralization and financial sovereignty. We accept 300+ cryptocurrencies including USDC, USDT, BTC, ETH, SOL, and LTC through NOWPayments. Your subscription activates instantly when your transaction confirms on-chain. No banks, no middlemen — just peer-to-peer value exchange.',
+                a: 'We believe in decentralization and financial sovereignty. We accept 300+ cryptocurrencies including USDC, USDT, BTC, ETH, SOL, and LTC through NOWPayments. Your subscription activates instantly when your transaction confirms on-chain. No banks, no middlemen - just peer-to-peer value exchange.',
               },
               {
                 q: 'Can I cancel my subscription anytime?',

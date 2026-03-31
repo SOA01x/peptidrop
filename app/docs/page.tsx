@@ -10,7 +10,7 @@ export default function DocsPage() {
       <div className="pt-24 sm:pt-28 pb-20 max-w-4xl mx-auto px-4 sm:px-6">
         <h1 className="font-display font-bold text-3xl sm:text-4xl mb-4">Documentation</h1>
         <p className="text-text-secondary mb-10 text-sm sm:text-base">
-          Everything you need to know about Peptidrop — how it works, important disclaimers, and legal information.
+          Everything you need to know about Peptidrop - how it works, important disclaimers, and legal information.
         </p>
 
         {/* Quick Links */}
@@ -39,8 +39,8 @@ export default function DocsPage() {
             <div>
               <h2 className="font-display font-bold text-lg text-accent-amber mb-2">Important: Educational Use Only</h2>
               <p className="text-text-secondary text-sm leading-relaxed">
-                Peptidrop is an AI-powered educational platform. All information — including peptide data, protocol suggestions,
-                dosing references, and AI-generated content — is provided strictly for educational and research purposes.
+                Peptidrop is an AI-powered educational platform. All information - including peptide data, protocol suggestions,
+                dosing references, and AI-generated content - is provided strictly for educational and research purposes.
                 Nothing on this platform constitutes medical advice, diagnosis, or treatment recommendations.
                 Always consult a qualified healthcare professional before making any health-related decisions.
               </p>

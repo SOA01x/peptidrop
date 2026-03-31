@@ -109,7 +109,7 @@ Generate a comprehensive peptide protocol following this EXACT JSON structure:
 }
 
 IMPORTANT:
-- Be specific to the user's profile — do not give generic advice
+- Be specific to the user's profile - do not give generic advice
 - Account for gender-specific pharmacology
 - Explain WHY each peptide was chosen for THIS person
 - Include realistic timelines

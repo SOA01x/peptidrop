@@ -39,12 +39,12 @@ export default function SignupPage() {
 
       // Check if email confirmation is required
       if (data.user && !data.session) {
-        // Email confirmation is ON — show success message
+        // Email confirmation is ON - show success message
         setSuccess(true)
         return
       }
 
-      // Email confirmation is OFF — user is logged in immediately
+      // Email confirmation is OFF - user is logged in immediately
       if (data.user && data.session) {
         // Wait a moment for the DB trigger to create the profile
         await new Promise(r => setTimeout(r, 1000))

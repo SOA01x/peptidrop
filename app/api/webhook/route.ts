@@ -71,11 +71,11 @@ export async function POST(req: NextRequest) {
 
     switch (payment_status) {
       case 'finished': {
-        // ✅ Payment fully confirmed — activate the purchase
+        // ✅ Payment fully confirmed - activate the purchase
         console.log(`✅ Payment confirmed for user ${userId}`)
 
         if (purchaseType === 'sub') {
-          // Subscription payment — upgrade user to Pro
+          // Subscription payment - upgrade user to Pro
           // TODO: Uncomment when Supabase is configured
           //
           // const supabase = createServiceRoleClient()
@@ -103,7 +103,7 @@ export async function POST(req: NextRequest) {
           console.log(`  → User ${userId} upgraded to Pro (plan: ${itemId})`)
 
         } else if (purchaseType === 'rpt') {
-          // Clinical report purchase — mark as paid
+          // Clinical report purchase - mark as paid
           // TODO: Uncomment when Supabase is configured
           //
           // const supabase = createServiceRoleClient()
@@ -130,7 +130,7 @@ export async function POST(req: NextRequest) {
       }
 
       case 'partially_paid': {
-        // ⚠️ User sent less than required — log it
+        // ⚠️ User sent less than required - log it
         console.log(`⚠️ Partial payment: ${actually_paid}/${pay_amount} ${pay_currency}`)
         // You could notify the user or auto-refund
         break

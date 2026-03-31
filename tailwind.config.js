@@ -30,11 +30,11 @@ module.exports = {
           muted: withOpacity('--c-text-mut'),
         },
         accent: {
-          cyan: '#00E5FF',
-          violet: '#7A5CFF',
-          emerald: '#00D68F',
-          amber: '#FFB800',
-          rose: '#FF4D6A',
+          cyan: '#e8c547',
+          violet: '#e8c547',
+          emerald: '#4ade80',
+          amber: '#e8c547',
+          rose: '#ef4444',
         },
       },
       fontFamily: {
@@ -44,8 +44,8 @@ module.exports = {
       },
       borderRadius: { card: '16px' },
       boxShadow: {
-        glow: '0 0 40px -10px rgba(0, 229, 255, 0.3)',
-        'glow-violet': '0 0 40px -10px rgba(122, 92, 255, 0.3)',
+        glow: '0 0 40px -10px rgba(232, 197, 71, 0.3)',
+        'glow-violet': '0 0 40px -10px rgba(232, 197, 71, 0.3)',
         card: '0 4px 24px -4px rgba(0, 0, 0, 0.5)',
         'card-hover': '0 8px 40px -4px rgba(0, 0, 0, 0.7)',
       },
@@ -59,8 +59,8 @@ module.exports = {
         float: { '0%, 100%': { transform: 'translateY(0)' }, '50%': { transform: 'translateY(-10px)' } },
         shimmer: { '0%': { backgroundPosition: '-200% 0' }, '100%': { backgroundPosition: '200% 0' } },
         'glow-pulse': {
-          '0%, 100%': { boxShadow: '0 0 20px -5px rgba(0, 229, 255, 0.2)' },
-          '50%': { boxShadow: '0 0 40px -5px rgba(0, 229, 255, 0.4)' },
+          '0%, 100%': { boxShadow: '0 0 20px -5px rgba(232, 197, 71, 0.2)' },
+          '50%': { boxShadow: '0 0 40px -5px rgba(232, 197, 71, 0.4)' },
         },
       },
     },

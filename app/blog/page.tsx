@@ -6,11 +6,11 @@ import type { Metadata } from 'next'
 import { blogPosts } from '@/lib/blog-posts'
 
 export const metadata: Metadata = {
-  title: 'Peptide Research Blog — Guides, Protocols & Science | Peptidrop',
+  title: 'Peptide Research Blog - Guides, Protocols & Science | Peptidrop',
   description: 'Read in-depth peptide research articles, guides, and protocols. Topics include BPC-157, TB-500, GHK-Cu, Semaglutide, growth hormone peptides, longevity, cognitive enhancement, and more. Written by the Peptidrop research team.',
   alternates: { canonical: 'https://peptidrop.me/blog' },
   openGraph: {
-    title: 'Peptide Research Blog — Guides, Protocols & Science | Peptidrop',
+    title: 'Peptide Research Blog - Guides, Protocols & Science | Peptidrop',
     description: 'In-depth peptide research articles covering 345+ peptides. Mechanisms, protocols, stacking guides, and safety information.',
     url: 'https://peptidrop.me/blog',
     type: 'website',

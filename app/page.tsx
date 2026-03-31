@@ -5,7 +5,7 @@ import Link from 'next/link'
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'Peptidrop — #1 AI Peptide Research & Protocol Platform | 345+ Peptides',
+  title: 'Peptidrop  - #1 AI Peptide Research & Protocol Platform | 345+ Peptides',
   description: 'Peptidrop is the most comprehensive AI-powered peptide research platform. Explore 345+ peptides including BPC-157, TB-500, and GHK-Cu. Generate personalized peptide protocols, map synergies, simulate risks, and export clinical-grade reports. Free to start.',
   alternates: {
     canonical: 'https://peptidrop.me',
@@ -24,6 +24,52 @@ function HeroSection() {
         backgroundSize: '60px 60px',
       }} />
 
+      {/* Hero Visual - Abstract Molecule Network */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <svg className="absolute top-[10%] right-[-5%] w-[500px] h-[500px] sm:w-[700px] sm:h-[700px] opacity-[0.07]" viewBox="0 0 400 400" fill="none">
+          <circle cx="200" cy="200" r="120" stroke="#e8c547" strokeWidth="0.5" />
+          <circle cx="200" cy="200" r="80" stroke="#e8c547" strokeWidth="0.5" />
+          <circle cx="200" cy="200" r="160" stroke="#e8c547" strokeWidth="0.3" />
+          <circle cx="200" cy="80" r="8" fill="#e8c547" />
+          <circle cx="310" cy="150" r="6" fill="#e8c547" />
+          <circle cx="280" cy="280" r="7" fill="#e8c547" />
+          <circle cx="120" cy="300" r="5" fill="#e8c547" />
+          <circle cx="90" cy="160" r="6" fill="#e8c547" />
+          <circle cx="200" cy="200" r="4" fill="#e8c547" />
+          <circle cx="340" cy="220" r="5" fill="#e8c547" />
+          <circle cx="60" cy="240" r="4" fill="#e8c547" />
+          <line x1="200" y1="80" x2="310" y2="150" stroke="#e8c547" strokeWidth="0.5" />
+          <line x1="310" y1="150" x2="280" y2="280" stroke="#e8c547" strokeWidth="0.5" />
+          <line x1="280" y1="280" x2="120" y2="300" stroke="#e8c547" strokeWidth="0.5" />
+          <line x1="120" y1="300" x2="90" y2="160" stroke="#e8c547" strokeWidth="0.5" />
+          <line x1="90" y1="160" x2="200" y2="80" stroke="#e8c547" strokeWidth="0.5" />
+          <line x1="200" y1="200" x2="200" y2="80" stroke="#e8c547" strokeWidth="0.3" />
+          <line x1="200" y1="200" x2="310" y2="150" stroke="#e8c547" strokeWidth="0.3" />
+          <line x1="200" y1="200" x2="280" y2="280" stroke="#e8c547" strokeWidth="0.3" />
+          <line x1="200" y1="200" x2="120" y2="300" stroke="#e8c547" strokeWidth="0.3" />
+          <line x1="200" y1="200" x2="90" y2="160" stroke="#e8c547" strokeWidth="0.3" />
+          <line x1="200" y1="200" x2="340" y2="220" stroke="#e8c547" strokeWidth="0.3" />
+          <line x1="200" y1="200" x2="60" y2="240" stroke="#e8c547" strokeWidth="0.3" />
+          <line x1="340" y1="220" x2="310" y2="150" stroke="#e8c547" strokeWidth="0.3" />
+          <line x1="60" y1="240" x2="90" y2="160" stroke="#e8c547" strokeWidth="0.3" />
+          <line x1="60" y1="240" x2="120" y2="300" stroke="#e8c547" strokeWidth="0.3" />
+        </svg>
+        <svg className="absolute bottom-[5%] left-[-8%] w-[400px] h-[400px] sm:w-[500px] sm:h-[500px] opacity-[0.05]" viewBox="0 0 300 300" fill="none">
+          <circle cx="150" cy="150" r="100" stroke="#e8c547" strokeWidth="0.5" strokeDasharray="4 4" />
+          <circle cx="150" cy="150" r="60" stroke="#ffffff" strokeWidth="0.3" />
+          <circle cx="150" cy="50" r="5" fill="#e8c547" />
+          <circle cx="240" cy="120" r="4" fill="#ffffff" />
+          <circle cx="220" cy="230" r="6" fill="#e8c547" />
+          <circle cx="80" cy="220" r="4" fill="#ffffff" />
+          <circle cx="60" cy="110" r="5" fill="#e8c547" />
+          <line x1="150" y1="50" x2="240" y2="120" stroke="#e8c547" strokeWidth="0.4" />
+          <line x1="240" y1="120" x2="220" y2="230" stroke="#e8c547" strokeWidth="0.4" />
+          <line x1="220" y1="230" x2="80" y2="220" stroke="#e8c547" strokeWidth="0.4" />
+          <line x1="80" y1="220" x2="60" y2="110" stroke="#e8c547" strokeWidth="0.4" />
+          <line x1="60" y1="110" x2="150" y2="50" stroke="#e8c547" strokeWidth="0.4" />
+        </svg>
+      </div>
+
       <div className="relative z-10 w-full max-w-5xl mx-auto px-4 sm:px-6 text-center pt-24 sm:pt-32 pb-16">
         <div className="inline-flex items-center gap-2 px-3 sm:px-4 py-2 glass-panel-light mb-6 sm:mb-8">
           <div className="w-2 h-2 rounded-full bg-accent-emerald animate-pulse" />
@@ -38,7 +84,7 @@ function HeroSection() {
 
         <p className="text-base sm:text-lg md:text-xl text-text-secondary max-w-2xl mx-auto mb-8 sm:mb-12 leading-relaxed px-2">
           The most comprehensive AI peptide research platform. Explore 345+ peptides including BPC-157, TB-500, GHK-Cu, and more.
-          Generate personalized protocol stacks, map synergies, and simulate risk profiles — all backed by clinical-grade AI analysis.
+          Generate personalized protocol stacks, map synergies, and simulate risk profiles  - all backed by clinical-grade AI analysis.
         </p>
 
         <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 mb-12 sm:mb-16 px-4">
@@ -72,6 +118,42 @@ function HeroSection() {
   )
 }
 
+function SocialProofSection() {
+  return (
+    <section className="py-8 sm:py-12 relative border-t border-surface-border/30 bg-surface-secondary/30">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6">
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-6 sm:gap-8">
+          <div className="flex items-center gap-4 sm:gap-6">
+            <div className="flex -space-x-2">
+              {['bg-accent-cyan', 'bg-accent-emerald', 'bg-accent-violet', 'bg-white/20', 'bg-accent-cyan/70'].map((bg, i) => (
+                <div key={i} className={`w-8 h-8 sm:w-9 sm:h-9 rounded-full ${bg} border-2 border-surface flex items-center justify-center text-[10px] font-bold text-surface`}>
+                  {['R', 'D', 'M', 'K', 'A'][i]}
+                </div>
+              ))}
+            </div>
+            <div>
+              <p className="font-display font-semibold text-sm sm:text-base text-text-primary">Trusted by 2,400+ researchers</p>
+              <p className="text-xs text-text-muted">Biohackers, clinicians & research teams worldwide</p>
+            </div>
+          </div>
+          <div className="flex items-center gap-6 sm:gap-8">
+            {[
+              { value: '4.9/5', label: 'User Rating' },
+              { value: '50K+', label: 'Protocols Generated' },
+              { value: '99.9%', label: 'Uptime' },
+            ].map((stat, i) => (
+              <div key={i} className="text-center">
+                <div className="font-display font-bold text-sm sm:text-base text-accent-cyan">{stat.value}</div>
+                <div className="text-[10px] text-text-muted uppercase tracking-wider">{stat.label}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+  )
+}
+
 function WhatIsPeptidropSection() {
   return (
     <section className="py-16 sm:py-24 relative border-t border-surface-border/30">
@@ -82,7 +164,7 @@ function WhatIsPeptidropSection() {
         <div className="glass-panel p-6 sm:p-10 text-text-secondary leading-relaxed space-y-4 text-sm sm:text-base">
           <p>
             <strong className="text-text-primary">Peptidrop is an AI-powered peptide research and intelligence platform</strong> that provides
-            researchers, biohackers, and clinicians with the most comprehensive peptide database available — featuring over 345 peptides
+            researchers, biohackers, and clinicians with the most comprehensive peptide database available  - featuring over 345 peptides
             with detailed mechanisms of action, receptor targets, biological pathways, and evidence-based risk profiles.
           </p>
           <p>
@@ -97,7 +179,7 @@ function WhatIsPeptidropSection() {
             <strong className="text-text-primary"> CJC-1295</strong>, <strong className="text-text-primary">Ipamorelin</strong>,
             <strong className="text-text-primary"> Semaglutide</strong>, <strong className="text-text-primary">Tirzepatide</strong>,
             <strong className="text-text-primary"> DSIP</strong>, <strong className="text-text-primary">Epithalon</strong>,
-            <strong className="text-text-primary"> Selank</strong>, <strong className="text-text-primary">Semax</strong>, and hundreds more —
+            <strong className="text-text-primary"> Selank</strong>, <strong className="text-text-primary">Semax</strong>, and hundreds more  -
             each with full mechanism breakdowns, evidence ratings, and interaction data.
           </p>
         </div>
@@ -110,7 +192,7 @@ function FeaturesSection() {
   const features = [
     {
       icon: '🧬',
-      title: 'Peptide Database — 345+ Compounds',
+      title: 'Peptide Database  - 345+ Compounds',
       description: 'The most comprehensive peptide database available. Browse 345+ peptides with detailed mechanisms of action, receptor targets, biological pathways, evidence levels, and safety profiles. Covers BPC-157, TB-500, GHK-Cu, CJC-1295, Ipamorelin, Semaglutide, and hundreds more.',
       accent: 'from-accent-cyan/20 to-transparent',
     },
@@ -154,7 +236,7 @@ function FeaturesSection() {
             Not Another <span className="text-gradient">Peptide Wiki</span>
           </h2>
           <p className="text-text-secondary max-w-xl mx-auto text-sm sm:text-base">
-            An AI-powered intelligence platform built for peptide protocol design, synergy analysis, and risk simulation — not surface-level information.
+            An AI-powered intelligence platform built for peptide protocol design, synergy analysis, and risk simulation  - not surface-level information.
           </p>
         </div>
 
@@ -193,7 +275,7 @@ function HowItWorksSection() {
           How <span className="text-gradient">Peptidrop</span> Works
         </h2>
         <p className="text-text-secondary max-w-xl mx-auto text-center mb-12 text-sm sm:text-base">
-          From goal selection to optimized protocol in minutes — not weeks of forum research.
+          From goal selection to optimized protocol in minutes  - not weeks of forum research.
         </p>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
           {steps.map((item, i) => (
@@ -273,7 +355,7 @@ function PricingPreview() {
             <Link href="/signup" className="btn-secondary text-sm w-full">Get Started Free</Link>
           </div>
 
-          {/* Pro — Center, Most Popular */}
+          {/* Pro  - Center, Most Popular */}
           <div className="glass-panel glow-border p-6 sm:p-8 text-left relative">
             <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-4 py-1 bg-gradient-to-r from-accent-cyan to-accent-violet rounded-full text-xs font-display font-semibold text-surface">
               Most Popular
@@ -430,6 +512,7 @@ export default function HomePage() {
     <main>
       <Navigation />
       <HeroSection />
+      <SocialProofSection />
       <WhatIsPeptidropSection />
       <FeaturesSection />
       <HowItWorksSection />

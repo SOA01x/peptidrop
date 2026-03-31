@@ -88,14 +88,14 @@ export const REPORT_TYPES = [
 ] as const
 
 export const GOALS = [
-  { id: 'fat-loss', label: 'Fat Loss', icon: '🔥', color: '#FFB800' },
-  { id: 'muscle-gain', label: 'Muscle Gain', icon: '💪', color: '#34D399' },
-  { id: 'cognition', label: 'Cognition', icon: '🧠', color: '#7A5CFF' },
-  { id: 'recovery', label: 'Recovery', icon: '💚', color: '#00D68F' },
-  { id: 'longevity', label: 'Longevity', icon: '⏳', color: '#A78BFA' },
-  { id: 'sleep', label: 'Sleep', icon: '🌙', color: '#6366F1' },
-  { id: 'libido', label: 'Libido', icon: '❤️', color: '#FF4D6A' },
-  { id: 'immune', label: 'Immunity', icon: '🛡️', color: '#FF6B6B' },
+  { id: 'fat-loss', label: 'Fat Loss', icon: '🔥', color: '#e8c547' },
+  { id: 'muscle-gain', label: 'Muscle Gain', icon: '💪', color: '#4ade80' },
+  { id: 'cognition', label: 'Cognition', icon: '🧠', color: '#e8c547' },
+  { id: 'recovery', label: 'Recovery', icon: '💚', color: '#4ade80' },
+  { id: 'longevity', label: 'Longevity', icon: '⏳', color: '#e8c547' },
+  { id: 'sleep', label: 'Sleep', icon: '🌙', color: '#94a3b8' },
+  { id: 'libido', label: 'Libido', icon: '❤️', color: '#ef4444' },
+  { id: 'immune', label: 'Immunity', icon: '🛡️', color: '#4ade80' },
 ] as const
 
 export const GENDERS = [

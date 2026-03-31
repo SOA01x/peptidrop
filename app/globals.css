@@ -7,10 +7,10 @@
 @layer base {
   /* RGB triplets so Tailwind opacity modifiers work (bg-surface/80 etc) */
   :root, .dark {
-    --c-surface: 10, 10, 15;
-    --c-surface-sec: 18, 18, 26;
-    --c-surface-ter: 26, 26, 40;
-    --c-border: 42, 42, 58;
+    --c-surface: 13, 27, 42;
+    --c-surface-sec: 18, 35, 55;
+    --c-surface-ter: 24, 44, 68;
+    --c-border: 40, 60, 90;
     --c-text: 255, 255, 255;
     --c-text-sec: 156, 163, 175;
     --c-text-mut: 107, 114, 128;
@@ -44,8 +44,8 @@
   }
 
   ::selection {
-    background: rgba(0, 229, 255, 0.2);
-    color: #00E5FF;
+    background: rgba(232, 197, 71, 0.2);
+    color: #e8c547;
   }
 
   ::-webkit-scrollbar { width: 6px; }
@@ -76,7 +76,7 @@
     inset: -1px;
     border-radius: inherit;
     padding: 1px;
-    background: linear-gradient(135deg, rgba(0,229,255,0.3), rgba(122,92,255,0.3), transparent);
+    background: linear-gradient(135deg, rgba(232,197,71,0.4), rgba(232,197,71,0.15), transparent);
     -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
     -webkit-mask-composite: xor;
     mask-composite: exclude;
@@ -91,7 +91,7 @@
     @apply px-6 py-3 bg-gradient-to-r from-accent-cyan to-accent-violet font-display font-semibold rounded-xl
            hover:shadow-glow transition-all duration-300 hover:scale-[1.02] active:scale-[0.98]
            min-h-[44px] inline-flex items-center justify-center;
-    color: #0A0A0F;
+    color: #0d1b2a;
   }
 
   .btn-secondary {
@@ -111,16 +111,16 @@
   }
 
   .shimmer-bg {
-    background: linear-gradient(90deg, transparent 0%, rgba(0,229,255,0.05) 50%, transparent 100%);
+    background: linear-gradient(90deg, transparent 0%, rgba(232,197,71,0.05) 50%, transparent 100%);
     background-size: 200% 100%;
     animation: shimmer 2s linear infinite;
   }
 
   .mesh-gradient {
     background:
-      radial-gradient(ellipse at 20% 50%, rgba(0,229,255,0.08) 0%, transparent 50%),
-      radial-gradient(ellipse at 80% 20%, rgba(122,92,255,0.08) 0%, transparent 50%),
-      radial-gradient(ellipse at 50% 80%, rgba(0,214,143,0.05) 0%, transparent 50%);
+      radial-gradient(ellipse at 20% 50%, rgba(232,197,71,0.06) 0%, transparent 50%),
+      radial-gradient(ellipse at 80% 20%, rgba(232,197,71,0.04) 0%, transparent 50%),
+      radial-gradient(ellipse at 50% 80%, rgba(255,255,255,0.02) 0%, transparent 50%);
   }
 
   @supports (padding-bottom: env(safe-area-inset-bottom)) {
@@ -139,6 +139,6 @@
 }
 
 @keyframes glow-pulse {
-  0%, 100% { box-shadow: 0 0 20px -5px rgba(0, 229, 255, 0.15); }
-  50% { box-shadow: 0 0 40px -5px rgba(0, 229, 255, 0.35); }
+  0%, 100% { box-shadow: 0 0 20px -5px rgba(232, 197, 71, 0.15); }
+  50% { box-shadow: 0 0 40px -5px rgba(232, 197, 71, 0.35); }
 }

@@ -9,20 +9,9 @@ export default function Footer() {
           <div className="col-span-2 sm:col-span-2 md:col-span-1">
             <div className="flex items-center gap-3 mb-4">
               <svg viewBox="0 0 200 200" className="w-8 h-8" xmlns="http://www.w3.org/2000/svg" aria-label="Peptidrop logo">
-                <g fill="#00E5FF">
-                  <circle cx="100" cy="12" r="8"/><circle cx="119.6" cy="13.5" r="7.5"/><circle cx="138" cy="18.5" r="7.5"/>
-                  <circle cx="154.5" cy="27" r="7"/><circle cx="168.5" cy="38.5" r="7"/><circle cx="179" cy="52.5" r="7"/>
-                  <circle cx="186.5" cy="68.5" r="7"/><circle cx="190" cy="86" r="7.5"/><circle cx="189.5" cy="104" r="7.5"/>
-                  <circle cx="185" cy="121.5" r="7.5"/><circle cx="177" cy="137.5" r="7.5"/><circle cx="166" cy="151.5" r="7.5"/>
-                  <circle cx="152.5" cy="163" r="7.5"/><circle cx="137" cy="171.5" r="7.5"/><circle cx="120" cy="177" r="8"/>
-                  <circle cx="100" cy="179" r="8.5"/><circle cx="80" cy="177" r="8"/><circle cx="63" cy="171.5" r="7.5"/>
-                  <circle cx="47.5" cy="163" r="7.5"/><circle cx="34" cy="151.5" r="7.5"/><circle cx="23" cy="137.5" r="7.5"/>
-                  <circle cx="15" cy="121.5" r="7.5"/><circle cx="10.5" cy="104" r="7.5"/><circle cx="10" cy="86" r="7.5"/>
-                  <circle cx="13.5" cy="68.5" r="7"/><circle cx="21" cy="52.5" r="7"/><circle cx="31.5" cy="38.5" r="7"/>
-                  <circle cx="45.5" cy="27" r="7"/><circle cx="62" cy="18.5" r="7.5"/><circle cx="80.4" cy="13.5" r="7.5"/>
-                </g>
-                <circle cx="100" cy="100" r="52" fill="none" stroke="#00E5FF" strokeWidth="12"/>
-                <circle cx="100" cy="100" r="6" fill="#00E5FF"/>
+                <circle cx="100" cy="100" r="90" fill="none" stroke="#e8c547" strokeWidth="4" strokeDasharray="8 8" />
+                <circle cx="100" cy="100" r="58" fill="none" stroke="#e8c547" strokeWidth="10" />
+                <circle cx="100" cy="100" r="12" fill="#e8c547" />
               </svg>
               <span className="font-display font-bold text-lg">Peptidrop</span>
             </div>

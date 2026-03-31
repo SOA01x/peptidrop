@@ -7,8 +7,8 @@ import CookieConsent from '@/components/ui/CookieConsent'
 export const metadata: Metadata = {
   metadataBase: new URL('https://peptidrop.me'),
   title: {
-    default: 'Peptidrop — #1 AI Peptide Research & Protocol Platform | 345+ Peptides Database',
-    template: '%s | Peptidrop — AI Peptide Intelligence',
+    default: 'Peptidrop - #1 AI Peptide Research & Protocol Platform | 345+ Peptides Database',
+    template: '%s | Peptidrop - AI Peptide Intelligence',
   },
   description: 'Peptidrop is the leading AI-powered peptide research platform. Explore 345+ peptides, generate personalized protocols, map synergies, and simulate risk profiles. Trusted by researchers and biohackers for clinical-grade peptide intelligence.',
   keywords: [
@@ -46,7 +46,7 @@ export const metadata: Metadata = {
     apple: '/favicon.svg',
   },
   openGraph: {
-    title: 'Peptidrop — #1 AI Peptide Research & Protocol Platform',
+    title: 'Peptidrop - #1 AI Peptide Research & Protocol Platform',
     description: 'Explore 345+ peptides, generate AI-powered protocols, map synergies, and simulate risk profiles. The most comprehensive peptide intelligence platform available.',
     url: 'https://peptidrop.me',
     siteName: 'Peptidrop',
@@ -57,14 +57,14 @@ export const metadata: Metadata = {
         url: 'https://peptidrop.me/og-image.svg',
         width: 1200,
         height: 630,
-        alt: 'Peptidrop — AI Peptide Research & Protocol Platform with 345+ peptides',
+        alt: 'Peptidrop - AI Peptide Research & Protocol Platform with 345+ peptides',
         type: 'image/svg+xml',
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Peptidrop — #1 AI Peptide Research & Protocol Platform',
+    title: 'Peptidrop - #1 AI Peptide Research & Protocol Platform',
     description: 'Explore 345+ peptides, generate AI-powered protocols, map synergies, and simulate risk profiles.',
     creator: '@peptidrop',
     images: ['https://peptidrop.me/og-image.svg'],
