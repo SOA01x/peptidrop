@@ -62,21 +62,29 @@ export default function ProtocolDetailPage() {
     const maxWidth = pageWidth - margin * 2
     let y = 20
 
+    const pageH = doc.internal.pageSize.getHeight()
+
+    const paintBg = () => {
+      doc.setFillColor(13, 27, 42)
+      doc.rect(0, 0, pageWidth, pageH, 'F')
+    }
+
+    const newPage = () => { doc.addPage(); paintBg(); y = 20 }
+
     const addText = (text: string, size: number, bold: boolean, color: [number, number, number] = [255, 255, 255]) => {
       doc.setFontSize(size)
       doc.setFont('helvetica', bold ? 'bold' : 'normal')
       doc.setTextColor(color[0], color[1], color[2])
       const lines = doc.splitTextToSize(text, maxWidth)
-      if (y + lines.length * size * 0.5 > 280) { doc.addPage(); y = 20 }
+      if (y + lines.length * size * 0.5 > 280) { newPage() }
       doc.text(lines, margin, y)
       y += lines.length * size * 0.45 + 2
     }
 
-    const checkPage = (needed: number) => { if (y + needed > 280) { doc.addPage(); y = 20 } }
+    const checkPage = (needed: number) => { if (y + needed > 280) { newPage() } }
 
-    // Background
-    doc.setFillColor(13, 27, 42)
-    doc.rect(0, 0, pageWidth, doc.internal.pageSize.getHeight(), 'F')
+    // Background (first page)
+    paintBg()
 
     // Title
     addText('PEPTIDROP PROTOCOL', 10, true, [232, 197, 71])
