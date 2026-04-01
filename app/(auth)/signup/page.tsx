@@ -45,6 +45,13 @@ export default function SignupPage() {
       })
       if (authError) throw authError
 
+      // Sync to Klaviyo (fire-and-forget, don't block signup)
+      fetch('/api/klaviyo-sync', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, full_name: fullName }),
+      }).catch(() => {}) // silently ignore if Klaviyo sync fails
+
       // Check if email confirmation is required
       if (data.user && !data.session) {
         // Email confirmation is ON - show success message
