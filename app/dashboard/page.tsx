@@ -258,19 +258,35 @@ function PeptideSynergyMap() {
       window.removeEventListener('touchmove', move); window.removeEventListener('touchend', up) }
   }, [dragging, dragOffset, updateNodePosition])
 
+  const [saveError, setSaveError] = useState('')
+
   const handleSave = async () => {
     if (!user || !stackName.trim() || selectedPeptides.length === 0) return
     setSaving(true)
+    setSaveError('')
     try {
       const supabase = createClient()
+      const payload = {
+        user_id: user.id,
+        name: stackName.trim(),
+        peptide_ids: selectedPeptides,
+        node_positions: JSON.parse(JSON.stringify(stackNodes)),
+        synergy_score: compatibility?.score || null,
+      }
       const { data, error } = await supabase.from('saved_stacks')
-        .insert({ user_id: user.id, name: stackName.trim(), peptide_ids: selectedPeptides, node_positions: stackNodes, synergy_score: compatibility?.score || null })
+        .insert(payload)
         .select().single()
-      if (!error && data) {
+      if (error) {
+        console.error('Save error:', error)
+        setSaveError(error.message)
+      } else if (data) {
         addSavedStack({ id: data.id, name: data.name, peptide_ids: data.peptide_ids, node_positions: data.node_positions, synergy_score: data.synergy_score, notes: null, created_at: data.created_at })
         setStackName(''); setShowSaveForm(false)
       }
-    } catch (e) { console.error(e) }
+    } catch (e: any) {
+      console.error('Save error:', e)
+      setSaveError(e.message || 'Failed to save')
+    }
     setSaving(false)
   }
 
@@ -307,9 +323,12 @@ function PeptideSynergyMap() {
           </div>
 
           {showSaveForm && (
-            <div className="mb-4 p-3 rounded-xl flex gap-2 bg-surface-tertiary border border-surface-border">
-              <input type="text" value={stackName} onChange={(e) => setStackName(e.target.value)} placeholder="Name your synergy map..." className="input-field !min-h-[36px] !py-1.5 !text-sm flex-1" />
-              <button onClick={handleSave} disabled={saving || !stackName.trim()} className="btn-primary !py-1.5 !px-4 text-xs disabled:opacity-50">{saving ? '...' : 'Save'}</button>
+            <div className="mb-4">
+              <div className="p-3 rounded-xl flex gap-2 bg-surface-tertiary border border-surface-border">
+                <input type="text" value={stackName} onChange={(e) => setStackName(e.target.value)} placeholder="Name your synergy map..." className="input-field !min-h-[36px] !py-1.5 !text-sm flex-1" />
+                <button onClick={handleSave} disabled={saving || !stackName.trim()} className="btn-primary !py-1.5 !px-4 text-xs disabled:opacity-50">{saving ? '...' : 'Save'}</button>
+              </div>
+              {saveError && <p className="text-accent-rose text-xs mt-2 px-1">{saveError}</p>}
             </div>
           )}
 
@@ -359,18 +378,44 @@ function PeptideSynergyMap() {
           {/* Synergy Visualization */}
           {stackPeptides.length === 0 ? (
             <div className="text-center py-14 relative">
-              <div className="relative inline-block mb-4">
-                <svg viewBox="0 0 120 120" className="w-24 h-24 mx-auto opacity-20">
-                  <circle cx="35" cy="40" r="12" fill="none" stroke="#e8c547" strokeWidth="1.5" />
-                  <circle cx="85" cy="40" r="12" fill="none" stroke="#4ade80" strokeWidth="1.5" />
-                  <circle cx="60" cy="85" r="12" fill="none" stroke="#e8c547" strokeWidth="1.5" />
-                  <line x1="47" y1="40" x2="73" y2="40" stroke="#e8c547" strokeWidth="1" opacity="0.5" strokeDasharray="3 3" />
-                  <line x1="42" y1="50" x2="53" y2="77" stroke="#4ade80" strokeWidth="1" opacity="0.5" strokeDasharray="3 3" />
-                  <line x1="78" y1="50" x2="67" y2="77" stroke="#e8c547" strokeWidth="1" opacity="0.5" strokeDasharray="3 3" />
+              <div className="relative inline-block mb-5">
+                <svg viewBox="0 0 200 200" className="w-40 h-40 mx-auto">
+                  {/* Animated orbit rings */}
+                  <circle cx="100" cy="100" r="80" fill="none" stroke="#e8c547" strokeWidth="0.5" opacity="0.15" strokeDasharray="4 6">
+                    <animateTransform attributeName="transform" type="rotate" from="0 100 100" to="360 100 100" dur="30s" repeatCount="indefinite" />
+                  </circle>
+                  <circle cx="100" cy="100" r="55" fill="none" stroke="#4ade80" strokeWidth="0.5" opacity="0.15" strokeDasharray="3 5">
+                    <animateTransform attributeName="transform" type="rotate" from="360 100 100" to="0 100 100" dur="20s" repeatCount="indefinite" />
+                  </circle>
+                  {/* Center glow */}
+                  <circle cx="100" cy="100" r="20" fill="#e8c547" opacity="0.04">
+                    <animate attributeName="r" values="18;24;18" dur="4s" repeatCount="indefinite" />
+                    <animate attributeName="opacity" values="0.04;0.08;0.04" dur="4s" repeatCount="indefinite" />
+                  </circle>
+                  <circle cx="100" cy="100" r="4" fill="#e8c547" opacity="0.5">
+                    <animate attributeName="opacity" values="0.3;0.7;0.3" dur="3s" repeatCount="indefinite" />
+                  </circle>
+                  {/* Orbiting nodes */}
+                  <g><animateTransform attributeName="transform" type="rotate" from="0 100 100" to="360 100 100" dur="12s" repeatCount="indefinite" />
+                    <circle cx="100" cy="20" r="8" fill="rgba(232,197,71,0.15)" stroke="#e8c547" strokeWidth="1.5" />
+                    <circle cx="100" cy="20" r="3" fill="#e8c547" opacity="0.6" />
+                  </g>
+                  <g><animateTransform attributeName="transform" type="rotate" from="120 100 100" to="480 100 100" dur="16s" repeatCount="indefinite" />
+                    <circle cx="100" cy="45" r="7" fill="rgba(74,222,128,0.15)" stroke="#4ade80" strokeWidth="1.5" />
+                    <circle cx="100" cy="45" r="2.5" fill="#4ade80" opacity="0.6" />
+                  </g>
+                  <g><animateTransform attributeName="transform" type="rotate" from="240 100 100" to="600 100 100" dur="20s" repeatCount="indefinite" />
+                    <circle cx="100" cy="32" r="6" fill="rgba(232,197,71,0.1)" stroke="#e8c547" strokeWidth="1" opacity="0.7" />
+                    <circle cx="100" cy="32" r="2" fill="#e8c547" opacity="0.4" />
+                  </g>
+                  {/* Connecting beams */}
+                  <line x1="100" y1="100" x2="100" y2="20" stroke="#e8c547" strokeWidth="0.5" opacity="0.08">
+                    <animate attributeName="opacity" values="0.05;0.15;0.05" dur="3s" repeatCount="indefinite" />
+                  </line>
                 </svg>
               </div>
-              <p className="text-text-muted text-sm mb-1">Select peptides from the dropdown above</p>
-              <p className="text-text-muted/60 text-xs">Discover synergistic pairs, potential conflicts, and stack compatibility</p>
+              <p className="text-text-primary text-sm font-display font-semibold mb-1">Map Peptide Interactions</p>
+              <p className="text-text-muted text-xs">Select peptides above to visualize synergies, conflicts, and compatibility scores</p>
             </div>
           ) : (
             <>
@@ -455,7 +500,7 @@ function PeptideSynergyMap() {
                   })}
 
                   {/* Nodes */}
-                  {stackNodes.map(n => {
+                  {stackNodes.map((n, i) => {
                     const p = getPeptideById(n.peptideId)
                     if (!p) return null
                     const col = riskColors[p.riskProfile] || '#e8c547'
@@ -468,17 +513,26 @@ function PeptideSynergyMap() {
                         onTouchStart={(e) => handleMouseDown(n.peptideId, e)}
                         style={{ cursor: 'grab' }}
                       >
-                        {/* Pulse ring */}
-                        <circle cx={n.x} cy={n.y} r="32" fill="none" stroke={col} strokeWidth="1" opacity="0.15">
-                          <animate attributeName="r" values="32;38;32" dur="3s" repeatCount="indefinite" />
-                          <animate attributeName="opacity" values="0.15;0.05;0.15" dur="3s" repeatCount="indefinite" />
+                        {/* Outer pulse ring - large and visible */}
+                        <circle cx={n.x} cy={n.y} r="36" fill="none" stroke={col} strokeWidth="1.5" opacity="0">
+                          <animate attributeName="r" values="30;50;30" dur="3s" repeatCount="indefinite" begin={`${i * 0.5}s`} />
+                          <animate attributeName="opacity" values="0.25;0;0.25" dur="3s" repeatCount="indefinite" begin={`${i * 0.5}s`} />
                         </circle>
-                        {/* Ambient glow */}
-                        <circle cx={n.x} cy={n.y} r="30" fill={col} opacity="0.06" filter="url(#node-glow)" />
-                        {/* Main node */}
-                        <circle cx={n.x} cy={n.y} r="26" fill="rgba(13,27,42,0.9)" stroke={col} strokeWidth="2.5" />
-                        {/* Inner ring */}
-                        <circle cx={n.x} cy={n.y} r="21" fill="none" stroke={col} strokeWidth="0.5" opacity="0.3" />
+                        {/* Second pulse ring - offset timing */}
+                        <circle cx={n.x} cy={n.y} r="30" fill="none" stroke={col} strokeWidth="1" opacity="0">
+                          <animate attributeName="r" values="28;44;28" dur="4s" repeatCount="indefinite" begin={`${i * 0.3 + 1}s`} />
+                          <animate attributeName="opacity" values="0.15;0;0.15" dur="4s" repeatCount="indefinite" begin={`${i * 0.3 + 1}s`} />
+                        </circle>
+                        {/* Ambient glow - bigger */}
+                        <circle cx={n.x} cy={n.y} r="34" fill={col} opacity="0.08" filter="url(#node-glow)" />
+                        {/* Main node - larger */}
+                        <circle cx={n.x} cy={n.y} r="28" fill="rgba(13,27,42,0.95)" stroke={col} strokeWidth="3">
+                          <animate attributeName="stroke-width" values="3;4;3" dur="2s" repeatCount="indefinite" />
+                        </circle>
+                        {/* Inner decorative ring */}
+                        <circle cx={n.x} cy={n.y} r="22" fill="none" stroke={col} strokeWidth="0.8" opacity="0.25" strokeDasharray="3 3">
+                          <animateTransform attributeName="transform" type="rotate" from={`0 ${n.x} ${n.y}`} to={`360 ${n.x} ${n.y}`} dur="10s" repeatCount="indefinite" />
+                        </circle>
                         {/* Label */}
                         <text x={n.x} y={n.y - 3} textAnchor="middle" dominantBaseline="middle" fill="white" fontSize="8" fontFamily="monospace" fontWeight="700">
                           {p.abbreviation.substring(0, 7)}
@@ -534,43 +588,103 @@ function PeptideSynergyMap() {
                 </div>
               )}
 
-              {/* Synergy/Conflict Details */}
-              {compatibility && (compatibility.synergies.length > 0 || compatibility.conflicts.length > 0) && (
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                  {compatibility.synergies.length > 0 && (
-                    <div className="rounded-xl p-3 border border-accent-emerald/10" style={{ background: 'rgba(74,222,128,0.03)' }}>
-                      <h4 className="text-xs font-display font-semibold text-accent-emerald mb-2 flex items-center gap-1.5">
-                        <span className="w-1.5 h-1.5 rounded-full bg-accent-emerald" /> Synergistic Pairs
-                      </h4>
-                      {compatibility.synergies.map((pair, i) => {
-                        const a = getPeptideById(pair[0]), b = getPeptideById(pair[1])
-                        return (
-                          <p key={i} className="text-xs text-text-secondary mb-1">
-                            <span className="font-mono text-accent-emerald">{a?.abbreviation}</span>
-                            <span className="text-text-muted mx-1">+</span>
-                            <span className="font-mono text-accent-emerald">{b?.abbreviation}</span>
-                          </p>
-                        )
-                      })}
+              {/* Interaction Matrix Chart */}
+              {compatibility && stackPeptides.length >= 2 && (
+                <div className="rounded-xl border border-surface-border p-4 sm:p-5" style={{ background: 'rgba(13,27,42,0.5)' }}>
+                  <h4 className="text-xs font-display font-semibold text-text-secondary mb-4 uppercase tracking-wider">Interaction Matrix</h4>
+                  <div className="space-y-2.5">
+                    {stackPeptides.map((pep, idx) => {
+                      const pepSyn = connections.filter(c => (c.from === pep.id || c.to === pep.id) && c.type === 'synergy')
+                      const pepConf = connections.filter(c => (c.from === pep.id || c.to === pep.id) && c.type === 'conflict')
+                      const totalConnections = pepSyn.length + pepConf.length
+                      const maxPossible = stackPeptides.length - 1
+                      const synPercent = maxPossible > 0 ? (pepSyn.length / maxPossible) * 100 : 0
+                      const confPercent = maxPossible > 0 ? (pepConf.length / maxPossible) * 100 : 0
+                      const col = riskColors[pep.riskProfile] || '#e8c547'
+
+                      return (
+                        <div key={pep.id} className="group">
+                          <div className="flex items-center gap-3 mb-1.5">
+                            <div className="flex items-center gap-2 min-w-[100px] sm:min-w-[120px]">
+                              <span className="w-2.5 h-2.5 rounded-full flex-shrink-0" style={{ backgroundColor: col, boxShadow: `0 0 6px ${col}40` }} />
+                              <span className="text-xs font-mono text-text-primary font-semibold truncate">{pep.abbreviation}</span>
+                            </div>
+                            <div className="flex-1 flex items-center gap-1 h-7 rounded-lg overflow-hidden" style={{ background: 'rgba(255,255,255,0.03)' }}>
+                              {/* Synergy bar */}
+                              {synPercent > 0 && (
+                                <div
+                                  className="h-full rounded-l-lg relative overflow-hidden transition-all duration-700"
+                                  style={{ width: `${Math.max(synPercent, 8)}%`, background: 'linear-gradient(90deg, rgba(74,222,128,0.25), rgba(74,222,128,0.4))' }}
+                                >
+                                  <div className="absolute inset-0 opacity-30" style={{ background: 'linear-gradient(90deg, transparent, rgba(74,222,128,0.3), transparent)', animation: 'shimmer 2s infinite' }} />
+                                </div>
+                              )}
+                              {/* Conflict bar */}
+                              {confPercent > 0 && (
+                                <div
+                                  className="h-full relative overflow-hidden transition-all duration-700"
+                                  style={{ width: `${Math.max(confPercent, 8)}%`, background: 'linear-gradient(90deg, rgba(239,68,68,0.25), rgba(239,68,68,0.4))' }}
+                                >
+                                  <div className="absolute inset-0 opacity-30" style={{ background: 'linear-gradient(90deg, transparent, rgba(239,68,68,0.3), transparent)', animation: 'shimmer 2.5s infinite' }} />
+                                </div>
+                              )}
+                              {/* Neutral space */}
+                              {totalConnections === 0 && (
+                                <div className="h-full flex-1 flex items-center justify-center">
+                                  <span className="text-[9px] text-text-muted/50 font-mono">No known interactions</span>
+                                </div>
+                              )}
+                            </div>
+                            <div className="flex gap-2 min-w-[60px] justify-end">
+                              {pepSyn.length > 0 && (
+                                <span className="text-[10px] font-mono font-bold text-accent-emerald px-1.5 py-0.5 rounded" style={{ background: 'rgba(74,222,128,0.1)' }}>
+                                  {pepSyn.length}S
+                                </span>
+                              )}
+                              {pepConf.length > 0 && (
+                                <span className="text-[10px] font-mono font-bold text-accent-rose px-1.5 py-0.5 rounded" style={{ background: 'rgba(239,68,68,0.1)' }}>
+                                  {pepConf.length}C
+                                </span>
+                              )}
+                            </div>
+                          </div>
+                          {/* Expanded detail on hover */}
+                          {(pepSyn.length > 0 || pepConf.length > 0) && (
+                            <div className="hidden group-hover:flex flex-wrap gap-1.5 ml-[112px] sm:ml-[132px] mb-1 transition-all">
+                              {pepSyn.map((c, ci) => {
+                                const other = getPeptideById(c.from === pep.id ? c.to : c.from)
+                                return (
+                                  <span key={ci} className="text-[9px] font-mono px-2 py-0.5 rounded-full border border-accent-emerald/20 text-accent-emerald" style={{ background: 'rgba(74,222,128,0.06)' }}>
+                                    + {other?.abbreviation}
+                                  </span>
+                                )
+                              })}
+                              {pepConf.map((c, ci) => {
+                                const other = getPeptideById(c.from === pep.id ? c.to : c.from)
+                                return (
+                                  <span key={ci} className="text-[9px] font-mono px-2 py-0.5 rounded-full border border-accent-rose/20 text-accent-rose" style={{ background: 'rgba(239,68,68,0.06)' }}>
+                                    ! {other?.abbreviation}
+                                  </span>
+                                )
+                              })}
+                            </div>
+                          )}
+                        </div>
+                      )
+                    })}
+                  </div>
+                  {/* Legend */}
+                  <div className="flex items-center gap-4 mt-4 pt-3 border-t border-surface-border/30">
+                    <div className="flex items-center gap-1.5">
+                      <span className="w-3 h-2 rounded-sm" style={{ background: 'linear-gradient(90deg, rgba(74,222,128,0.3), rgba(74,222,128,0.5))' }} />
+                      <span className="text-[10px] text-text-muted">Synergy (S)</span>
                     </div>
-                  )}
-                  {compatibility.conflicts.length > 0 && (
-                    <div className="rounded-xl p-3 border border-accent-rose/10" style={{ background: 'rgba(239,68,68,0.03)' }}>
-                      <h4 className="text-xs font-display font-semibold text-accent-rose mb-2 flex items-center gap-1.5">
-                        <span className="w-1.5 h-1.5 rounded-full bg-accent-rose" /> Potential Conflicts
-                      </h4>
-                      {compatibility.conflicts.map((pair, i) => {
-                        const a = getPeptideById(pair[0]), b = getPeptideById(pair[1])
-                        return (
-                          <p key={i} className="text-xs text-text-secondary mb-1">
-                            <span className="font-mono text-accent-rose">{a?.abbreviation}</span>
-                            <span className="text-text-muted mx-1">vs</span>
-                            <span className="font-mono text-accent-rose">{b?.abbreviation}</span>
-                          </p>
-                        )
-                      })}
+                    <div className="flex items-center gap-1.5">
+                      <span className="w-3 h-2 rounded-sm" style={{ background: 'linear-gradient(90deg, rgba(239,68,68,0.3), rgba(239,68,68,0.5))' }} />
+                      <span className="text-[10px] text-text-muted">Conflict (C)</span>
                     </div>
-                  )}
+                    <span className="text-[10px] text-text-muted/50 ml-auto">Hover rows for details</span>
+                  </div>
                 </div>
               )}
             </>

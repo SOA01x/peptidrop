@@ -87,8 +87,14 @@ CREATE TABLE public.saved_stacks (
 
 ALTER TABLE public.saved_stacks ENABLE ROW LEVEL SECURITY;
 
-CREATE POLICY "Users can manage own stacks"
-  ON public.saved_stacks FOR ALL USING (auth.uid() = user_id);
+CREATE POLICY "Users can view own stacks"
+  ON public.saved_stacks FOR SELECT USING (auth.uid() = user_id);
+CREATE POLICY "Users can insert own stacks"
+  ON public.saved_stacks FOR INSERT WITH CHECK (auth.uid() = user_id);
+CREATE POLICY "Users can update own stacks"
+  ON public.saved_stacks FOR UPDATE USING (auth.uid() = user_id);
+CREATE POLICY "Users can delete own stacks"
+  ON public.saved_stacks FOR DELETE USING (auth.uid() = user_id);
 
 -- ============================================
 -- TRANSACTIONS TABLE
