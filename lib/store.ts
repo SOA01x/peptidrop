@@ -72,6 +72,7 @@ interface AppState {
   addProtocol: (protocol: GeneratedProtocol) => void
   setProtocols: (protocols: GeneratedProtocol[]) => void
   updateProtocolWeek: (id: string, week: number) => void
+  updateProtocolStatus: (id: string, status: 'active' | 'completed' | 'paused') => void
 
   // Progress Tracking
   progressEntries: ProgressEntry[]
@@ -130,6 +131,9 @@ export const useAppStore = create<AppState>((set, get) => ({
   setProtocols: (protocols) => set({ protocols }),
   updateProtocolWeek: (id, week) => set((s) => ({
     protocols: s.protocols.map(p => p.id === id ? { ...p, currentWeek: week } : p)
+  })),
+  updateProtocolStatus: (id, status) => set((s) => ({
+    protocols: s.protocols.map(p => p.id === id ? { ...p, status } : p)
   })),
 
   progressEntries: [],

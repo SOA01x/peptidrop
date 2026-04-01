@@ -8,6 +8,7 @@ import Footer from '@/components/layout/Footer'
 import { createClient } from '@/lib/supabase'
 import { useAppStore } from '@/lib/store'
 import { cn } from '@/lib/utils'
+import { jsPDF } from 'jspdf'
 import Link from 'next/link'
 
 interface ProtocolData {
@@ -30,6 +31,116 @@ export default function ProtocolDetailPage() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
   const [activeTab, setActiveTab] = useState<'overview' | 'timeline' | 'risk' | 'alternatives'>('overview')
+  const [deactivating, setDeactivating] = useState(false)
+  const plan = useAppStore((s) => s.plan)
+  const updateProtocolStatus = useAppStore((s) => s.updateProtocolStatus)
+
+  const handleDeactivate = async () => {
+    if (!data || deactivating) return
+    setDeactivating(true)
+    try {
+      const supabase = createClient()
+      const newStatus = data.status === 'paused' ? 'active' : 'paused'
+      const { error: err } = await supabase
+        .from('protocols')
+        .update({ status: newStatus })
+        .eq('id', data.id)
+      if (!err) {
+        setData({ ...data, status: newStatus })
+        updateProtocolStatus(data.id, newStatus)
+      }
+    } catch (e) { console.error(e) }
+    setDeactivating(false)
+  }
+
+  const handleExportPDF = () => {
+    if (!data || !data.protocol) return
+    const p = data.protocol
+    const doc = new jsPDF()
+    const pageWidth = doc.internal.pageSize.getWidth()
+    const margin = 20
+    const maxWidth = pageWidth - margin * 2
+    let y = 20
+
+    const addText = (text: string, size: number, bold: boolean, color: [number, number, number] = [255, 255, 255]) => {
+      doc.setFontSize(size)
+      doc.setFont('helvetica', bold ? 'bold' : 'normal')
+      doc.setTextColor(color[0], color[1], color[2])
+      const lines = doc.splitTextToSize(text, maxWidth)
+      if (y + lines.length * size * 0.5 > 280) { doc.addPage(); y = 20 }
+      doc.text(lines, margin, y)
+      y += lines.length * size * 0.45 + 2
+    }
+
+    const checkPage = (needed: number) => { if (y + needed > 280) { doc.addPage(); y = 20 } }
+
+    // Background
+    doc.setFillColor(13, 27, 42)
+    doc.rect(0, 0, pageWidth, doc.internal.pageSize.getHeight(), 'F')
+
+    // Title
+    addText('PEPTIDROP PROTOCOL', 10, true, [232, 197, 71])
+    y += 2
+    addText(data.goal, 18, true, [255, 255, 255])
+    addText(`Generated: ${new Date(data.created_at).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}  |  Status: ${data.status}`, 9, false, [160, 160, 180])
+    y += 6
+
+    // Summary
+    if (p.protocolSummary) {
+      addText('PROTOCOL SUMMARY', 12, true, [232, 197, 71])
+      y += 1
+      if (p.protocolSummary.objective) { addText('Objective:', 9, true, [200, 200, 210]); addText(p.protocolSummary.objective, 9, false, [180, 180, 195]); y += 2 }
+      if (p.protocolSummary.strategicReasoning) { addText('Strategic Reasoning:', 9, true, [200, 200, 210]); addText(p.protocolSummary.strategicReasoning, 9, false, [180, 180, 195]); y += 4 }
+    }
+
+    // Core Stack
+    if (p.coreStack?.length) {
+      addText(`CORE STACK (${p.coreStack.length} peptides)`, 12, true, [232, 197, 71])
+      y += 1
+      p.coreStack.forEach((pep: any) => {
+        checkPage(40)
+        addText(pep.name, 11, true, [255, 255, 255])
+        if (pep.riskLevel) addText(`Risk: ${pep.riskLevel}`, 8, false, [160, 160, 180])
+        if (pep.mechanism) { addText('Mechanism:', 8, true, [200, 200, 210]); addText(pep.mechanism, 8, false, [180, 180, 195]) }
+        if (pep.whySelected) { addText('Why Selected:', 8, true, [200, 200, 210]); addText(pep.whySelected, 8, false, [180, 180, 195]) }
+        if (pep.educationalDosing) addText(`Dosing (Educational): ${pep.educationalDosing}  |  Frequency: ${pep.frequency || 'N/A'}`, 8, false, [160, 160, 180])
+        y += 3
+      })
+    }
+
+    // Timeline
+    if (p.weeklyTimeline?.length) {
+      checkPage(20)
+      addText('WEEKLY TIMELINE', 12, true, [232, 197, 71])
+      y += 1
+      p.weeklyTimeline.forEach((week: any) => {
+        checkPage(20)
+        addText(`Week ${week.week} - ${week.phase}`, 9, true, [255, 255, 255])
+        if (week.actions) addText(week.actions, 8, false, [180, 180, 195])
+        if (week.expectations) addText(week.expectations, 8, false, [160, 160, 180])
+        y += 2
+      })
+    }
+
+    // Risk
+    if (p.riskAndTradeoffs) {
+      checkPage(20)
+      addText('RISK & SAFETY', 12, true, [232, 197, 71])
+      y += 1
+      if (p.riskAndTradeoffs.sideEffects?.length) { addText('Side Effects: ' + p.riskAndTradeoffs.sideEffects.join(', '), 8, false, [180, 180, 195]); y += 2 }
+      if (p.riskAndTradeoffs.monitoringRecommendations?.length) {
+        addText('Monitoring:', 9, true, [200, 200, 210])
+        p.riskAndTradeoffs.monitoringRecommendations.forEach((m: string) => { checkPage(8); addText('  - ' + m, 8, false, [180, 180, 195]) })
+      }
+    }
+
+    // Disclaimer
+    checkPage(20)
+    y += 6
+    addText('DISCLAIMER: This protocol is for educational and research purposes only. Not medical advice.', 7, false, [120, 120, 140])
+
+    doc.save(`peptidrop-protocol-${data.goal.toLowerCase().replace(/\s+/g, '-').substring(0, 30)}.pdf`)
+  }
 
   useEffect(() => {
     const load = async () => {
@@ -111,7 +222,28 @@ export default function ProtocolDetailPage() {
               {data.gender && <span className="text-xs text-text-muted capitalize">{data.gender}</span>}
             </div>
           </div>
-          <Link href={`/protocol/${params.id}/journal`} className="btn-primary text-sm !py-2">📓 Progress Journal</Link>
+          <div className="flex flex-wrap gap-2">
+            {plan === 'pro' && (
+              <button onClick={handleExportPDF} className="btn-primary text-sm !py-2">
+                PDF Export
+              </button>
+            )}
+            {data.status !== 'completed' && (
+              <button
+                onClick={handleDeactivate}
+                disabled={deactivating}
+                className={cn(
+                  'px-4 py-2 rounded-xl text-sm font-medium transition-colors border min-h-[40px]',
+                  data.status === 'paused'
+                    ? 'border-accent-emerald/30 text-accent-emerald hover:bg-accent-emerald/10'
+                    : 'border-accent-rose/30 text-accent-rose hover:bg-accent-rose/10'
+                )}
+              >
+                {deactivating ? '...' : data.status === 'paused' ? 'Reactivate' : 'Deactivate'}
+              </button>
+            )}
+            <Link href={`/protocol/${params.id}/journal`} className="btn-primary text-sm !py-2">📓 Journal</Link>
+          </div>
         </div>
 
         {/* Tabs */}
