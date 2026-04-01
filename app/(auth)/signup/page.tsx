@@ -9,6 +9,7 @@ import { createClient } from '@/lib/supabase'
 import { loadUserProfile } from '@/components/AuthProvider'
 
 export default function SignupPage() {
+  const [fullName, setFullName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
@@ -34,7 +35,14 @@ export default function SignupPage() {
 
     try {
       const supabase = createClient()
-      const { data, error: authError } = await supabase.auth.signUp({ email, password })
+      const { data, error: authError } = await supabase.auth.signUp({
+        email,
+        password,
+        options: {
+          emailRedirectTo: `${window.location.origin}/auth/callback`,
+          data: { full_name: fullName },
+        },
+      })
       if (authError) throw authError
 
       // Check if email confirmation is required
@@ -92,6 +100,14 @@ export default function SignupPage() {
           </div>
 
           <form onSubmit={handleSignup} className="space-y-5">
+            <div>
+              <label className="text-sm font-display font-medium text-text-secondary mb-2 block">Full Name</label>
+              <input
+                type="text" value={fullName} onChange={(e) => setFullName(e.target.value)}
+                required placeholder="John Doe" className="input-field"
+              />
+            </div>
+
             <div>
               <label className="text-sm font-display font-medium text-text-secondary mb-2 block">Email</label>
               <input

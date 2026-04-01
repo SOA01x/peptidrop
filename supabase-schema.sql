@@ -10,6 +10,7 @@ CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 CREATE TABLE public.profiles (
   id UUID REFERENCES auth.users(id) ON DELETE CASCADE PRIMARY KEY,
   email TEXT NOT NULL,
+  full_name TEXT,
   credits INTEGER DEFAULT 0 NOT NULL,
   plan TEXT DEFAULT 'free' NOT NULL CHECK (plan IN ('free', 'pro', 'premium')),
   plan_expires_at TIMESTAMPTZ,
@@ -133,8 +134,8 @@ CREATE POLICY "Users can view own reports"
 CREATE OR REPLACE FUNCTION public.handle_new_user()
 RETURNS TRIGGER AS $$
 BEGIN
-  INSERT INTO public.profiles (id, email, credits, plan)
-  VALUES (NEW.id, NEW.email, 0, 'free');
+  INSERT INTO public.profiles (id, email, full_name, credits, plan)
+  VALUES (NEW.id, NEW.email, NEW.raw_user_meta_data->>'full_name', 0, 'free');
   RETURN NEW;
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
@@ -181,3 +182,9 @@ CREATE INDEX IF NOT EXISTS idx_reports_user_id ON public.clinical_reports(user_i
 -- ALTER TABLE public.protocols ADD COLUMN IF NOT EXISTS status TEXT DEFAULT 'active';
 -- ALTER TABLE public.protocols ADD COLUMN IF NOT EXISTS current_week INTEGER DEFAULT 1;
 -- ALTER TABLE public.protocols ADD COLUMN IF NOT EXISTS gender TEXT;
+
+-- ============================================
+-- v2 → v3 MIGRATION (full_name support)
+-- ============================================
+-- ALTER TABLE public.profiles ADD COLUMN IF NOT EXISTS full_name TEXT;
+-- Then re-run the handle_new_user function above to update the trigger.

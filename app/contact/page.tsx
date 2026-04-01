@@ -16,15 +16,10 @@ export default function ContactPage() {
           {/* Company Info */}
           <div className="glass-panel p-6 sm:p-8">
             <div className="flex items-center gap-3 mb-6">
-              <svg viewBox="0 0 64 64" className="w-10 h-10" xmlns="http://www.w3.org/2000/svg">
-                <defs>
-                  <linearGradient id="cg" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" stopColor="#e8c547"/><stop offset="100%" stopColor="#e8c547"/>
-                  </linearGradient>
-                </defs>
-                <path d="M32 4 C32 4, 8 30, 8 42 C8 55.2 18.8 62 32 62 C45.2 62 56 55.2 56 42 C56 30 32 4 32 4Z" fill="url(#cg)" opacity="0.9"/>
-                <path d="M32 8 C32 8, 12 31, 12 42 C12 53 20.9 58 32 58 C43.1 58 52 53 52 42 C52 31 32 8 32 8Z" fill="#0d1b2a"/>
-                <text x="25" y="49" fontFamily="Arial" fontWeight="800" fontSize="30" fill="#e8c547">P</text>
+              <svg viewBox="0 0 200 200" className="w-10 h-10" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="100" cy="100" r="90" fill="none" stroke="#e8c547" strokeWidth="4" strokeDasharray="8 8" />
+                <circle cx="100" cy="100" r="58" fill="none" stroke="#e8c547" strokeWidth="10" />
+                <circle cx="100" cy="100" r="12" fill="#e8c547" />
               </svg>
               <div>
                 <h2 className="font-display font-bold text-lg">Peptidrop</h2>
@@ -40,8 +35,8 @@ export default function ContactPage() {
 
               <div>
                 <p className="text-xs font-display font-semibold text-text-muted uppercase tracking-wider mb-1">Email</p>
-                <a href="mailto:usensium@gmail.com" className="text-accent-cyan hover:underline text-base font-mono">
-                  usensium@gmail.com
+                <a href="mailto:contact@peptidrop.me" className="text-accent-cyan hover:underline text-base font-mono">
+                  contact@peptidrop.me
                 </a>
               </div>
 

@@ -16,12 +16,14 @@ export async function loadUserProfile(supabase: any, userId: string, email: stri
 
   store.setUser(profile ? {
     id: profile.id, email: profile.email,
+    full_name: profile.full_name || null,
     credits: profile.credits || 0,
     plan: (profile.plan || 'free') as PlanTier,
     favorites: profile.favorites || [],
     created_at: profile.created_at,
   } : {
     id: userId, email,
+    full_name: null,
     credits: 0, plan: 'free' as PlanTier,
     favorites: [], created_at: createdAt,
   })

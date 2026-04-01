@@ -57,6 +57,12 @@ export default function ProfilePage() {
           <div className="glass-panel p-6 sm:p-8">
             <h3 className="font-display font-semibold text-lg mb-4">Account</h3>
             <div className="space-y-4">
+              {user.full_name && (
+                <div className="flex justify-between items-center py-3 border-b border-surface-border/30">
+                  <span className="text-text-muted text-sm">Name</span>
+                  <span className="text-sm font-display font-semibold">{user.full_name}</span>
+                </div>
+              )}
               <div className="flex justify-between items-center py-3 border-b border-surface-border/30">
                 <span className="text-text-muted text-sm">Email</span>
                 <span className="text-sm font-mono">{user.email}</span>

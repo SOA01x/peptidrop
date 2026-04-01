@@ -5,6 +5,7 @@ import type { PlanTier } from '@/lib/utils'
 interface UserProfile {
   id: string
   email: string
+  full_name: string | null
   credits: number
   plan: PlanTier
   favorites: string[]
