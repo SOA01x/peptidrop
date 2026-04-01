@@ -57,95 +57,394 @@ export default function ProtocolDetailPage() {
     if (!data || !data.protocol) return
     const p = data.protocol
     const doc = new jsPDF()
-    const pageWidth = doc.internal.pageSize.getWidth()
-    const margin = 20
-    const maxWidth = pageWidth - margin * 2
-    let y = 20
+    const pw = doc.internal.pageSize.getWidth()
+    const ph = doc.internal.pageSize.getHeight()
+    const margin = 22
+    const maxW = pw - margin * 2
+    let y = 0
+    let pageNum = 0
 
-    const pageH = doc.internal.pageSize.getHeight()
-
-    const paintBg = () => {
-      doc.setFillColor(13, 27, 42)
-      doc.rect(0, 0, pageWidth, pageH, 'F')
+    // --- Draw watermark logo (concentric circles at 30% opacity) ---
+    const drawLogo = () => {
+      const cx = pw / 2, cy = ph / 2, scale = 0.42 // ~88px radius
+      doc.setGState(new (doc as any).GState({ opacity: 0.03 }))
+      // Outer dotted circle
+      doc.setDrawColor(232, 197, 71)
+      doc.setLineWidth(1.2)
+      const r1 = 90 * scale, segments = 36
+      for (let i = 0; i < segments; i++) {
+        if (i % 2 === 0) {
+          const a1 = (i / segments) * 2 * Math.PI
+          const a2 = ((i + 1) / segments) * 2 * Math.PI
+          doc.line(cx + Math.cos(a1) * r1, cy + Math.sin(a1) * r1, cx + Math.cos(a2) * r1, cy + Math.sin(a2) * r1)
+        }
+      }
+      // Middle solid circle
+      doc.setLineWidth(3)
+      doc.circle(cx, cy, 58 * scale, 'S')
+      // Center filled dot
+      doc.setFillColor(232, 197, 71)
+      doc.circle(cx, cy, 5, 'F')
+      doc.setGState(new (doc as any).GState({ opacity: 1 }))
     }
 
-    const newPage = () => { doc.addPage(); paintBg(); y = 20 }
+    // --- Page setup: navy bg + logo + header/footer ---
+    const setupPage = () => {
+      pageNum++
+      doc.setFillColor(13, 27, 42)
+      doc.rect(0, 0, pw, ph, 'F')
 
-    const addText = (text: string, size: number, bold: boolean, color: [number, number, number] = [255, 255, 255]) => {
+      // Subtle gradient overlay at top
+      doc.setFillColor(18, 35, 55)
+      doc.rect(0, 0, pw, 50, 'F')
+
+      // Top gold accent line
+      doc.setFillColor(232, 197, 71)
+      doc.rect(0, 0, pw, 1.2, 'F')
+
+      // Watermark logo
+      drawLogo()
+
+      // Header
+      doc.setFontSize(7)
+      doc.setFont('helvetica', 'bold')
+      doc.setTextColor(232, 197, 71)
+      doc.text('PEPTIDROP', margin, 10)
+      doc.setFont('helvetica', 'normal')
+      doc.setTextColor(100, 115, 140)
+      doc.text('AI Peptide Intelligence Platform', margin + 24, 10)
+
+      // Page number
+      doc.setFontSize(7)
+      doc.setTextColor(80, 95, 115)
+      doc.text(`${pageNum}`, pw - margin, ph - 8, { align: 'right' })
+
+      // Bottom accent line
+      doc.setFillColor(232, 197, 71)
+      doc.rect(0, ph - 1.2, pw, 1.2, 'F')
+
+      // Bottom footer
+      doc.setFontSize(6)
+      doc.setTextColor(70, 85, 105)
+      doc.text('peptidrop.me  |  For educational and research purposes only', margin, ph - 8)
+
+      y = 18
+    }
+
+    const newPage = () => { doc.addPage(); setupPage() }
+
+    // --- Section heading with gold underline ---
+    const addSection = (title: string) => {
+      checkPage(18)
+      y += 4
+      doc.setFontSize(11)
+      doc.setFont('helvetica', 'bold')
+      doc.setTextColor(232, 197, 71)
+      doc.text(title.toUpperCase(), margin, y)
+      y += 2
+      doc.setFillColor(232, 197, 71)
+      doc.rect(margin, y, 40, 0.6, 'F')
+      doc.setFillColor(50, 65, 85)
+      doc.rect(margin + 40, y, maxW - 40, 0.3, 'F')
+      y += 6
+    }
+
+    // --- Body text ---
+    const addText = (text: string, size: number, bold: boolean, color: [number, number, number] = [200, 205, 215]) => {
       doc.setFontSize(size)
       doc.setFont('helvetica', bold ? 'bold' : 'normal')
       doc.setTextColor(color[0], color[1], color[2])
-      const lines = doc.splitTextToSize(text, maxWidth)
-      if (y + lines.length * size * 0.5 > 280) { newPage() }
+      const lines = doc.splitTextToSize(text, maxW)
+      if (y + lines.length * size * 0.45 > ph - 18) { newPage() }
       doc.text(lines, margin, y)
-      y += lines.length * size * 0.45 + 2
+      y += lines.length * size * 0.42 + 2
     }
 
-    const checkPage = (needed: number) => { if (y + needed > 280) { newPage() } }
+    // --- Label + value pair ---
+    const addField = (label: string, value: string) => {
+      checkPage(10)
+      doc.setFontSize(7.5)
+      doc.setFont('helvetica', 'bold')
+      doc.setTextColor(140, 155, 175)
+      doc.text(label.toUpperCase(), margin + 2, y)
+      y += 3.5
+      addText(value, 8.5, false, [195, 200, 215])
+    }
 
-    // Background (first page)
-    paintBg()
+    // --- Rounded card background ---
+    const addCard = (height: number) => {
+      checkPage(height + 4)
+      doc.setFillColor(18, 35, 55)
+      doc.setDrawColor(40, 58, 80)
+      doc.setLineWidth(0.3)
+      doc.roundedRect(margin - 2, y - 2, maxW + 4, height, 3, 3, 'FD')
+    }
 
-    // Title
-    addText('PEPTIDROP PROTOCOL', 10, true, [232, 197, 71])
-    y += 2
-    addText(data.goal, 18, true, [255, 255, 255])
-    addText(`Generated: ${new Date(data.created_at).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}  |  Status: ${data.status}`, 9, false, [160, 160, 180])
-    y += 6
+    // --- Risk badge ---
+    const addRiskBadge = (risk: string, x: number, bY: number) => {
+      const colors: Record<string, [number, number, number]> = {
+        low: [74, 222, 128], moderate: [232, 197, 71], high: [239, 68, 68], 'very-high': [255, 0, 64]
+      }
+      const col = colors[risk] || [232, 197, 71]
+      doc.setFillColor(col[0], col[1], col[2])
+      doc.setGState(new (doc as any).GState({ opacity: 0.15 }))
+      doc.roundedRect(x, bY - 3, 22, 5, 2, 2, 'F')
+      doc.setGState(new (doc as any).GState({ opacity: 1 }))
+      doc.setFontSize(6.5)
+      doc.setFont('helvetica', 'bold')
+      doc.setTextColor(col[0], col[1], col[2])
+      doc.text(risk.toUpperCase(), x + 11, bY, { align: 'center' })
+    }
 
-    // Summary
+    const checkPage = (needed: number) => { if (y + needed > ph - 18) { newPage() } }
+
+    // ============ BUILD PDF ============
+
+    // Page 1 - Cover
+    setupPage()
+    y = 60
+
+    // Large title
+    doc.setFontSize(28)
+    doc.setFont('helvetica', 'bold')
+    doc.setTextColor(255, 255, 255)
+    const titleLines = doc.splitTextToSize(data.goal, maxW)
+    doc.text(titleLines, margin, y)
+    y += titleLines.length * 12 + 4
+
+    // Gold divider
+    doc.setFillColor(232, 197, 71)
+    doc.rect(margin, y, 50, 1.5, 'F')
+    y += 10
+
+    // Meta info
+    doc.setFontSize(9)
+    doc.setFont('helvetica', 'normal')
+    doc.setTextColor(160, 170, 190)
+    doc.text(`Generated: ${new Date(data.created_at).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}`, margin, y)
+    y += 5
+    doc.text(`Status: ${data.status.charAt(0).toUpperCase() + data.status.slice(1)}  |  Gender: ${data.gender || 'Not specified'}`, margin, y)
+    y += 12
+
+    // Summary on cover
     if (p.protocolSummary) {
-      addText('PROTOCOL SUMMARY', 12, true, [232, 197, 71])
-      y += 1
-      if (p.protocolSummary.objective) { addText('Objective:', 9, true, [200, 200, 210]); addText(p.protocolSummary.objective, 9, false, [180, 180, 195]); y += 2 }
-      if (p.protocolSummary.strategicReasoning) { addText('Strategic Reasoning:', 9, true, [200, 200, 210]); addText(p.protocolSummary.strategicReasoning, 9, false, [180, 180, 195]); y += 4 }
+      if (p.protocolSummary.objective) {
+        addField('Objective', p.protocolSummary.objective)
+        y += 2
+      }
+      if (p.protocolSummary.strategicReasoning) {
+        addField('Strategic Reasoning', p.protocolSummary.strategicReasoning)
+      }
     }
 
     // Core Stack
     if (p.coreStack?.length) {
-      addText(`CORE STACK (${p.coreStack.length} peptides)`, 12, true, [232, 197, 71])
-      y += 1
-      p.coreStack.forEach((pep: any) => {
-        checkPage(40)
-        addText(pep.name, 11, true, [255, 255, 255])
-        if (pep.riskLevel) addText(`Risk: ${pep.riskLevel}`, 8, false, [160, 160, 180])
-        if (pep.mechanism) { addText('Mechanism:', 8, true, [200, 200, 210]); addText(pep.mechanism, 8, false, [180, 180, 195]) }
-        if (pep.whySelected) { addText('Why Selected:', 8, true, [200, 200, 210]); addText(pep.whySelected, 8, false, [180, 180, 195]) }
-        if (pep.educationalDosing) addText(`Dosing (Educational): ${pep.educationalDosing}  |  Frequency: ${pep.frequency || 'N/A'}`, 8, false, [160, 160, 180])
-        y += 3
+      newPage()
+      addSection(`Core Stack - ${p.coreStack.length} Peptides`)
+
+      p.coreStack.forEach((pep: any, idx: number) => {
+        const cardH = 38 + (pep.mechanism ? 8 : 0) + (pep.whySelected ? 8 : 0)
+        checkPage(cardH + 6)
+        addCard(cardH)
+
+        const cardTop = y
+        // Peptide name
+        doc.setFontSize(11)
+        doc.setFont('helvetica', 'bold')
+        doc.setTextColor(232, 197, 71)
+        doc.text(pep.name, margin + 4, y + 4)
+
+        // Risk badge
+        if (pep.riskLevel) addRiskBadge(pep.riskLevel, pw - margin - 24, y + 4)
+
+        y += 10
+        if (pep.mechanism) { addField('Mechanism', pep.mechanism) }
+        if (pep.whySelected) { addField('Why Selected', pep.whySelected) }
+        if (pep.synergyRole) { addField('Synergy Role', pep.synergyRole) }
+
+        // Dosing bar
+        if (pep.educationalDosing) {
+          checkPage(10)
+          doc.setFillColor(24, 44, 68)
+          doc.roundedRect(margin, y, maxW, 7, 2, 2, 'F')
+          doc.setFontSize(7)
+          doc.setFont('helvetica', 'bold')
+          doc.setTextColor(232, 197, 71)
+          doc.text(`DOSING: ${pep.educationalDosing}`, margin + 4, y + 5)
+          if (pep.frequency) {
+            doc.setTextColor(140, 155, 175)
+            doc.text(`FREQ: ${pep.frequency}`, pw - margin - 4, y + 5, { align: 'right' })
+          }
+          y += 11
+        }
+
+        y += 4
       })
     }
 
     // Timeline
     if (p.weeklyTimeline?.length) {
-      checkPage(20)
-      addText('WEEKLY TIMELINE', 12, true, [232, 197, 71])
-      y += 1
+      newPage()
+      addSection('Weekly Timeline')
+
       p.weeklyTimeline.forEach((week: any) => {
-        checkPage(20)
-        addText(`Week ${week.week} - ${week.phase}`, 9, true, [255, 255, 255])
-        if (week.actions) addText(week.actions, 8, false, [180, 180, 195])
-        if (week.expectations) addText(week.expectations, 8, false, [160, 160, 180])
-        y += 2
+        checkPage(18)
+        // Week number badge
+        doc.setFillColor(232, 197, 71)
+        doc.setGState(new (doc as any).GState({ opacity: 0.12 }))
+        doc.roundedRect(margin, y - 2, 16, 8, 2, 2, 'F')
+        doc.setGState(new (doc as any).GState({ opacity: 1 }))
+        doc.setFontSize(7)
+        doc.setFont('helvetica', 'bold')
+        doc.setTextColor(232, 197, 71)
+        doc.text(`W${week.week}`, margin + 8, y + 3, { align: 'center' })
+
+        // Phase name
+        doc.setFontSize(9)
+        doc.setTextColor(230, 235, 245)
+        doc.text(week.phase || '', margin + 20, y + 3)
+        y += 8
+
+        if (week.actions) addText(week.actions, 8, false, [180, 185, 200])
+        if (week.expectations) addText(week.expectations, 7.5, false, [130, 145, 165])
+        y += 3
+
+        // Subtle separator
+        doc.setFillColor(35, 50, 70)
+        doc.rect(margin + 6, y, maxW - 12, 0.2, 'F')
+        y += 3
       })
     }
 
-    // Risk
+    // Risk & Safety
     if (p.riskAndTradeoffs) {
-      checkPage(20)
-      addText('RISK & SAFETY', 12, true, [232, 197, 71])
-      y += 1
-      if (p.riskAndTradeoffs.sideEffects?.length) { addText('Side Effects: ' + p.riskAndTradeoffs.sideEffects.join(', '), 8, false, [180, 180, 195]); y += 2 }
+      newPage()
+      addSection('Risk & Safety')
+
+      if (p.riskAndTradeoffs.sideEffects?.length) {
+        addText('Side Effects', 9, true, [200, 205, 215])
+        y += 1
+        // Tag-style badges
+        let tagX = margin
+        p.riskAndTradeoffs.sideEffects.forEach((se: string) => {
+          doc.setFontSize(7)
+          const tw = doc.getTextWidth(se) + 8
+          if (tagX + tw > pw - margin) { tagX = margin; y += 7 }
+          checkPage(8)
+          doc.setFillColor(239, 68, 68)
+          doc.setGState(new (doc as any).GState({ opacity: 0.1 }))
+          doc.roundedRect(tagX, y - 3, tw, 6, 2, 2, 'F')
+          doc.setGState(new (doc as any).GState({ opacity: 1 }))
+          doc.setTextColor(239, 130, 130)
+          doc.text(se, tagX + 4, y + 0.5)
+          tagX += tw + 3
+        })
+        y += 10
+      }
+
+      if (p.riskAndTradeoffs.suppressionRisks?.length) {
+        addText('Suppression Risks', 9, true, [200, 205, 215])
+        y += 1
+        p.riskAndTradeoffs.suppressionRisks.forEach((r: string) => {
+          checkPage(8)
+          doc.setFillColor(239, 68, 68)
+          doc.circle(margin + 2, y - 1, 1, 'F')
+          addText(r, 8, false, [180, 185, 200])
+        })
+        y += 4
+      }
+
+      if (p.riskAndTradeoffs.longTermConsiderations?.length) {
+        addText('Long-Term Considerations', 9, true, [200, 205, 215])
+        y += 1
+        p.riskAndTradeoffs.longTermConsiderations.forEach((c: string) => {
+          checkPage(8)
+          doc.setFillColor(232, 197, 71)
+          doc.circle(margin + 2, y - 1, 1, 'F')
+          addText(c, 8, false, [180, 185, 200])
+        })
+        y += 4
+      }
+
       if (p.riskAndTradeoffs.monitoringRecommendations?.length) {
-        addText('Monitoring:', 9, true, [200, 200, 210])
-        p.riskAndTradeoffs.monitoringRecommendations.forEach((m: string) => { checkPage(8); addText('  - ' + m, 8, false, [180, 180, 195]) })
+        addText('Monitoring Recommendations', 9, true, [200, 205, 215])
+        y += 1
+        p.riskAndTradeoffs.monitoringRecommendations.forEach((m: string) => {
+          checkPage(8)
+          doc.setFillColor(74, 222, 128)
+          doc.circle(margin + 2, y - 1, 1, 'F')
+          addText(m, 8, false, [180, 185, 200])
+        })
       }
     }
 
-    // Disclaimer
+    // Alternatives
+    if (p.alternativeStacks) {
+      newPage()
+      addSection('Alternative Stacks')
+
+      if (p.alternativeStacks.conservative) {
+        addText('Conservative Option', 10, true, [74, 222, 128])
+        y += 1
+        if (p.alternativeStacks.conservative.description) addText(p.alternativeStacks.conservative.description, 8.5, false, [180, 185, 200])
+        if (p.alternativeStacks.conservative.peptides?.length) {
+          y += 2
+          let tagX = margin
+          p.alternativeStacks.conservative.peptides.forEach((name: string) => {
+            doc.setFontSize(7)
+            const tw = doc.getTextWidth(name) + 8
+            if (tagX + tw > pw - margin) { tagX = margin; y += 7 }
+            doc.setFillColor(74, 222, 128)
+            doc.setGState(new (doc as any).GState({ opacity: 0.1 }))
+            doc.roundedRect(tagX, y - 3, tw, 6, 2, 2, 'F')
+            doc.setGState(new (doc as any).GState({ opacity: 1 }))
+            doc.setTextColor(74, 222, 128)
+            doc.text(name, tagX + 4, y + 0.5)
+            tagX += tw + 3
+          })
+          y += 8
+        }
+        if (p.alternativeStacks.conservative.tradeoff) addText(`Tradeoff: ${p.alternativeStacks.conservative.tradeoff}`, 7.5, false, [140, 150, 170])
+        y += 6
+      }
+
+      if (p.alternativeStacks.aggressive) {
+        addText('Aggressive Option', 10, true, [239, 68, 68])
+        y += 1
+        if (p.alternativeStacks.aggressive.description) addText(p.alternativeStacks.aggressive.description, 8.5, false, [180, 185, 200])
+        if (p.alternativeStacks.aggressive.peptides?.length) {
+          y += 2
+          let tagX = margin
+          p.alternativeStacks.aggressive.peptides.forEach((name: string) => {
+            doc.setFontSize(7)
+            const tw = doc.getTextWidth(name) + 8
+            if (tagX + tw > pw - margin) { tagX = margin; y += 7 }
+            doc.setFillColor(239, 68, 68)
+            doc.setGState(new (doc as any).GState({ opacity: 0.1 }))
+            doc.roundedRect(tagX, y - 3, tw, 6, 2, 2, 'F')
+            doc.setGState(new (doc as any).GState({ opacity: 1 }))
+            doc.setTextColor(239, 68, 68)
+            doc.text(name, tagX + 4, y + 0.5)
+            tagX += tw + 3
+          })
+          y += 8
+        }
+        if (p.alternativeStacks.aggressive.tradeoff) addText(`Tradeoff: ${p.alternativeStacks.aggressive.tradeoff}`, 7.5, false, [140, 150, 170])
+      }
+    }
+
+    // Final disclaimer page footer
     checkPage(20)
-    y += 6
-    addText('DISCLAIMER: This protocol is for educational and research purposes only. Not medical advice.', 7, false, [120, 120, 140])
+    y += 8
+    doc.setFillColor(30, 45, 65)
+    doc.roundedRect(margin, y, maxW, 14, 3, 3, 'F')
+    doc.setFontSize(6.5)
+    doc.setFont('helvetica', 'bold')
+    doc.setTextColor(232, 197, 71)
+    doc.text('DISCLAIMER', margin + 4, y + 5)
+    doc.setFont('helvetica', 'normal')
+    doc.setTextColor(120, 135, 155)
+    doc.text('This protocol is generated by AI for educational and research purposes only. Not medical advice. Consult a healthcare professional.', margin + 4, y + 10)
 
     doc.save(`peptidrop-protocol-${data.goal.toLowerCase().replace(/\s+/g, '-').substring(0, 30)}.pdf`)
   }
