@@ -11,7 +11,9 @@ function createSupabaseFromRequest(req: NextRequest) {
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
     {
       cookies: {
-        getAll() { return req.cookies.getAll() },
+        getAll() {
+          return req.cookies.getAll()
+        },
         setAll(cookiesToSet: { name: string; value: string; options?: any }[]) {},
       },
     }
@@ -27,18 +29,36 @@ export async function POST(req: NextRequest) {
     }
 
     const supabase = createSupabaseFromRequest(req)
-    const { data: { user }, error: authError } = await supabase.auth.getUser()
 
-    if (authError || !user) {
-      return NextResponse.json({ error: 'Not authenticated. Please sign in.' }, { status: 401 })
+    // Debug: log auth cookies
+    const authCookies = req.cookies.getAll().filter(c => c.name.includes('auth-token'))
+    console.log('[Generate] Auth cookies:', authCookies.length, authCookies.map(c => c.name))
+
+    // Try getUser first, fallback to getSession
+    let user = null
+    const { data: userData, error: userError } = await supabase.auth.getUser()
+    if (userData?.user) {
+      user = userData.user
+      console.log('[Generate] getUser OK:', user.email)
+    } else {
+      console.log('[Generate] getUser failed:', userError?.message)
+      const { data: sessionData } = await supabase.auth.getSession()
+      if (sessionData?.session?.user) {
+        user = sessionData.session.user
+        console.log('[Generate] getSession OK:', user.email)
+      }
+    }
+
+    if (!user) {
+      return NextResponse.json({ error: 'Not authenticated. Please sign out and sign back in.' }, { status: 401 })
     }
 
     // Check plan
     const { data: profile } = await supabase
       .from('profiles').select('plan').eq('id', user.id).single()
 
-    if (!profile || (profile.plan !== 'pro' && profile.plan !== 'researcher')) {
-      return NextResponse.json({ error: 'Researcher or Pro subscription required. Upgrade at /pricing' }, { status: 402 })
+    if (!profile || profile.plan !== 'pro') {
+      return NextResponse.json({ error: 'Pro subscription required.' }, { status: 402 })
     }
 
     // Call Claude
@@ -47,7 +67,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'AI service not configured.' }, { status: 500 })
     }
 
-    console.log('[Generate] User:', user.email, 'Goal:', body.goal)
+    console.log('[Generate] Calling Claude for:', user.email, 'Goal:', body.goal)
 
     const claudeRes = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
@@ -86,7 +106,6 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'AI returned invalid format. Try again.' }, { status: 500 })
     }
 
-    // Save protocol (Pro = unlimited, no credit deduction)
     const { data: saved, error: saveErr } = await supabase
       .from('protocols')
       .insert({
