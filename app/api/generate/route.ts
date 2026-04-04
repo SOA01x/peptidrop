@@ -1,6 +1,7 @@
 // app/api/generate/route.ts
 import { NextRequest, NextResponse } from 'next/server'
 import { createServerClient } from '@supabase/ssr'
+import { createClient as createSupabaseClient } from '@supabase/supabase-js'
 import { buildProtocolPrompt, type ProtocolInput } from '@/lib/ai-engine'
 
 export const maxDuration = 60
@@ -28,24 +29,31 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Missing required fields' }, { status: 400 })
     }
 
+    // Try cookie-based auth first, then fall back to Authorization header
+    let user = null
     const supabase = createSupabaseFromRequest(req)
 
-    // Debug: log auth cookies
-    const authCookies = req.cookies.getAll().filter(c => c.name.includes('auth-token'))
-    console.log('[Generate] Auth cookies:', authCookies.length, authCookies.map(c => c.name))
-
-    // Try getUser first, fallback to getSession
-    let user = null
-    const { data: userData, error: userError } = await supabase.auth.getUser()
+    const { data: userData } = await supabase.auth.getUser()
     if (userData?.user) {
       user = userData.user
-      console.log('[Generate] getUser OK:', user.email)
-    } else {
-      console.log('[Generate] getUser failed:', userError?.message)
-      const { data: sessionData } = await supabase.auth.getSession()
-      if (sessionData?.session?.user) {
-        user = sessionData.session.user
-        console.log('[Generate] getSession OK:', user.email)
+      console.log('[Generate] Cookie auth OK:', user.email)
+    }
+
+    // Fallback: read Bearer token from Authorization header (client-side localStorage session)
+    if (!user) {
+      const authHeader = req.headers.get('Authorization')
+      if (authHeader?.startsWith('Bearer ')) {
+        const token = authHeader.slice(7)
+        const supabaseWithToken = createSupabaseClient(
+          process.env.NEXT_PUBLIC_SUPABASE_URL!,
+          process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+          { global: { headers: { Authorization: `Bearer ${token}` } } }
+        )
+        const { data: tokenUser } = await supabaseWithToken.auth.getUser()
+        if (tokenUser?.user) {
+          user = tokenUser.user
+          console.log('[Generate] Token auth OK:', user.email)
+        }
       }
     }
 
@@ -53,8 +61,14 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Not authenticated. Please sign out and sign back in.' }, { status: 401 })
     }
 
+    // Use service role client for DB operations (bypasses RLS, user already verified above)
+    const dbClient = createSupabaseClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.SUPABASE_SERVICE_ROLE_KEY!
+    )
+
     // Check plan
-    const { data: profile } = await supabase
+    const { data: profile } = await dbClient
       .from('profiles').select('plan').eq('id', user.id).single()
 
     if (!profile || profile.plan !== 'pro') {
@@ -106,7 +120,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'AI returned invalid format. Try again.' }, { status: 500 })
     }
 
-    const { data: saved, error: saveErr } = await supabase
+    const { data: saved, error: saveErr } = await dbClient
       .from('protocols')
       .insert({
         user_id: user.id, goal: body.goal, gender: body.gender || null,

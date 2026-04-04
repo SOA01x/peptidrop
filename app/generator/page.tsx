@@ -250,9 +250,14 @@ export default function GeneratorPage() {
     }
 
     try {
+      const supabase = createClient()
+      const { data: { session } } = await supabase.auth.getSession()
       const res = await fetch('/api/generate', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          ...(session?.access_token ? { 'Authorization': `Bearer ${session.access_token}` } : {}),
+        },
         body: JSON.stringify({
           goal, gender, experienceLevel: experience, riskTolerance, age,
           weight: weight ? Number(weight) : undefined,

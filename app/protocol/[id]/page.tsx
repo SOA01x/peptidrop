@@ -67,7 +67,7 @@ export default function ProtocolDetailPage() {
     // --- Draw watermark logo (concentric circles at 30% opacity) ---
     const drawLogo = () => {
       const cx = pw / 2, cy = ph / 2, scale = 0.42 // ~88px radius
-      doc.setGState(new (doc as any).GState({ opacity: 0.03 }))
+      doc.setGState(new (doc as any).GState({ opacity: 0.015 }))
       // Outer dotted circle
       doc.setDrawColor(232, 197, 71)
       doc.setLineWidth(1.2)
@@ -197,6 +197,21 @@ export default function ProtocolDetailPage() {
     }
 
     const checkPage = (needed: number) => { if (y + needed > ph - 18) { newPage() } }
+
+    // --- Bulleted item (circle + indented text) ---
+    const addBullet = (text: string, bulletColor: [number, number, number]) => {
+      checkPage(10)
+      doc.setFillColor(bulletColor[0], bulletColor[1], bulletColor[2])
+      doc.circle(margin + 3, y + 1, 1.2, 'F')
+      // Render text indented past the bullet
+      doc.setFontSize(8)
+      doc.setFont('helvetica', 'normal')
+      doc.setTextColor(180, 185, 200)
+      const lines = doc.splitTextToSize(text, maxW - 10)
+      if (y + lines.length * 3.5 > ph - 18) { newPage() }
+      doc.text(lines, margin + 8, y + 2.5)
+      y += lines.length * 3.5 + 2
+    }
 
     // ============ BUILD PDF ============
 
@@ -346,10 +361,7 @@ export default function ProtocolDetailPage() {
         addText('Suppression Risks', 9, true, [200, 205, 215])
         y += 1
         p.riskAndTradeoffs.suppressionRisks.forEach((r: string) => {
-          checkPage(8)
-          doc.setFillColor(239, 68, 68)
-          doc.circle(margin + 2, y - 1, 1, 'F')
-          addText(r, 8, false, [180, 185, 200])
+          addBullet(r, [239, 68, 68])
         })
         y += 4
       }
@@ -358,10 +370,7 @@ export default function ProtocolDetailPage() {
         addText('Long-Term Considerations', 9, true, [200, 205, 215])
         y += 1
         p.riskAndTradeoffs.longTermConsiderations.forEach((c: string) => {
-          checkPage(8)
-          doc.setFillColor(232, 197, 71)
-          doc.circle(margin + 2, y - 1, 1, 'F')
-          addText(c, 8, false, [180, 185, 200])
+          addBullet(c, [232, 197, 71])
         })
         y += 4
       }
@@ -370,10 +379,7 @@ export default function ProtocolDetailPage() {
         addText('Monitoring Recommendations', 9, true, [200, 205, 215])
         y += 1
         p.riskAndTradeoffs.monitoringRecommendations.forEach((m: string) => {
-          checkPage(8)
-          doc.setFillColor(74, 222, 128)
-          doc.circle(margin + 2, y - 1, 1, 'F')
-          addText(m, 8, false, [180, 185, 200])
+          addBullet(m, [74, 222, 128])
         })
       }
     }
