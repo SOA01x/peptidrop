@@ -413,9 +413,15 @@ export default function GeneratorPage() {
                     className="btn-secondary text-sm !py-2">✅ Saved - View Details</Link>
                 )}
                 {plan === 'pro' ? (
-                  <button className="btn-primary text-sm !py-2" onClick={() => alert('PDF export coming soon!')}>
-                    📄 Export PDF Report
-                  </button>
+                  protocolId ? (
+                    <Link href={`/protocol/${protocolId}`} className="btn-primary text-sm !py-2 inline-flex items-center gap-1.5">
+                      📄 Export PDF Report
+                    </Link>
+                  ) : (
+                    <button className="btn-primary text-sm !py-2" onClick={async () => { await handleSave(); }}>
+                      💾 Save to Export PDF
+                    </button>
+                  )
                 ) : (
                   <Link href="/pricing" className="btn-secondary text-sm !py-2 inline-flex items-center gap-1.5">
                     🔒 PDF Reports - <span className="text-accent-cyan">Pro Only</span>

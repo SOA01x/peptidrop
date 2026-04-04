@@ -64,14 +64,14 @@ export default function ProtocolDetailPage() {
     let y = 0
     let pageNum = 0
 
-    // --- Draw watermark logo (concentric circles at 30% opacity) ---
+    // --- Draw watermark logo (concentric circles at 10% opacity, ~500px equivalent) ---
     const drawLogo = () => {
-      const cx = pw / 2, cy = ph / 2, scale = 0.42 // ~88px radius
-      doc.setGState(new (doc as any).GState({ opacity: 0.015 }))
+      const cx = pw / 2, cy = ph / 2, scale = 0.95 // large ~500px equivalent
+      doc.setGState(new (doc as any).GState({ opacity: 0.10 }))
       // Outer dotted circle
       doc.setDrawColor(232, 197, 71)
-      doc.setLineWidth(1.2)
-      const r1 = 90 * scale, segments = 36
+      doc.setLineWidth(2.5)
+      const r1 = 90 * scale, segments = 48
       for (let i = 0; i < segments; i++) {
         if (i % 2 === 0) {
           const a1 = (i / segments) * 2 * Math.PI
@@ -80,11 +80,11 @@ export default function ProtocolDetailPage() {
         }
       }
       // Middle solid circle
-      doc.setLineWidth(3)
+      doc.setLineWidth(6)
       doc.circle(cx, cy, 58 * scale, 'S')
       // Center filled dot
       doc.setFillColor(232, 197, 71)
-      doc.circle(cx, cy, 5, 'F')
+      doc.circle(cx, cy, 8 * scale, 'F')
       doc.setGState(new (doc as any).GState({ opacity: 1 }))
     }
 
