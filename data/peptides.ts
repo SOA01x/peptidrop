@@ -5102,7 +5102,7 @@ export const peptides: Peptide[] = [
     pathways: ['Immune Modulation', 'Thymic Function'],
     effects: ['Immune support', 'T-cell function', 'Post-infection recovery'],
     halfLife: 'Short',
-    suggestedDosing: '1mL IM daily (educational)',
+    suggestedDosing: '100mcg IM daily (educational)',
     frequency: 'Daily, 3-10 day courses',
     riskProfile: 'low',
     sideEffects: ['Well-tolerated', 'Mild injection site reaction'],
