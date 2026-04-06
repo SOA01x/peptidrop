@@ -64,28 +64,25 @@ export default function ProtocolDetailPage() {
     let y = 0
     let pageNum = 0
 
-    // --- Draw watermark logo (concentric circles at 10% opacity, ~500px equivalent) ---
-    const drawLogo = () => {
-      const cx = pw / 2, cy = ph / 2, scale = 0.95 // large ~500px equivalent
-      doc.setGState(new (doc as any).GState({ opacity: 0.10 }))
-      // Outer dotted circle
+    // --- Small footer logo icon (concentric circles) ---
+    const drawFooterLogo = (cx: number, cy: number, s: number) => {
       doc.setDrawColor(232, 197, 71)
-      doc.setLineWidth(2.5)
-      const r1 = 90 * scale, segments = 48
-      for (let i = 0; i < segments; i++) {
+      // Outer dotted circle
+      doc.setLineWidth(0.3)
+      const r1 = 4 * s, segs = 20
+      for (let i = 0; i < segs; i++) {
         if (i % 2 === 0) {
-          const a1 = (i / segments) * 2 * Math.PI
-          const a2 = ((i + 1) / segments) * 2 * Math.PI
+          const a1 = (i / segs) * 2 * Math.PI
+          const a2 = ((i + 1) / segs) * 2 * Math.PI
           doc.line(cx + Math.cos(a1) * r1, cy + Math.sin(a1) * r1, cx + Math.cos(a2) * r1, cy + Math.sin(a2) * r1)
         }
       }
       // Middle solid circle
-      doc.setLineWidth(6)
-      doc.circle(cx, cy, 58 * scale, 'S')
-      // Center filled dot
+      doc.setLineWidth(0.6)
+      doc.circle(cx, cy, 2.6 * s, 'S')
+      // Center dot
       doc.setFillColor(232, 197, 71)
-      doc.circle(cx, cy, 8 * scale, 'F')
-      doc.setGState(new (doc as any).GState({ opacity: 1 }))
+      doc.circle(cx, cy, 0.7 * s, 'F')
     }
 
     // --- Page setup: navy bg + logo + header/footer ---
@@ -101,9 +98,6 @@ export default function ProtocolDetailPage() {
       // Top gold accent line
       doc.setFillColor(232, 197, 71)
       doc.rect(0, 0, pw, 1.2, 'F')
-
-      // Watermark logo
-      drawLogo()
 
       // Header
       doc.setFontSize(7)
@@ -123,10 +117,15 @@ export default function ProtocolDetailPage() {
       doc.setFillColor(232, 197, 71)
       doc.rect(0, ph - 1.2, pw, 1.2, 'F')
 
-      // Bottom footer
-      doc.setFontSize(6)
+      // Bottom footer with logo icon
+      drawFooterLogo(margin + 3, ph - 9.5, 1)
+      doc.setFontSize(6.5)
+      doc.setFont('helvetica', 'bold')
+      doc.setTextColor(232, 197, 71)
+      doc.text('PEPTIDROP', margin + 9, ph - 8)
+      doc.setFont('helvetica', 'normal')
       doc.setTextColor(70, 85, 105)
-      doc.text('peptidrop.me  |  For educational and research purposes only', margin, ph - 8)
+      doc.text('|  peptidrop.me  |  For educational and research purposes only', margin + 27, ph - 8)
 
       y = 18
     }
